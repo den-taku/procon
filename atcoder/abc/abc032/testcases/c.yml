@@ -47,6 +47,20 @@ cases:
       4
     out: |
       0
+  - name: sample5
+    in: |
+      9 8
+      1
+      1
+      1
+      1
+      1
+      1
+      1
+      1
+      1
+    out: |
+      9
 
 extend:
   - type: Text
