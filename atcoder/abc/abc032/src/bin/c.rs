@@ -19,14 +19,12 @@ fn main() {
     let mut best = VecDeque::<i64>::new();
     let mut now = VecDeque::<i64>::new();
     let mut mul = 1;
-    let mut flag = false;
     for e in s {
         if e == 0 {
             println!("{}", n);
             return;
         }
         now.push_back(e);
-        // let mut mul = now.iter().fold(1, |mul, el| mul * el);
         mul *= e;
         if mul > k {
             if best.len() < now.len() {
@@ -39,14 +37,8 @@ fn main() {
                     mul /= el;
                 }
             }
-        } else {
-            flag = true;
         }
     }
-    if !flag {
-        println!("0");
-        return;
-    } 
     let ans = if best.len() >= now.len() {
         best.len()
     } else {
