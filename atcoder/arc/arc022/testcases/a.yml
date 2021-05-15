@@ -1,0 +1,37 @@
+---
+type: Batch
+timelimit: 2s
+match: Lines
+
+cases:
+  - name: sample1
+    in: |
+      InformationAndCommunicationTechnology
+    out: |
+      YES
+  - name: sample2
+    in: |
+      InformationTechnology
+    out: |
+      NO
+  - name: sample3
+    in: |
+      SinCosTan
+    out: |
+      YES
+  - name: sample4
+    in: |
+      Ticket
+    out: |
+      YES
+  - name: sample5
+    in: |
+      InternetTrouble
+    out: |
+      NO
+
+extend:
+  - type: Text
+    path: "./a"
+    in: /in/*.txt
+    out: /out/*.txt
