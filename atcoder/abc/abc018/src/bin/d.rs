@@ -12,31 +12,50 @@ fn main() {
         chocolate: [(usize, usize, i64);r]
     }
     let mut ans = 0;
-    for i in 0..m {
-        let est = calulate(i, p, q, &chocolate);
-        ans = if est > ans { est } else { ans };
+    for i in 0..n-p+1 {
+        // dfs: nCp
+        let cand = dfs(n, m, p, q, i, HashSet::with_capacity(p), &chocolate);
+        if cand > ans {
+            ans = cand;
+        }
     }
     println!("{}", ans);
 }
 
-fn calulate(mut index: usize, p: usize, q:usize, chocolate: &Vec<(usize, usize, i64)>) -> i64 {
-    let mut girls = HashSet::with_capacity(p);
-    let mut boys = HashSet::with_capacity(q);
-    boys.insert(index);
-    let mut i = 0;
-    while i < p {
-        let contains = assemble(index, &chocolate, &girls);
+fn dfs(n: usize, m: usize, p: usize, q: usize, index: usize, mut candidate: HashSet<usize>, chocolate: &Vec<(usize, usize, i64)>) -> i64 {
+    // dfs: start from index
+    let candidate = {
+        candidate.insert(index);
+        candidate
+    };
+    // get nCp, then calculate in greedy
+    if candidate.len() == p {
+        return calculate(n, m, q, candidate, chocolate);
     }
-    unimplemented!()
-}
-
-fn assemble(index: usize, chocolate: &Vec<(usize, usize, i64)>, girls: &HashSet<usize>) -> Vec<(i64, usize)> {
-    let mut contains = Vec::new();
-    for e in chocolate {
-        if e.1 == index && !girls.contains(&e.0) {
-            contains.push((e.2, e.0));
+    let mut best = 0;
+    for i in index+1..n {
+        let cand = dfs(n, m, p, q, i, candidate.clone(), chocolate);
+        if best < cand {
+            best = cand;
         }
     }
-    contains.sort();
-    contains
+    return best;
+}
+
+fn calculate(_n: usize, m: usize, q: usize, candidate: HashSet<usize>, chocolate: &Vec<(usize, usize, i64)>) -> i64 {
+    let mut count = vec![0; m];
+    for e in chocolate {
+        if candidate.contains(&(e.0 - 1)) {
+            count[e.1 - 1] += e.2;
+        }
+    }
+    count.sort();
+    let mut est = 0;
+    for (i, e) in count.iter().rev().enumerate() {
+        if i == q {
+            break;
+        }
+        est += e;
+    }
+    est
 }
