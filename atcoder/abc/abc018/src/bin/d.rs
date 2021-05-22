@@ -51,6 +51,7 @@ fn calculate(_n: usize, m: usize, q: usize, candidate: HashSet<usize>, chocolate
     }
     count.sort();
     let mut est = 0;
+    // greedy
     for (i, e) in count.iter().rev().enumerate() {
         if i == q {
             break;
