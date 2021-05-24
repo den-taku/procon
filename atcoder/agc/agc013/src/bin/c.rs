@@ -27,6 +27,11 @@ fn main() {
     } else {
         l - ((dis - ants[0].0) % l)
     };
+    let pure = if ants[0].1 == 1 {
+        ants[0].0 % l
+    } else {
+        l - (- ants[0].0 % l)
+    }; 
     let mut array = vec![0i128; n];
     // i: sorted address, j: virtual address
     for (i, j) in (index..index + n as i128).enumerate() {
@@ -34,10 +39,10 @@ fn main() {
             calurate_lacation(ants[j as usize % n].0, t, ants[j as usize % n].1, l);
     }
     // println!("{}", count);
-    // for i in index..index + n as i128 {
-    //     array[ants[i as usize % n].2] =
-    //         calurate_lacation(ants[i as usize % n].0, t, ants[i as usize % n].1, l);
-    // }
+    for i in index..index + n as i128 {
+        array[ants[i as usize % n].2] =
+            calurate_lacation(ants[i as usize % n].0, t, ants[i as usize % n].1, l);
+    }
     // for i in 0..ants.len() {
     //     // because 1-index and 0-index is mixed
     //     let address = array[(i + n - 1) % n];
