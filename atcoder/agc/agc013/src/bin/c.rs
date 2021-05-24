@@ -23,35 +23,55 @@ fn main() {
     let dis = count % l;
     // virtual index
     let index = if ants[0].1 == 1 {
-        (ants[0].0 + dis) % l
+        (0 + dis as usize) % n as usize
     } else {
-        l - ((dis - ants[0].0) % l)
+        l as usize - (dis as usize - 0) % n as usize
+        // l - ((dis - ants[0].0) % l)
     };
-    let pure = if ants[0].1 == 1 {
+    let _pure = if ants[0].1 == 1 {
         ants[0].0 % l
     } else {
         l - (- ants[0].0 % l)
     }; 
     let mut array = vec![0i128; n];
+    let mut tmp = vec![0i128; n];
+    for i in 0..n {
+        tmp[i] = calurate_lacation(ants[i].0, t, ants[i].1, l);
+    }
+    tmp.sort();
+    let ants0_virtual = calurate_lacation(ants[index % n].0, t, ants[index % n].0, l);
+    let j = {
+        let mut j = 0;
+        for i in 0..n {
+            if tmp[j] == ants0_virtual {
+                j = i;
+                break;
+            }
+        } 
+        j
+    };
+    for i in 0..n {
+        println!("{}", tmp[(j + i) % n]);
+    }
     // i: sorted address, j: virtual address
-    for (i, j) in (index..index + n as i128).enumerate() {
-        array[ants[i % n].2] =
-            calurate_lacation(ants[j as usize % n].0, t, ants[j as usize % n].1, l);
-    }
+    // for (i, j) in (index..index + n).enumerate() {
+    //     array[ants[i % n].2] =
+    //         calurate_lacation(ants[j as usize % n].0, t, ants[j as usize % n].1, l);
+    // }
     // println!("{}", count);
-    for i in index..index + n as i128 {
-        array[ants[i as usize % n].2] =
-            calurate_lacation(ants[i as usize % n].0, t, ants[i as usize % n].1, l);
-    }
+    // for i in index..index + n as i128 {
+    //     array[ants[i as usize % n].2] =
+    //         calurate_lacation(ants[i as usize % n].0, t, ants[i as usize % n].1, l);
+    // }
     // for i in 0..ants.len() {
     //     // because 1-index and 0-index is mixed
     //     let address = array[(i + n - 1) % n];
     //     // let address = if address == 0 { l } else { address };
     //     println!("{}", address % l);
     // }
-    for e in array {
-        println!("{}", e % l);
-    }
+    // for e in array {
+    //     println!("{}", e % l);
+    // }
 }
 
 fn estmated_index(ants: &Vec<(i128, i128, usize)>, time: i128, length: i128) -> i128 {
@@ -62,9 +82,9 @@ fn estmated_index(ants: &Vec<(i128, i128, usize)>, time: i128, length: i128) -> 
         if !ants[0].1 == e.1 {
             count += base * 2;
             let distance = distance(ants[0].0, e.0, length, ants[0].1);
-            if res > length / 2 + distance {
+            if 2 * res > length + distance {
                 count += 2;
-            } else if res > distance {
+            } else if 2 * res > distance {
                 count += 1;
             }
             // if res > distance(ants[0].0, e.0, length, ants[0].1) {
