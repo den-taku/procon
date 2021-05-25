@@ -3,8 +3,9 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        n: usize,
-        t: [[i128; 50];50]
+        n: i128,
+        l: i128,
+        t: i128
     }
     unimplemented!()
 }
