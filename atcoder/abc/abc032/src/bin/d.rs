@@ -37,7 +37,7 @@ fn if_n_30(n: usize, w: i64, load: Vec<(i64, i64)>) -> i64 {
     for i in 0..a.len() {
         a[i] = adder(n, i, &load);
     }
-    let mut b = vec![(0i64, 0i64); 2i64.pow(n as u32 - n as u32 / 2 as u32) us usize];
+    let mut b = vec![(0i64, 0i64); 2i64.pow(n as u32 - n as u32 / 2 as u32) as usize];
     println!("1");
     unimplemented!()
 }
