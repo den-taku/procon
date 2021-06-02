@@ -8,7 +8,7 @@ fn main() {
         mut p: [i64; n]
     }
     p.push(0);
-    p.push(0);
+    // p.push(0);
     let mut a: Vec<i64> = Vec::with_capacity((n + 2) * (n + 2));
     for i in 0..n + 2 {
         for j in 0..n + 2 {
