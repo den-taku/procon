@@ -205,35 +205,3 @@ mod tests_range_minimum_query {
         }
     }
 }
-
-// fn main() {
-//     // input! {
-//     //     n: usize,
-//     //     q: usize,
-//     //     com: [(usize, usize, usize);q]
-//     // }
-//     let condition = read_line::<usize>();
-//     let n = condition[0];
-//     let q = condition[1];
-//     let mut com = Vec::with_capacity(q);
-//     for _ in 0..q {
-//         let elem = read_line::<usize>();
-//         com.push((elem[0], elem[1], elem[2]));
-//     }
-//     let com = com;
-
-//     let mut segment = Rmq::init(n, 2_147_483_647i64);
-//     for &(d, x, y) in &com {
-//         match d {
-//             0 => segment.update(x, y as i64),
-//             1 => println!(
-//                 "{}",
-//                 match segment.find(x..y + 1) {
-//                     std::i64::MAX => 2_147_483_647i64,
-//                     a => a,
-//                 }
-//             ),
-//             _ => unreachable!(),
-//         }
-//     }
-// }
