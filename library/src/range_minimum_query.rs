@@ -42,7 +42,6 @@ where
     }
 }
 
-
 impl<T> Rmq<T>
 where
     T: Ord + Copy,
@@ -97,7 +96,6 @@ impl<T> Rmq<T> {
         self.len() == 0
     }
 }
-
 
 impl<T> std::ops::Index<usize> for Rmq<T> {
     type Output = T;
@@ -159,13 +157,7 @@ mod tests_range_minimum_query {
     fn for_rmq1() {
         let n = 3;
         let _q = 5;
-        let com = [
-            (0, 0, 1),
-            (0, 1, 2),
-            (0, 2, 3),
-            (1, 0, 2),
-            (1, 1, 2)
-        ];
+        let com = [(0, 0, 1), (0, 1, 2), (0, 2, 3), (1, 0, 2), (1, 1, 2)];
         let answers = &[1, 2];
         let mut rmq = Rmq::new(n);
         let mut i = 0;
@@ -173,10 +165,10 @@ mod tests_range_minimum_query {
             match d {
                 0 => rmq.update(x, y as i64),
                 1 => {
-                    assert_eq!(rmq.find(x..y+1), answers[i]);
+                    assert_eq!(rmq.find(x..y + 1), answers[i]);
                     i += 1;
-                },
-                _ => unreachable!()
+                }
+                _ => unreachable!(),
             }
         }
     }
@@ -185,11 +177,7 @@ mod tests_range_minimum_query {
     fn for_rmq2() {
         let n = 1;
         let _q = 3;
-        let com = [
-            (1, 0, 0),
-            (0, 0, 5),
-            (1, 0, 0)
-        ];
+        let com = [(1, 0, 0), (0, 0, 5), (1, 0, 0)];
         let answers = &[std::i64::MAX, 5];
         let mut rmq = Rmq::new(n);
         let mut i = 0;
@@ -197,10 +185,10 @@ mod tests_range_minimum_query {
             match d {
                 0 => rmq.update(x, y as i64),
                 1 => {
-                    assert_eq!(rmq.find(x..y+1), answers[i]);
+                    assert_eq!(rmq.find(x..y + 1), answers[i]);
                     i += 1;
-                },
-                _ => unreachable!()
+                }
+                _ => unreachable!(),
             }
         }
     }
