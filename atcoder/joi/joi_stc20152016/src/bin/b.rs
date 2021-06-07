@@ -190,6 +190,49 @@ mod tests_bit_sum {
     use super::*;
 
     #[test]
+    fn for_bit_range_sum1() {
+        enum Query {
+            Add(usize, usize, i64),
+            Get(usize, usize),
+        }
+        let (n, q) = (3, 5);
+        let querys = [
+            Add(1, 2, 1),
+            Add(2, 3, 2),
+            Add(3, 3, 3),
+            Get(1, 2),
+            Get(2, 3),
+        ];
+        let answers = [4, 8];
+        let mut i = 0;
+
+        let mut bit1 = BitSum::<i64>::new(n + 2);
+        let mut bit0 = BitSum::<i64>::new(n + 2);
+
+        for &query in &querys {
+            match query {
+                Add(l, r, x) => {
+                    bit0.add(l - 1, -x * (l as i64 - 1));
+                    bit1.add(l - 1, x);
+                    bit0.add(r - 1 + 1, x * r as i64);
+                    bit1.add(r - 1 + 1, -x);
+                }
+                Get(a, b) => {
+                    assert_eq!(
+                        {
+                            bit1.sum_in_range(0..b) * b as i64 + bit0.sum_in_range(0..b)
+                                - bit1.sum_in_range(0..a - 1) * (a - 1) as i64
+                                - bit0.sum_in_range(0..a - 1)
+                        },
+                        answers[i]
+                    );
+                    i += 1;
+                }
+            }
+        }
+    }
+
+    #[test]
     fn for_bit_sum1() {
         let com = [(1, 11), (1, 29), (1, 89), (2, 2), (2, 2)];
         let answers = [29, 89];
