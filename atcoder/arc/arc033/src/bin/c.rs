@@ -1,3 +1,58 @@
+// #![allow(dead_code)]
+// use proconio::{fastout, input};
+
+// #[fastout]
+// fn main() {
+//     input! {
+//         q: usize,
+//         com: [(i32, i64); q]
+//     }
+//     let mut array = [0i64; 200_001];
+//     let mut sub = [0i64; 450];
+//     for &(query, num) in &com {
+//         match query {
+//             1 => one(&mut array, &mut sub, num),
+//             2 => println!("{}", two(&mut array, &mut sub, num)),
+//             _ => unreachable!(),
+//         }
+//     }
+// }
+
+// fn one(array: &mut [i64], sub: &mut [i64], num: i64) {
+//     array[num as usize] += 1;
+//     sub[(num / 450) as usize] += 1;
+// }
+
+// fn two(array: &mut [i64], sub: &mut [i64], index: i64) -> i64 {
+//     let (sum, i) = {
+//         let mut i = 0i64;
+//         let mut sum = 0i64;
+//         while sum + sub[i as usize] < index as i64 {
+//             sum += sub[i as usize];
+//             i += 1;
+//         }
+//         (sum, i)
+//     };
+//     // 総和がi以上になるもののうち最小
+//     let j = {
+//         let mut j_sum = 0;
+//         let mut j = 0;
+//         for e in &array[(450 * i) as usize..(450 * (i + 1)) as usize] {
+//             j_sum += e;
+//             if j_sum + sum >= index as i64 {
+//                 break;
+//             }
+//             j += 1;
+//         }
+//         j
+//     };
+//     let j = if j >= 450 { 449 } else { j };
+//     sub[((i * 450 + j) / 450) as usize] -= 1;
+//     array[(i * 450 + j) as usize] -= 1;
+//     // 総和がちょうどiになる最小のindex
+//     i * 450 + j
+// }
+
 #![allow(dead_code)]
 use proconio::{fastout, input};
 
