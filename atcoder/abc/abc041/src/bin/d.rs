@@ -17,6 +17,7 @@ fn main() {
     println!("{}", rec(n, (1 << n) - 1, &edge, &mut dp));
 }
 
+// count topological sort's path in set
 fn rec(n: usize, set: i64, edge: &[i32], dp: &mut [Option<i64>]) -> i64 {
     if let Some(ans) = dp[set as usize] {
         // already calculated
