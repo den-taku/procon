@@ -27,7 +27,7 @@ fn main() {
             len[1] = 2;
         } else {
             sub_ans[i] = (((((sub_ans[i - 1] % MOD) + (sub_ans[i - 2] % MOD)) % MOD) % MOD
-                + (((a[i] % MOD) * ((len[i - 1] - len[i - 2]) % MOD)) % MOD))
+                + (((a[i] % MOD) * (((len[i - 1] as i128 - len[i - 2] as i128) % MOD as i128) as i128)) % MOD))
                 % MOD
                 + ((a[i - 1] % MOD) * len[i - 2] % MOD) % MOD)
                 % MOD;
