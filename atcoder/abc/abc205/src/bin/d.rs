@@ -1,3 +1,29 @@
+// use proconio::{fastout, input};
+
+// #[fastout]
+// fn main() {
+//     input! {
+//         n: usize,
+//         q: usize,
+//         mut a: [i64; n],
+//         querys: [i64; q]
+//     }
+//     let a = {
+//         (0..1_000_0000)
+//     }
+//     a.dedup();
+    
+//     for query in querys {
+//         if query > a[a.len() - 1] {
+//             println!("{}", query + a[a.len()-1] - a.len() as i64);
+//         } else {
+//             println!("{}", 9)
+//         }
+//     }
+// }
+
+// fn binary_search()
+
 #![allow(dead_code)]
 
 use proconio::{fastout, input};
@@ -7,13 +33,13 @@ fn main() {
     input! {
         n: usize,
         q: usize,
-        mut a: [i64; n],
-        query: [i64; q]
+        mut a: [i32; n],
+        query: [i32; q]
     }
     a.sort();
     a.dedup();
     let max = *a.iter().max().unwrap();
-    let mut bit = BitSum::<i64>::new(max as usize + 3);
+    let mut bit = BitSum::<i32>::new(max as usize);
     for &e in &a {
         bit.add(e as usize - 1, 1);
     }
@@ -22,16 +48,16 @@ fn main() {
         let mut i = 0;
         let mut j = q;
         let mut flag = false;
-        if q > bit.len() as i64 {
+        if q > bit.len() as i32 {
             flag = true;
         } else {
             while res > 0 {
                 let count = bit.sum_in_range(i..j as usize);
-                let can_sub = (j - i as i64) - count as i64;
+                let can_sub = (j - i as i32) - count as i32;
                 res -= can_sub;
                 i = j as usize;
                 j += res;
-                if j > bit.len() as i64 {
+                if j > bit.len() as i32 {
                     flag = true;
                     break;
                 }
@@ -39,7 +65,7 @@ fn main() {
         }
         if flag {
             let count = bit.sum_in_range(i..bit.len());
-            let can_sub = (bit.len() - i) as i64 - count as i64;
+            let can_sub = (bit.len() - i) as i32 - count as i32;
             res -= can_sub;
             i = bit.len();
             i += res as usize;
@@ -57,7 +83,7 @@ pub struct BitSum<T> {
 
 impl<T> BitSum<T>
 where
-    T: From<i64> + Copy,
+    T: From<i32> + Copy,
 {
     /// Make BitSum for g[0]...g[n-1].
     pub fn new(n: usize) -> Self {
@@ -69,7 +95,7 @@ where
 
 impl<T> BitSum<T>
 where
-    T: From<i64> + std::ops::Sub<Output = T> + Copy + std::ops::AddAssign,
+    T: From<i32> + std::ops::Sub<Output = T> + Copy + std::ops::AddAssign,
 {
     /// `sum_in_range(a..b)` calculate sum in [a..b).
     /// Of cource, 0-indexed.
@@ -91,7 +117,7 @@ where
         let mut sum = T::from(0);
         while index > 0 {
             sum += self[index - 1];
-            index -= (index as i64 & -(index as i64)) as usize;
+            index -= (index as i32 & -(index as i32)) as usize;
         }
         sum
     }
@@ -106,14 +132,14 @@ where
         let mut index = index + 1;
         while index <= self.tree.len() {
             self.tree[index - 1] += value;
-            index += (index as i64 & -(index as i64)) as usize;
+            index += (index as i32 & -(index as i32)) as usize;
         }
     }
 }
 
 impl<T> BitSum<T>
 where
-    T: Ord + From<i64> + std::ops::Sub<Output = T> + Copy + std::ops::AddAssign,
+    T: Ord + From<i32> + std::ops::Sub<Output = T> + Copy + std::ops::AddAssign,
 {
     /// Find index that giving least bit_sum[index] such that is more than value.
     pub fn binary_search_least(&self, value: T) -> Option<usize> {
@@ -181,13 +207,13 @@ mod tests_bit_sum {
     fn for_bit_sum1() {
         let com = [(1, 11), (1, 29), (1, 89), (2, 2), (2, 2)];
         let answers = [29, 89];
-        let mut bit_sum = BitSum::<i64>::new(200_000);
+        let mut bit_sum = BitSum::<i32>::new(200_000);
         let mut i = 0;
         for &(direction, value) in &com {
             match direction {
                 1 => bit_sum.add(value - 1, 1),
                 2 => {
-                    let index = bit_sum.binary_search_least(value as i64).unwrap() + 1;
+                    let index = bit_sum.binary_search_least(value as i32).unwrap() + 1;
                     bit_sum.add(index - 1, -1);
                     assert_eq!(index, answers[i]);
                     i += 1;
@@ -214,14 +240,14 @@ mod tests_bit_sum {
             (2, 4),
         ];
         let answers = [55277, 52403];
-        let mut bit_sum = BitSum::<i64>::new(200_000);
+        let mut bit_sum = BitSum::<i32>::new(200_000);
         let mut i = 0;
         for &(direction, value) in &com {
             match direction {
                 1 => bit_sum.add(value - 1, 1),
                 2 => {
                     // sum become i and least
-                    let index = bit_sum.binary_search_least(value as i64).unwrap() + 1;
+                    let index = bit_sum.binary_search_least(value as i32).unwrap() + 1;
                     bit_sum.add(index - 1, -1);
                     assert_eq!(index, answers[i]);
                     i += 1;
@@ -233,7 +259,7 @@ mod tests_bit_sum {
 
     #[derive(Debug, Clone, Copy)]
     enum Query {
-        Add(usize, usize, i64),
+        Add(usize, usize, i32),
         Get(usize, usize),
     }
     use Query::*;
@@ -251,22 +277,22 @@ mod tests_bit_sum {
         let answers = [4, 8];
         let mut i = 0;
 
-        let mut bit1 = BitSum::<i64>::new(n + 2);
-        let mut bit0 = BitSum::<i64>::new(n + 2);
+        let mut bit1 = BitSum::<i32>::new(n + 2);
+        let mut bit0 = BitSum::<i32>::new(n + 2);
 
         for &query in &querys {
             match query {
                 Add(l, r, x) => {
-                    bit0.add(l - 1, -x * (l as i64 - 1));
+                    bit0.add(l - 1, -x * (l as i32 - 1));
                     bit1.add(l - 1, x);
-                    bit0.add(r - 1 + 1, x * r as i64);
+                    bit0.add(r - 1 + 1, x * r as i32);
                     bit1.add(r - 1 + 1, -x);
                 }
                 Get(a, b) => {
                     assert_eq!(
                         {
-                            bit1.sum_in_range(0..b) * b as i64 + bit0.sum_in_range(0..b)
-                                - bit1.sum_in_range(0..a - 1) * (a - 1) as i64
+                            bit1.sum_in_range(0..b) * b as i32 + bit0.sum_in_range(0..b)
+                                - bit1.sum_in_range(0..a - 1) * (a - 1) as i32
                                 - bit0.sum_in_range(0..a - 1)
                         },
                         answers[i]
@@ -284,22 +310,22 @@ mod tests_bit_sum {
         let answers = [0, 4];
         let mut i = 0;
 
-        let mut bit1 = BitSum::<i64>::new(n + 2);
-        let mut bit0 = BitSum::<i64>::new(n + 2);
+        let mut bit1 = BitSum::<i32>::new(n + 2);
+        let mut bit0 = BitSum::<i32>::new(n + 2);
 
         for &query in &querys {
             match query {
                 Add(l, r, x) => {
-                    bit0.add(l - 1, -x * (l as i64 - 1));
+                    bit0.add(l - 1, -x * (l as i32 - 1));
                     bit1.add(l - 1, x);
-                    bit0.add(r - 1 + 1, x * r as i64);
+                    bit0.add(r - 1 + 1, x * r as i32);
                     bit1.add(r - 1 + 1, -x);
                 }
                 Get(a, b) => {
                     assert_eq!(
                         {
-                            bit1.sum_in_range(0..b) * b as i64 + bit0.sum_in_range(0..b)
-                                - bit1.sum_in_range(0..a - 1) * (a - 1) as i64
+                            bit1.sum_in_range(0..b) * b as i32 + bit0.sum_in_range(0..b)
+                                - bit1.sum_in_range(0..a - 1) * (a - 1) as i32
                                 - bit0.sum_in_range(0..a - 1)
                         },
                         answers[i]
