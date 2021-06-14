@@ -1,4 +1,4 @@
-use library::enumeration::path_enumeration_algorithm;
+use library::enumeration::enumeration_library::path_enumeration_algorithm;
 
 fn main() {
     // println!("Hello, world!");
