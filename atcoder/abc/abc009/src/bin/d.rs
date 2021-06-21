@@ -12,12 +12,12 @@ fn main() {
         println!("{}", a[m - 1])
     } else {
         let mut tmp = vec![0u64; k * k - k];
-        (0..k-1).fold((), |_, i| {
-            tmp[i * k + i] = 0xffffffff;
+        (0..k - 1).fold((), |_, i| {
+            tmp[i * k + i] = 0xffff_ffff;
         });
         c.append(&mut tmp);
         let index = m - k;
-        let a: Vec<u64> = a.iter().rev().map(|e| *e).collect();
+        let a: Vec<u64> = a.iter().rev().copied().collect();
         println!("{}", (Matrix::new(c, k).pow(index) * a)[0]);
     }
 }
