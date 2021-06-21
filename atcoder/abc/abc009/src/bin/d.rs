@@ -77,7 +77,7 @@ impl Matrix {
         if n == 0 {
             let mut e = vec![0; self.k * self.k];
             (0..self.k).fold((), |_, i| {
-                e[i * self.k + i] = 1;
+                e[i * self.k + i] = 0xffff_ffff;
             });
             Self::new(e, self.k)
         } else if n == 1 {
