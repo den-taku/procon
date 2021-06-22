@@ -13,6 +13,7 @@ fn main() {
     let mut c = vec![1i64; r * r];
     // i に向かう組み合わせ
     for i in 0..r {
+        // v[v][S] -> v から始まるiへの道の組み合わせ，ただし領域はS(vを含む)
         let mut v = vec![vec![0i64; 2 << r]; r];
         // bitDP
         for j in 0..2 << r {
