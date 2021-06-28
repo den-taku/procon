@@ -50,7 +50,6 @@ fn main() {
                     }
                 }
             }
-            println!("{}: {:?}", k, &v_k);
         }
     }
     println!("{}", unsafe { v_k.get_unchecked(miss_max).len() - 1 })
