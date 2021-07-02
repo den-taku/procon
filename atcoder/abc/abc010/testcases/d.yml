@@ -61,6 +61,14 @@ cases:
       2 3
     out: |
       0
+  - name: sample5
+    in: |
+      2 1 1
+      1
+      0 1
+      1 0
+    out: |
+      1
 
 extend:
   - type: Text
