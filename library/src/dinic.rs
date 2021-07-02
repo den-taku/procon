@@ -1,33 +1,4 @@
 #![allow(dead_code)]
-use dinic_library::*;
-
-fn main() {
-    let (v, e) = {
-        let input = read_line::<usize>();
-        (input[0], input[1])
-    };
-    let mut edges = Vec::with_capacity(e);
-    (0..e).fold((), |_, _| {
-        let elem = read_line::<i64>();
-        edges.push((elem[0] as usize, elem[1] as usize, elem[2]));
-    });
-    let mut flow = Dinic::new(v, &edges);
-    println!("{}", flow.max_flow(0, v - 1));
-}
-
-fn read_line<T>() -> Vec<T>
-where
-    T: std::str::FromStr,
-    <T as std::str::FromStr>::Err: std::fmt::Debug,
-{
-    let mut s = String::new();
-    std::io::stdin().read_line(&mut s).unwrap();
-    s.trim()
-        .split_whitespace()
-        .map(|c| T::from_str(c).unwrap())
-        .collect()
-}
-
 
 pub mod dinic_library {
     /// edges is expressed as adjacency list.

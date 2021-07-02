@@ -3,7 +3,7 @@
 pub mod ford_fulkerson_library {
     /// edges is expressed as adjacency list.
     #[derive(Clone, Debug)]
-    struct FordFulkerson<T> {
+    pub struct FordFulkerson<T> {
         edges: Vec<Vec<Edge<T>>>,
         edges_size: usize,
     }
@@ -84,6 +84,7 @@ pub mod ford_fulkerson_library {
                                 break;
                             }
                         }
+                        d = T::from(0);
                     }
                     d
                 }
@@ -92,7 +93,7 @@ pub mod ford_fulkerson_library {
 
         pub fn max_flow(&mut self, start: usize, terminal: usize) -> T {
             let mut flow = T::from(0);
-            let mut used = vec![false; self.edges_size];
+            let mut used = vec![false; self.edges.len()];
             loop {
                 let f = self.dfs(start, terminal, T::MAX, &mut used);
                 if f == T::from(0) {

@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-use ford_fulkerson_library::*;
+use dinic_library::*;
 use proconio::{fastout, input};
 
 #[fastout]
@@ -11,10 +11,6 @@ fn main() {
         p: [usize; g],
         f: [(usize, usize); e]
     }
-    if n == 1 || g == 0 {
-        println!("0");
-        return;
-    }
     let mut f: Vec<(usize, usize, i64)> = f
         .iter()
         .map(|(s, t)| vec![(*s, *t, 1i64), (*t, *s, 1)])
@@ -23,14 +19,14 @@ fn main() {
     for &girl in &p {
         f.push((girl, n, 1));
     }
-    let mut flow = FordFulkerson::new(n + 1, &f);
+    let mut flow = Dinic::new(n + 1, &f);
     println!("{}", flow.max_flow(0, n));
 }
 
-pub mod ford_fulkerson_library {
+pub mod dinic_library {
     /// edges is expressed as adjacency list.
     #[derive(Clone, Debug)]
-    pub struct FordFulkerson<T> {
+    pub struct Dinic<T> {
         edges: Vec<Vec<Edge<T>>>,
         edges_size: usize,
     }
@@ -42,7 +38,7 @@ pub mod ford_fulkerson_library {
         rev: usize,
     }
 
-    impl<T> FordFulkerson<T>
+    impl<T> Dinic<T>
     where
         T: std::convert::From<i32> + Clone + Copy,
     {
@@ -73,62 +69,86 @@ pub mod ford_fulkerson_library {
         }
     }
 
-    impl<T> FordFulkerson<T>
+    impl<T> Dinic<T>
     where
-        T: std::cmp::Ord
-            + std::convert::From<i32>
+        T: std::convert::From<i32>
+            + std::cmp::Ord
             + Copy
-            + std::ops::AddAssign
             + std::ops::SubAssign
+            + std::ops::AddAssign
             + Max,
     {
-        fn dfs(&mut self, vertex: usize, terminal: usize, flow: T, used: &mut [bool]) -> T {
+        fn bfs(&self, start: usize) -> Vec<i64> {
+            let mut level = vec![-1; self.edges.len()];
+            let mut queue = std::collections::VecDeque::with_capacity(self.edges_size);
+            level[start] = 0;
+            queue.push_back(start);
+            while !queue.is_empty() {
+                let vertex = queue.pop_front().unwrap();
+                (0..self.edges[vertex].len()).fold((), |_, i| {
+                    let edge = self.edges[vertex][i];
+                    if edge.capacity > T::from(0) && level[edge.to] < 0 {
+                        level[edge.to] = level[vertex] + 1;
+                        queue.push_back(edge.to);
+                    }
+                });
+            }
+            level
+        }
+
+        fn dfs(
+            &mut self,
+            vertex: usize,
+            terminal: usize,
+            flow: T,
+            level: &[i64],
+            iter: &mut [usize],
+        ) -> T {
             if vertex == terminal {
                 flow
             } else {
-                unsafe {
-                    (*used.get_unchecked_mut(vertex)) = true;
-                    let mut d = T::from(0);
-                    for i in 0..self.edges.get_unchecked(vertex).len() {
-                        let edge = *self.edges.get_unchecked(vertex).get_unchecked(i);
-                        if !used.get_unchecked(edge.to) && edge.capacity > T::from(0) {
-                            d = self.dfs(
-                                edge.to,
-                                terminal,
-                                std::cmp::min(flow, edge.capacity),
-                                used,
-                            );
-                            if d > T::from(0) {
-                                {
-                                    let edge =
-                                        self.edges.get_unchecked_mut(vertex).get_unchecked_mut(i);
-                                    edge.capacity -= d;
-                                }
-                                self.edges
-                                    .get_unchecked_mut(edge.to)
-                                    .get_unchecked_mut(edge.rev)
-                                    .capacity += d;
-                                break;
+                let mut d = T::from(0);
+                // let mut iter = vec![T::from(0); self.edges_size];
+                for i in iter[vertex]..self.edges[vertex].len() {
+                    let edge = self.edges[vertex][i];
+                    if edge.capacity > T::from(0) && level[vertex] < level[edge.to] {
+                        d = self.dfs(
+                            edge.to,
+                            terminal,
+                            std::cmp::min(flow, edge.capacity),
+                            level,
+                            iter,
+                        );
+                        if d > T::from(0) {
+                            {
+                                self.edges[vertex][i].capacity -= d;
                             }
+                            self.edges[edge.to][edge.rev].capacity += d;
+                            break;
                         }
-                        d = T::from(0);
                     }
-                    d
+                    d = T::from(0);
                 }
+                d
             }
         }
 
         pub fn max_flow(&mut self, start: usize, terminal: usize) -> T {
             let mut flow = T::from(0);
-            let mut used = vec![false; self.edges_size];
+            let mut iter = vec![0usize; self.edges.len()];
             loop {
-                let f = self.dfs(start, terminal, T::MAX, &mut used);
-                if f == T::from(0) {
+                let level = self.bfs(start);
+                if level[terminal] < 0 {
                     return flow;
-                } else {
+                }
+                let mut f;
+                while {
+                    f = self.dfs(start, terminal, T::MAX, &level, &mut iter);
+                    f > T::from(0) && f != T::MAX
+                } {
                     flow += f;
                 }
-                used = used.iter().map(|_| false).collect();
+                iter = iter.iter().map(|_| 0).collect();
             }
         }
     }
@@ -178,11 +198,19 @@ pub mod ford_fulkerson_library {
         use super::*;
 
         #[test]
-        fn for_maximum_flow() {
+        fn for_maximum_flow_dinic1() {
             let n = 4;
             let vertics = [(0, 1, 2i64), (0, 2, 1), (1, 2, 1), (1, 3, 1), (2, 3, 2)];
-            let mut flow = FordFulkerson::new(n, &vertics);
+            let mut flow = Dinic::new(n, &vertics);
             assert_eq!(flow.max_flow(0, 3), 3);
+        }
+
+        #[test]
+        fn for_maximum_flow_dinic2() {
+            let n = 2;
+            let vertics = [(0, 1, 1000i64)];
+            let mut flow = Dinic::new(n, &vertics);
+            assert_eq!(flow.max_flow(0, 1), 1000);
         }
     }
 }
