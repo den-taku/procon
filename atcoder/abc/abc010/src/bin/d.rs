@@ -79,21 +79,23 @@ pub mod dinic_library {
             + Max,
     {
         fn bfs(&self, start: usize) -> Vec<i64> {
-            let mut level = vec![-1; self.edges.len()];
-            let mut queue = std::collections::VecDeque::with_capacity(self.edges_size);
-            level[start] = 0;
-            queue.push_back(start);
-            while !queue.is_empty() {
-                let vertex = queue.pop_front().unwrap();
-                (0..self.edges[vertex].len()).fold((), |_, i| {
-                    let edge = self.edges[vertex][i];
-                    if edge.capacity > T::from(0) && level[edge.to] < 0 {
-                        level[edge.to] = level[vertex] + 1;
-                        queue.push_back(edge.to);
-                    }
-                });
+            unsafe {
+                let mut level = vec![-1; self.edges.len()];
+                let mut queue = std::collections::VecDeque::with_capacity(self.edges_size);
+                *level.get_unchecked_mut(start) = 0;
+                queue.push_back(start);
+                while !queue.is_empty() {
+                    let vertex = queue.pop_front().unwrap();
+                    (0..self.edges.get_unchecked(vertex).len()).fold((), |_, i| {
+                        let edge = self.edges.get_unchecked(vertex).get_unchecked(i);
+                        if edge.capacity > T::from(0) && *level.get_unchecked(edge.to) < 0 {
+                            *level.get_unchecked_mut(edge.to) = *level.get_unchecked(vertex) + 1;
+                            queue.push_back(edge.to);
+                        }
+                    });
+                }
+                level
             }
-            level
         }
 
         fn dfs(
@@ -107,29 +109,38 @@ pub mod dinic_library {
             if vertex == terminal {
                 flow
             } else {
-                let mut d = T::from(0);
-                // let mut iter = vec![T::from(0); self.edges_size];
-                for i in iter[vertex]..self.edges[vertex].len() {
-                    let edge = self.edges[vertex][i];
-                    if edge.capacity > T::from(0) && level[vertex] < level[edge.to] {
-                        d = self.dfs(
-                            edge.to,
-                            terminal,
-                            std::cmp::min(flow, edge.capacity),
-                            level,
-                            iter,
-                        );
-                        if d > T::from(0) {
-                            {
-                                self.edges[vertex][i].capacity -= d;
+                unsafe {
+                    let mut d = T::from(0);
+                    for i in *iter.get_unchecked(vertex)..self.edges.get_unchecked(vertex).len() {
+                        let edge = *self.edges.get_unchecked(vertex).get_unchecked(i);
+                        if edge.capacity > T::from(0)
+                            && *level.get_unchecked(vertex) < *level.get_unchecked(edge.to)
+                        {
+                            d = self.dfs(
+                                edge.to,
+                                terminal,
+                                std::cmp::min(flow, edge.capacity),
+                                level,
+                                iter,
+                            );
+                            if d > T::from(0) {
+                                {
+                                    self.edges
+                                        .get_unchecked_mut(vertex)
+                                        .get_unchecked_mut(i)
+                                        .capacity -= d;
+                                }
+                                self.edges
+                                    .get_unchecked_mut(edge.to)
+                                    .get_unchecked_mut(edge.rev)
+                                    .capacity += d;
+                                break;
                             }
-                            self.edges[edge.to][edge.rev].capacity += d;
-                            break;
                         }
+                        d = T::from(0);
                     }
-                    d = T::from(0);
+                    d
                 }
-                d
             }
         }
 
@@ -137,18 +148,20 @@ pub mod dinic_library {
             let mut flow = T::from(0);
             let mut iter = vec![0usize; self.edges.len()];
             loop {
-                let level = self.bfs(start);
-                if level[terminal] < 0 {
-                    return flow;
+                unsafe {
+                    let level = self.bfs(start);
+                    if *level.get_unchecked(terminal) < 0 {
+                        return flow;
+                    }
+                    let mut f;
+                    while {
+                        f = self.dfs(start, terminal, T::MAX, &level, &mut iter);
+                        f > T::from(0) && f != T::MAX
+                    } {
+                        flow += f;
+                    }
+                    iter = iter.iter().map(|_| 0).collect();
                 }
-                let mut f;
-                while {
-                    f = self.dfs(start, terminal, T::MAX, &level, &mut iter);
-                    f > T::from(0) && f != T::MAX
-                } {
-                    flow += f;
-                }
-                iter = iter.iter().map(|_| 0).collect();
             }
         }
     }
