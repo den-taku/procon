@@ -7,7 +7,7 @@ fn main() {
         m: usize,
         abc: [(usize, usize, usize); m]
     }
-    let mut ans = 0i64;
+    let mut ans = 0usize;
     let graph = convert(&abc, n);
     let mut past = graph.clone();
     let mut next = graph;
@@ -15,18 +15,26 @@ fn main() {
     //     .iter()
     //     .filter(|e| if let Some(_) = e { true } else { false })
     //     .map(|e| e.unwrap())
-    //     .sum::<usize>() as i64;
+    //     .sum::<usize>() as usize;
     for k in 0..n {
         for i in 0..n {
             for j in 0..n {
-                next[i * n + j] = min(next[i * n + j], past[i * n + k], past[k * n + j]);
+                unsafe {
+                    let a = *next.get_unchecked(i * n + j);
+                    *next.get_unchecked_mut(i * n + j) = min(
+                        a,
+                        *past.get_unchecked(i * n + k),
+                        *past.get_unchecked(k * n + j),
+                    );
+                }
+                // next[i * n + j] = min(next[i * n + j], past[i * n + k], past[k * n + j]);
             }
         }
         ans += next
             .iter()
             .filter(|e| e.is_some())
             .map(|e| e.unwrap())
-            .sum::<usize>() as i64;
+            .sum::<usize>() as usize;
         past = next.clone();
     }
     println!("{}", ans);
