@@ -1,16 +1,10 @@
 #![allow(dead_code)]
 
-//use proconio::{fastout, input};
 use dinic_library::*;
 use std::fmt::Debug;
 use std::str::FromStr;
 
-// #[fastout]
 fn main() {
-    // input! {
-    //     n: usize,
-    //     t: [[i128; 50];50]
-    // }
     let (n, a, b) = {
         let input = read_line::<i32>();
         (input[0], input[1], input[2])
