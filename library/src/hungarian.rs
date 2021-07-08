@@ -227,37 +227,41 @@ pub mod hungarian_library {
 
             // this graph is a quize of cce in 2019
             let mut graph = Graph::new(18);
-            graph.add_edge(0, 1);
-            graph.add_edge(0, 6);
-            graph.add_edge(0, 9);
-            graph.add_edge(1, 3);
-            graph.add_edge(1, 7);
-            graph.add_edge(2, 3);
-            graph.add_edge(2, 5);
-            graph.add_edge(2, 12);
-            graph.add_edge(3, 4);
-            graph.add_edge(3, 5);
-            graph.add_edge(4, 8);
-            graph.add_edge(4, 17);
-            graph.add_edge(5, 13);
-            graph.add_edge(5, 14);
-            graph.add_edge(6, 7);
-            graph.add_edge(6, 8);
-            graph.add_edge(7, 8);
-            graph.add_edge(9, 10);
-            graph.add_edge(9, 13);
-            graph.add_edge(10, 11);
-            graph.add_edge(10, 12);
-            graph.add_edge(11, 12);
-            graph.add_edge(11, 13);
-            graph.add_edge(14, 15);
-            graph.add_edge(14, 16);
-            graph.add_edge(15, 16);
-            graph.add_edge(15, 17);
-            graph.add_edge(16, 17);
+            let given = [
+                (0, 1),
+                (0, 6),
+                (0, 9),
+                (1, 3),
+                (1, 7),
+                (2, 3),
+                (2, 5),
+                (2, 12),
+                (3, 4),
+                (3, 5),
+                (4, 8),
+                (4, 17),
+                (5, 13),
+                (5, 14),
+                (6, 7),
+                (6, 8),
+                (7, 8),
+                (9, 10),
+                (9, 13),
+                (10, 11),
+                (10, 12),
+                (11, 12),
+                (11, 13),
+                (14, 15),
+                (14, 16),
+                (15, 16),
+                (15, 17),
+                (16, 17),
+            ];
+            for &(i, j) in given.iter() {
+                graph.add_edge(i, j)
+            }
             let hungarian = Hungarian::new(graph);
             assert_eq!(hungarian.maximum_matching_with_graph::<i32>().0, 9);
-
         }
     }
 }
