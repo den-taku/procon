@@ -225,6 +225,7 @@ pub mod hungarian_library {
             let hungarian = Hungarian::new(graph);
             assert_eq!(hungarian.maximum_matching_with_graph::<i32>().0, 2);
 
+            // this graph is a quize of cce in 2019
             let mut graph = Graph::new(18);
             graph.add_edge(0, 1);
             graph.add_edge(0, 6);
