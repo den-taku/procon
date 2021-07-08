@@ -184,7 +184,7 @@ pub mod dinic_library {
     }
 
     #[cfg(test)]
-    mod tests_ford_fulkerson {
+    mod tests_dinic {
         use super::*;
 
         #[test]
