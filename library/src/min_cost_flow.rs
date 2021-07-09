@@ -1,36 +1,4 @@
-// Minimum Cost Flow
-// (https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_6_B&lang=jp)
-use min_cost_flow_library::*;
-use std::fmt::Debug;
-use std::str::FromStr;
-
-fn main() {
-    let (v, e, f) = {
-        let input = read_line::<usize>();
-        (input[0], input[1], input[2] as i32)
-    };
-    let mut flow = MinCostFlow::new(v);
-    let _ = (0..e)
-        .map(|_| {
-            let elem = read_line::<usize>();
-            flow.add_edge(elem[0], elem[1], elem[2] as i32, elem[3] as i32)
-        })
-        .collect::<Vec<()>>();
-    println!("{}", flow.min_cost_flow(0, v - 1, f).unwrap_or(-1));
-}
-
-fn read_line<T>() -> Vec<T>
-where
-    T: FromStr,
-    <T as FromStr>::Err: Debug,
-{
-    let mut s = String::new();
-    std::io::stdin().read_line(&mut s).unwrap();
-    s.trim()
-        .split_whitespace()
-        .map(|c| T::from_str(c).unwrap())
-        .collect()
-}
+#![allow(dead_code)]
 
 pub mod min_cost_flow_library {
 
@@ -288,7 +256,6 @@ pub mod min_cost_flow_library {
                 .iter()
                 .fold((), |_, e| flow.add_edge(e.0, e.1, e.2, e.3));
             assert_eq!(flow.min_cost_flow(0, v - 1, f).unwrap_or(-1), -1);
-
         }
     }
 }
