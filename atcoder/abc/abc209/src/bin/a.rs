@@ -6,6 +6,5 @@ fn main() {
         a: i32,
         b: i32
     }
-    let hoge = b - a + 1;
-    println!("{}", if hoge > 0 { hoge } else { 0 });
+    println!("{}", std::cmp::max(b - a + 1, 0));
 }
