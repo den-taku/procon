@@ -2,6 +2,7 @@
 
 pub mod enumeration_library {
 
+    #[inline]
     pub fn path_enumeration_algorithm<F>(n: usize, mut f: F)
     where
         F: FnMut(&SequencialSet<usize>),
@@ -47,12 +48,14 @@ pub mod enumeration_library {
 
     impl<T> std::ops::Index<usize> for SequencialSet<T> {
         type Output = T;
+        #[inline]
         fn index(&self, index: usize) -> &Self::Output {
             &self.sequence[index]
         }
     }
 
     impl<T> std::ops::IndexMut<usize> for SequencialSet<T> {
+        #[inline]
         fn index_mut(&mut self, index: usize) -> &mut Self::Output {
             &mut self.sequence[index]
         }
@@ -62,6 +65,7 @@ pub mod enumeration_library {
     where
         T: Clone + std::cmp::Eq + std::hash::Hash,
     {
+        #[inline]
         pub fn to_set(&self) -> Set<T> {
             Set::new(self.sequence.iter().cloned().collect())
         }
@@ -71,6 +75,7 @@ pub mod enumeration_library {
     where
         T: Clone,
     {
+        #[inline]
         pub fn to_vec(&self) -> Vec<T> {
             self.sequence.clone()
         }
@@ -80,6 +85,7 @@ pub mod enumeration_library {
     where
         T: std::cmp::Eq + std::hash::Hash + Copy,
     {
+        #[inline]
         pub fn extract_with_range(&self, range: std::ops::Range<usize>) -> Set<T> {
             let mut set = std::collections::HashSet::with_capacity(self.sequence.len());
             for e in self
@@ -98,6 +104,7 @@ pub mod enumeration_library {
     where
         T: Copy,
     {
+        #[inline]
         pub fn extract(&self, index: usize) -> Option<T> {
             if index < self.sequence.len() {
                 Some(self.sequence[index])
@@ -108,17 +115,22 @@ pub mod enumeration_library {
     }
 
     impl<T> SequencialSet<T> {
+        #[inline]
         pub fn new(sequence: Vec<T>) -> Self {
             Self { sequence }
         }
     }
 
     #[derive(Debug, Clone)]
-    pub struct Set<T> {
+    pub struct Set<T: std::cmp::Eq + std::hash::Hash> {
         set: std::collections::HashSet<T>,
     }
 
-    impl<T> Set<T> {
+    impl<T> Set<T> 
+    where
+        T: std::cmp::Eq + std::hash::Hash
+    {
+        #[inline]
         pub fn new(set: std::collections::HashSet<T>) -> Self {
             Self { set }
         }
@@ -128,6 +140,7 @@ pub mod enumeration_library {
     where
         T: std::cmp::Eq + std::hash::Hash + From<usize>,
     {
+        #[inline]
         fn from(range: std::ops::Range<usize>) -> Self {
             let mut set = std::collections::HashSet::with_capacity(range.end - range.start);
             for e in range {
@@ -143,6 +156,7 @@ pub mod enumeration_library {
     {
         type Output = Set<T>;
 
+        #[inline]
         fn sub(self, other: Self) -> Self::Output {
             let mut set = std::collections::HashSet::new();
             for x in self.set.difference(&other.set) {
@@ -154,8 +168,9 @@ pub mod enumeration_library {
 
     impl<T> Set<T>
     where
-        T: Ord + Copy,
+        T: Ord + Copy + std::cmp::Eq + std::hash::Hash,
     {
+        #[inline]
         pub fn min(&self) -> Option<T> {
             if self.set.is_empty() {
                 None
@@ -173,6 +188,7 @@ pub mod enumeration_library {
     where
         T: Eq + std::hash::Hash,
     {
+        #[inline]
         fn eq(&self, other: &Self) -> bool {
             self.set == other.set
         }
@@ -182,6 +198,7 @@ pub mod enumeration_library {
     where
         T: Eq,
     {
+        #[inline]
         fn eq(&self, other: &Self) -> bool {
             self.sequence == other.sequence
         }
