@@ -40,6 +40,7 @@ fn main() {
     unimplemented!()
 }
 
+#[inline]
 fn read_line<T>() -> Vec<T>
 where
     T: std::str::FromStr,
