@@ -29,10 +29,8 @@ fn main() {
     });
     let (cost, log) = flow.min_cost_flow(0, 2 * n + 1, n as i32);
     println!("{}", cost.unwrap());
-    // println!("{}", log.len());
     let mut set = std::collections::HashSet::new();
     for s in log {
-        // println!("{:?}", s);
         set.insert((s[2], s[1]));
     }
     let mut output = Vec::with_capacity(n * n);
@@ -58,7 +56,6 @@ fn main() {
     for state in &output {
         println!("{}", state);
     }
-    // println!("{:?}", flow.graph());
 }
 
 #[inline]
@@ -351,7 +348,7 @@ pub mod min_cost_flow_library {
             let _ = edges
                 .iter()
                 .fold((), |_, e| flow.add_edge(e.0, e.1, e.2, e.3));
-            assert_eq!(flow.min_cost_flow(0, v - 1, f).unwrap_or(-1), 6);
+            assert_eq!(flow.min_cost_flow(0, v - 1, f).0.unwrap_or(-1), 6);
 
             let (v, _e, f) = (6, 9, 3);
             let mut flow = MinCostFlow::new(v);
@@ -369,7 +366,7 @@ pub mod min_cost_flow_library {
             let _ = edges
                 .iter()
                 .fold((), |_, e| flow.add_edge(e.0, e.1, e.2, e.3));
-            assert_eq!(flow.min_cost_flow(0, v - 1, f).unwrap_or(-1), 18);
+            assert_eq!(flow.min_cost_flow(0, v - 1, f).0.unwrap_or(-1), 18);
 
             let (v, _e, f) = (6, 9, 6);
             let mut flow = MinCostFlow::new(v);
@@ -387,7 +384,7 @@ pub mod min_cost_flow_library {
             let _ = edges
                 .iter()
                 .fold((), |_, e| flow.add_edge(e.0, e.1, e.2, e.3));
-            assert_eq!(flow.min_cost_flow(0, v - 1, f).unwrap_or(-1), -1);
+            assert_eq!(flow.min_cost_flow(0, v - 1, f).0.unwrap_or(-1), -1);
         }
     }
 }
