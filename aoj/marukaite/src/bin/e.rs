@@ -8,11 +8,13 @@ fn main() {
     // }
     let n = read_line::<usize>()[0];
     let mut t = Vec::with_capacity(n);
-    let _ = (0..n).map(|_| {
-        let elem = read_line::<i64>();
-        t.push(elem);
-    }).collect::<Vec<()>>;
-    _t = t;
+    let _ = (0..n)
+        .map(|_| {
+            let elem = read_line::<i64>();
+            t.push(elem);
+        })
+        .collect::<Vec<()>>();
+    t = t;
     unimplemented!()
 }
 

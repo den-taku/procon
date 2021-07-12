@@ -35,8 +35,8 @@ fn main() {
     let _ = (0..n).map(|_| {
         let elem = read_line::<i64>();
         t.push(elem);
-    }).collect::<Vec<()>>;
-    _t = t;
+    }).collect::<Vec<()>>();
+    t = t;
     unimplemented!()
 }
 
