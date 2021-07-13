@@ -28,6 +28,8 @@ fn main() {
         }
     });
     let (cost, log) = flow.min_cost_flow(0, 2 * n + 1, n as i32);
+    // In this problem, we can see flow only considering x -> y
+    // because original graph has only x -> y and added edges are only x -> s.
     println!("{}", cost.unwrap());
     let mut set = std::collections::HashSet::new();
     for s in log {
