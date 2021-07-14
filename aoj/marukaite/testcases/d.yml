@@ -6,26 +6,21 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      5
-      180 186 189 191 218
-    out: |
-      Yes
-      1 1
-      2 3 4
-  - name: sample2
-    in: |
-      2
-      123 523
-    out: |
-      Yes
-      1 1
-      1 2
-  - name: sample3
-    in: |
       6
-      2013 1012 2765 2021 508 6971
+      30 35
+      35 15
+      15 5
+      5 10
+      10 20
+      20 25
     out: |
-      No
+      15125
+  - name: sample1
+    in: |
+      1
+      1 34
+    out: |
+      0
 
 extend:
   - type: Text
