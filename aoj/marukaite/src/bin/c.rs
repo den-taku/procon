@@ -1,21 +1,10 @@
-//use proconio::{fastout, input};
-
-// #[fastout]
 fn main() {
-    // input! {
-    //     n: usize,
-    //     t: [[i128; 50];50]
-    // }
     let n = read_line::<usize>()[0];
-    let mut t = Vec::with_capacity(n);
-    let _ = (0..n)
-        .map(|_| {
-            let elem = read_line::<i64>();
-            t.push(elem);
-        })
-        .collect::<Vec<()>>();
-    t = t;
-    unimplemented!()
+    let mut v = vec![1; n + 1];
+    for i in 2..n + 1 {
+        v[i] = v[i - 1] + v[i - 2]
+    }
+    println!("{}", v[n]);
 }
 
 fn read_line<T>() -> Vec<T>
