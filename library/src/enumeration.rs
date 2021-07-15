@@ -126,9 +126,9 @@ pub mod enumeration_library {
         set: std::collections::HashSet<T>,
     }
 
-    impl<T> Set<T> 
+    impl<T> Set<T>
     where
-        T: std::cmp::Eq + std::hash::Hash
+        T: std::cmp::Eq + std::hash::Hash,
     {
         #[inline]
         pub fn new(set: std::collections::HashSet<T>) -> Self {

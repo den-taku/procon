@@ -19,6 +19,7 @@ pub mod dinic_library {
     where
         T: std::convert::From<i32> + Clone + Copy,
     {
+        #[inline]
         fn add_edge(&mut self, from: usize, to: usize, capacity: T) {
             unsafe {
                 let rev = self.edges.get_unchecked(to).len();
@@ -34,6 +35,7 @@ pub mod dinic_library {
             }
         }
 
+        #[inline]
         pub fn new(n: usize, edges: &[(usize, usize, T)]) -> Self {
             let mut container = Self {
                 edges: vec![vec![]; n],
@@ -55,6 +57,7 @@ pub mod dinic_library {
             + std::ops::AddAssign
             + Max,
     {
+        #[inline]
         fn bfs(&self, start: usize) -> Vec<i64> {
             unsafe {
                 let mut level = vec![-1; self.edges.len()];
@@ -75,6 +78,7 @@ pub mod dinic_library {
             }
         }
 
+        #[inline]
         fn dfs(
             &mut self,
             vertex: usize,
@@ -121,6 +125,7 @@ pub mod dinic_library {
             }
         }
 
+        #[inline]
         pub fn max_flow(&mut self, start: usize, terminal: usize) -> T {
             let mut flow = T::from(0);
             let mut iter = vec![0usize; self.edges.len()];
