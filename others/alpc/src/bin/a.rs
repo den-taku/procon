@@ -24,30 +24,46 @@ fn main() {
     let mut max = 0;
     let mut max_flow = flow.clone();
     for i in 1..k * n + 1 {
-        let est_flow = flow.clone();
-        let est = flow.min_cost_flow(0, 2 * n + 1, i as i64).unwrap_or(0);
-        if max < -est {
+        let mut est_flow = flow.clone();
+        let est = est_flow.min_cost_flow(0, 2 * n + 1, i as i64).unwrap_or(0);
+        if max <= -est {
             max = -est;
             max_flow = est_flow;
         }
     }
     println!("{}", max);
-    // println!("{:?}", flow);
+    let mut s = String::new();
+    for edges in max_flow.graph.iter().cloned().skip(1).take(n) {
+        let mut c = vec!['.'; n];
+        for j in 0..n+1 {
+            if edges[j].capacity == 0 && edges[j].to != 0 {
+                c[edges[j].to - 1 - n] = 'X';
+            // s = format!("{}X", s);
+            } else {
+                // s = format!("{}.", s);
+            }
+        }
+        for c in c {
+            s = format!("{}{}", s, c);
+        }
+        s = format!("{}\n", s);
+    }
+    print!("{}", s);
 }
 
 pub mod min_cost_flow_library {
 
     #[derive(Copy, Clone, Debug)]
-    struct Edge<T> {
-        to: usize,
-        capacity: T,
+    pub struct Edge<T> {
+        pub to: usize,
+        pub capacity: T,
         cost: T,
         rev: usize,
     }
 
     #[derive(Clone, Debug)]
     pub struct MinCostFlow<T> {
-        graph: Vec<Vec<Edge<T>>>,
+        pub graph: Vec<Vec<Edge<T>>>,
         edges: usize,
     }
 
