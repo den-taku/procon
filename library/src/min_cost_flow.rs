@@ -206,6 +206,31 @@ pub mod min_cost_flow_library {
         use super::*;
 
         #[test]
+        fn for_minimum_cost_flow0() {
+            let mut flow = MinCostFlow::new(8);
+
+            flow.add_edge(0, 1, 2, 0);
+            flow.add_edge(0, 2, 2, 0);
+            flow.add_edge(0, 3, 2, 0);
+
+            flow.add_edge(1, 4, 1, -10);
+            flow.add_edge(1, 5, 1, -10);
+            flow.add_edge(1, 6, 1, -1);
+            flow.add_edge(2, 4, 1, -10);
+            flow.add_edge(2, 5, 1, -10);
+            flow.add_edge(2, 6, 1, -1);
+            flow.add_edge(3, 4, 1, -1);
+            flow.add_edge(3, 5, 1, -1);
+            flow.add_edge(3, 6, 1, -10);
+
+            flow.add_edge(4, 7, 2, 0);
+            flow.add_edge(5, 7, 2, 0);
+            flow.add_edge(6, 7, 2, 0);
+
+            assert_eq!(flow.min_cost_flow(0, 7, 5), Some(-50));
+        }
+
+        #[test]
         fn for_minimum_cost_flow() {
             let (v, _e, f) = (4, 5, 2);
             let mut flow = MinCostFlow::new(v);
