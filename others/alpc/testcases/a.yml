@@ -6,19 +6,26 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      5 1 3
+      3 1
+      5 3 2
+      1 4 8
+      7 6 9
     out: |
-      Yes
+      19
+      X..
+      ..X
+      .X.
   - name: sample2
     in: |
-      1 4 3
+      3 2
+      10 10 1
+      10 10 1
+      1 1 10
     out: |
-      No
-  - name: sample3
-    in: |
-      5 5 5
-    out: |
-      Yes
+      50
+      XX.
+      XX.
+      ..X
 
 extend:
   - type: Text
