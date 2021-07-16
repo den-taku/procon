@@ -59,7 +59,6 @@ pub mod min_cost_flow_dijkstra_library {
         }
 
         pub fn add_edge(&mut self, from: usize, to: usize, capacity: T, cost: T) {
-            assert!(cost >= T::from(0));
             unsafe {
                 let rev = self.graph.get_unchecked(to).len();
                 self.graph.get_unchecked_mut(from).push(Edge {
@@ -109,9 +108,10 @@ pub mod min_cost_flow_dijkstra_library {
                                         // - *potential.get_unchecked(edge.to)
                             {
                                 *dist.get_unchecked_mut(edge.to) = *dist.get_unchecked(position)
-                                    + edge.cost;
+                                    + edge.cost
                                     // + *potential.get_unchecked(position)
                                     // - *potential.get_unchecked(edge.to);
+                                    ;
                                 *prevv.get_unchecked_mut(edge.to) = position;
                                 *preve.get_unchecked_mut(edge.to) = i;
                                 queue.push(DirectedCost(*dist.get_unchecked(edge.to), edge.to));
@@ -121,9 +121,10 @@ pub mod min_cost_flow_dijkstra_library {
                     if *dist.get_unchecked(terminal) == T::MAX {
                         return None;
                     }
-                    // for (i, dis) in dist.iter().enumerate() {
-                    //     *potential.get_unchecked_mut(i) += *dis;
-                    // }
+                    for (i, dis) in dist.iter().enumerate() {
+                        // *potential.get_unchecked_mut(i) += *dis;
+                        // *potential.get_unchecked_mut(i) = T::from(0);
+                    }
                     // flush
                     let mut d = f;
                     let mut v = terminal;
@@ -208,7 +209,7 @@ pub mod min_cost_flow_dijkstra_library {
         use super::*;
 
         #[test]
-        fn for_minimum_cost_flow_dijkstra() {
+        fn for_minimum_cost_flow() {
             let (v, _e, f) = (4, 5, 2);
             let mut flow = MinCostFlow::new(v);
             let edges = [
@@ -261,5 +262,4 @@ pub mod min_cost_flow_dijkstra_library {
         }
     }
 }
-
 */
