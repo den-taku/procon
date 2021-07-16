@@ -3,27 +3,8 @@ use min_cost_flow_library::*;
 
 fn main() {
     let (n, m, d, cost, shop, keys, bad) = input();
-    if d == 1 {
-        if n as i32 > bad[0] {
-            println!("-1");
-        } else {
-            let flow0 = min_cost(n, m, d, &cost, &shop, &keys, &bad, &vec![0; d]);
-            println!("{}", flow0);
-        }
-    } else {
-        let flow0 = min_cost(n, m, d, &cost, &shop, &keys, &bad, &vec![0; d]);
-        println!("{}", flow0);
-    }
-}
-
-#[inline]
-fn binary_search() -> i32 {
-    let mut upper_bound = std::i32::MAX;
-    let mut lower_bound = 0;
-    while upper_bound - lower_bound > 2 {
-        //
-    }
-    unimplemented!()
+    let flow0 = min_cost(n, m, d, &cost, &shop, &keys, &bad);
+    println!("{}", flow0);
 }
 
 #[inline]
@@ -31,33 +12,27 @@ fn min_cost(
     n: usize,
     m: usize,
     d: usize,
-    cost: &[i32],
+    cost: &[i128],
     shop: &[usize],
     keys: &[Vec<usize>],
-    bad: &[i32],
-    direction: &[usize],
-) -> i32 {
-    let mut flow = MinCostFlow::<i32>::new(2 + n + m + d);
+    bad: &[i128],
+) -> i128 {
+    let mut flow = MinCostFlow::<i128>::new(2 + n + m + d);
     for i in 1..n + 1 {
         flow.add_edge(0, i, 1, 0);
     }
     for j in 0..m {
         let index = n + 1 + j;
         for &i in &keys[j] {
-            flow.add_edge(i, index, std::i32::MAX, cost[j]);
+            flow.add_edge(i, index, std::i128::MAX, cost[j]);
         }
-        flow.add_edge(
-            index,
-            shop[j] + n + m,
-            std::i32::MAX,
-            bad[shop[j] - 1] * direction[shop[j] - 1] as i32,
-        );
+        flow.add_edge(index, shop[j] + n + m, std::i128::MAX, 0);
     }
     let terminal = n + m + d + 1;
     for i in n + m + 1..n + m + d + 1 {
-        flow.add_edge(i, terminal, std::i32::MAX, 0);
+        flow.add_edge(i, terminal, bad[i - n - m - 1], 0);
     }
-    flow.min_cost_flow(0, terminal, n as i32).unwrap_or(-1)
+    flow.min_cost_flow(0, terminal, n as i128).unwrap_or(-1)
 }
 
 #[inline]
@@ -65,10 +40,10 @@ fn input() -> (
     usize,
     usize,
     usize,
-    Vec<i32>,
+    Vec<i128>,
     Vec<usize>,
     Vec<Vec<usize>>,
-    Vec<i32>,
+    Vec<i128>,
 ) {
     let (n, m, d) = {
         let input = read_line::<usize>();
@@ -79,12 +54,12 @@ fn input() -> (
     let mut keys = Vec::with_capacity(m);
     (0..m).fold((), |_, _| {
         let input = read_line::<usize>();
-        cost.push(input[0] as i32);
+        cost.push(input[0] as i128);
         shop.push(input[1]);
         keys.push(input.iter().skip(3).map(|e| *e).collect::<Vec<usize>>());
     });
     let mut bad = Vec::with_capacity(d);
-    (0..d).fold((), |_, _| bad.push(read_line::<i32>()[0]));
+    (0..d).fold((), |_, _| bad.push(read_line::<i128>()[0]));
     (n, m, d, cost, shop, keys, bad)
 }
 

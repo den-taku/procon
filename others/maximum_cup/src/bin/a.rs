@@ -114,8 +114,8 @@ fn condition(
                 }
             }
         }
-        let mut flow = Dinic::<i32>::new(v.len() + stones.len() + 2, &edges);
-        flow.max_flow(start, terminal) >= v.len() as i32
+        let mut flow = Dinic::<i64>::new(v.len() + stones.len() + 2, &edges);
+        flow.max_flow(start, terminal) >= v.len() as i64
     }
 }
 
