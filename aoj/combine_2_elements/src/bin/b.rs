@@ -288,7 +288,6 @@ pub mod min_cost_flow_library {
                 .iter()
                 .fold((), |_, e| flow.add_edge(e.0, e.1, e.2, e.3));
             assert_eq!(flow.min_cost_flow(0, v - 1, f).unwrap_or(-1), -1);
-
         }
     }
 }
