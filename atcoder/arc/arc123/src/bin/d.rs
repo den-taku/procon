@@ -21,11 +21,7 @@ fn main() {
         c.push(a_s[i] - b[n - i - 1]);
     }
     // println!("{:?}", c);
-    let b_sum = b.iter().fold(0i64, |e, s| {
-        e + s.abs()
-    });
-    let c_sum = c.iter().fold(0i64, |e, s| {
-        e + s.abs()
-    });
+    let b_sum = b.iter().fold(0i64, |e, s| e + s.abs());
+    let c_sum = c.iter().fold(0i64, |e, s| e + s.abs());
     println!("{}", b_sum + c_sum);
 }
