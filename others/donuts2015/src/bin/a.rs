@@ -1,10 +1,11 @@
 use proconio::{fastout, input};
+use std::f64::consts::PI;
 
 #[fastout]
 fn main() {
     input! {
-        n: usize,
-        t: [[i128; 50];50]
+        r: f64,
+        d: f64
     }
-    unimplemented!()
+    println!("{}", PI * r * r * PI * 2.0 * d);
 }

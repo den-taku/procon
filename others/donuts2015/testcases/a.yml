@@ -6,22 +6,14 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      15
-      10
+      3 5
     out: |
-      5
+      888.264396
   - name: sample2
     in: |
-      0
-      0
+      46 96
     out: |
-      0
-  - name: sample3
-    in: |
-      5
-      20
-    out: |
-      -15
+      4009743.9192393753
 
 extend:
   - type: Text
