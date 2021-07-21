@@ -4,7 +4,16 @@ use proconio::{fastout, input};
 fn main() {
     input! {
         n: usize,
-        t: [[i128; 50];50]
+        x: u32,
+        drinks: [(u32, u32); n]
     }
-    unimplemented!()
+    let mut sum = 0u32;
+    for (i, &(volume, percent)) in drinks.iter().enumerate() {
+        sum += volume * percent;
+        if sum > x * 100 {
+            println!("{}", i + 1);
+            return;
+        }
+    }
+    println!("-1");
 }
