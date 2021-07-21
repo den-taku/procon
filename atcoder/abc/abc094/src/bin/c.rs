@@ -4,7 +4,18 @@ use proconio::{fastout, input};
 fn main() {
     input! {
         n: usize,
-        t: [[i128; 50];50]
+        xs: [u32; n]
     }
-    unimplemented!()
+    let (lm, um) = {
+        let mut sorted = xs.clone();
+        sorted.sort();
+        (sorted[n / 2 - 1], sorted[n / 2])
+    };
+    for x in xs {
+        if x <= lm {
+            println!("{}", um);
+        } else {
+            println!("{}", lm);
+        }
+    }
 }
