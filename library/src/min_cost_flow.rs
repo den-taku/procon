@@ -144,11 +144,10 @@ pub mod min_cost_flow_library {
                             .get_unchecked_mut(*prevv.get_unchecked(v))
                             .get_unchecked_mut(*preve.get_unchecked(v));
                         edge.capacity -= d;
-                        let edge = self
+                        let edge = *self
                             .graph
                             .get_unchecked(*prevv.get_unchecked(v))
-                            .get_unchecked(*preve.get_unchecked(v))
-                            .clone();
+                            .get_unchecked(*preve.get_unchecked(v));
                         self.graph
                             .get_unchecked_mut(v)
                             .get_unchecked_mut(edge.rev)
