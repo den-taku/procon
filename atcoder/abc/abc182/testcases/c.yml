@@ -24,6 +24,41 @@ cases:
       11
     out: |
       -1
+  - name: test1
+    in: |
+      1111111111111
+    out: |
+      1
+  - name: test2
+    in: |
+      99999999999
+    out: |
+      0
+  - name: test2
+    in: |
+      121
+    out: |
+      1
+  - name: test3
+    in: |
+      22
+    out: |
+      -1
+  - name: test4
+    in: |
+      3111111
+    out: |
+      0
+  - name: randam00
+    in: |
+      3143237
+    out: |
+      1
+  - name: all5
+    in: |
+      5
+    out: |
+      -1
 
 extend:
   - type: Text
