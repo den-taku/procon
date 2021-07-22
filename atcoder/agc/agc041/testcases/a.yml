@@ -14,6 +14,11 @@ cases:
       5 2 3
     out: |
       2
+  - name: test1
+    in: |
+      7 2 5
+    out: |
+      3
 
 extend:
   - type: Text
