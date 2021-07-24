@@ -41,60 +41,6 @@ fn main() {
                 }
             }
         }
-        // println!("dis: {:?}", dis);
-        // println!("queue: {:?}", queue);
-        // println!("cnt: {:?}", cnt);
-        // println!("");
     }
     println!("{}", cnt[n - 1]);
-}
-
-#[derive(Clone, Debug)]
-struct Matrix {
-    vec: Vec<u64>,
-    len: usize,
-}
-
-impl Matrix {
-    fn new(len: usize) -> Self {
-        Self {
-            vec: vec![0; len * len],
-            len,
-        }
-    }
-
-    fn add(&mut self, a: usize, b: usize) {
-        self.vec[a * self.len + b] += 1;
-        self.vec[b * self.len + a] += 1;
-    }
-}
-
-impl Matrix {
-    fn pow(self, rhs: &Self) -> Self {
-        // let mut v = vec![0; self.len * self.len];
-        // for i in 0..self.len {
-        //     for j in 0..self.len {
-        //         let mut sum = 0;
-        //         for k in 0..self.len {
-        //             sum += (self.vec[i * self.len + k] * rhs.vec[k * self.len + k]) % MOD;
-        //             sum %= MOD;
-        //         }
-        //         v[i * self.len + j] = sum
-        //     }
-        // }
-        let k = self.len;
-        let mut array = vec![0; k * k];
-        (0..k).fold((), |_, i| {
-            (0..k).fold((), |_, j| {
-                array[i * k + j] = (0..k).fold(0, |e, l| {
-                    (e + ((self.vec[i * k + l] * rhs.vec[j + l * k]) % MOD)) % MOD
-                })
-            })
-        });
-        Self { vec: array, len: k }
-        // Self {
-        //     vec: v,
-        //     len: self.len,
-        // }
-    }
 }

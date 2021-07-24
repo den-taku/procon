@@ -37,9 +37,8 @@ fn main() {
                 update(&mut dp, i, 8);
             }
             _ => {
-                for j in 0..9 {
-                    dp[i][j] = dp[i - 1][j];
-                }
+                let d_p = dp[i - 1].clone();
+                dp[i][..9].clone_from_slice(&d_p[..9])
             }
         }
         i += 1;
