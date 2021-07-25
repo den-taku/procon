@@ -1,6 +1,6 @@
 use proconio::{fastout, input};
 
-const MOD: u64 = 998244353;
+const MOD: u64 = 998_244_353;
 
 #[fastout]
 fn main() {
@@ -13,9 +13,9 @@ fn main() {
     let mut ls = Vec::new();
     let mut rs = Vec::new();
     for (i, (c, k)) in ind.iter().cloned().enumerate() {
-        if c.starts_with("L") {
+        if c.starts_with('L') {
             ls.push((k - 1, i + 1));
-        } else if c.starts_with("R") {
+        } else if c.starts_with('R') {
             rs.push((k - 1, i + 1));
             set.insert(i + 1);
         }

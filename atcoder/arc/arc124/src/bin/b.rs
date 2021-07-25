@@ -7,11 +7,9 @@ fn main() {
         ar: [u128; n],
         br: [u128; n]
     }
-    let mut count = 0;
     let mut ans = Vec::new();
     for i in 0..n {
         if ok(ar[0] ^ br[i], &ar, &br, n) {
-            count += 1;
             ans.push(ar[0] ^ br[i]);
         }
     }
