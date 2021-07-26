@@ -4,7 +4,19 @@ use proconio::{fastout, input};
 fn main() {
     input! {
         n: usize,
-        t: [[i128; 50];50]
+        a: [u128; n]
     }
-    unimplemented!()
+    let mut product = 1;
+    if a.iter().any(|&e| e == 0) {
+        println!("0");
+        return;
+    }
+    for e in a {
+        product *= e;
+        if product > 1_000_000_000_000_000_000 {
+            println!("-1");
+            return;
+        }
+    }
+    println!("{}", product);
 }
