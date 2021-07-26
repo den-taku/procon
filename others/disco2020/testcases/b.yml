@@ -6,16 +6,22 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      5
-      00101
+      3
+      2 4 3
     out: |
-      Takahashi
+      3
   - name: sample2
     in: |
-      3
-      010
+      12
+      100 104 102 105 103 103 101 105 104 102 104 101
     out: |
-      Aoki
+      0
+  - name: test1
+    in: |
+      12
+      100 104 104 105 103 103 101 105 104 102 104 101
+    out: |
+      2
 
 extend:
   - type: Text
