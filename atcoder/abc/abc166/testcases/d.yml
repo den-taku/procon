@@ -13,7 +13,7 @@ cases:
     in: |
       1
     out: |
-      0 -1
+      1 0
 
 extend:
   - type: Text
