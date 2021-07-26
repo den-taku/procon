@@ -1,10 +1,14 @@
 use proconio::{fastout, input};
+use std::collections::BTreeSet;
 
 #[fastout]
 fn main() {
     input! {
         n: usize,
-        t: [[i128; 50];50]
+        costs: [i32; n]
     }
-    unimplemented!()
+    let set = costs.iter().cloned().collect::<BTreeSet<i32>>();
+    for e in set.iter().cloned().rev().skip(1).take(1) {
+        println!("{}", e);
+    }
 }
