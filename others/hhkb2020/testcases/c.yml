@@ -6,19 +6,28 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      ooo???xxxx
-    out: |
-      108
-  - name: sample2
-    in: |
-      o?oo?oxoxo
+      4
+      1 1 0 2
     out: |
       0
-  - name: sample3
+      0
+      2
+      3
+  - name: sample2
     in: |
-      xxxxx?xxxo
+      10
+      5 4 3 2 1 0 7 7 6 6
     out: |
-      15
+      0
+      0
+      0
+      0
+      0
+      6
+      6
+      6
+      8
+      8
 
 extend:
   - type: Text
