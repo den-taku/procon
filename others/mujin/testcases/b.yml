@@ -1,24 +1,26 @@
 ---
 type: Batch
 timelimit: 2s
-match: Lines
+match: 
+  Float:
+    relative_error: 1e-6
 
 cases:
   - name: sample1
     in: |
-      0601889
+      1 1 1
     out: |
-      6881090
+      28.2743338823
   - name: sample2
     in: |
-      86910
+      3 1 1
     out: |
-      01698
+      75.3982236862
   - name: sample3
     in: |
-      01010
+      16 2 27
     out: |
-      01010
+      6107.2561185786
 
 extend:
   - type: Text

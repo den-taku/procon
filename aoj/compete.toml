@@ -22,6 +22,7 @@ test-suite = "{{ manifest_dir }}/testcases/{{ bin_alias }}.yml"
 
 [template]
 src = '''
+#![allow(unreachable_code)]
 //use proconio::{fastout, input};
 
 // #[fastout]
@@ -36,7 +37,7 @@ fn main() {
         let elem = read_line::<i64>();
         t.push(elem);
     }).collect::<Vec<()>>();
-    t = t;
+    let _t = t;
     unimplemented!()
 }
 
