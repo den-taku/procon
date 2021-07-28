@@ -4,7 +4,19 @@ use proconio::{fastout, input};
 fn main() {
     input! {
         n: usize,
-        t: [[i128; 50];50]
+        t: u32,
+        a: [u32; n]
     }
-    unimplemented!()
+    let mut end = 0;
+    let mut sum = 0;
+    for e in a {
+        if end <= e {
+            sum += t;
+            end = e + t;
+        } else {
+            sum += t - (end - e);
+            end = e + t;
+        }
+    }
+    println!("{}", sum);
 }
