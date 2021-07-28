@@ -1,3 +1,4 @@
+#[allow(unreachable_code)]
 use proconio::{fastout, input};
 
 #[fastout]
