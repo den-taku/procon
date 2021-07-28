@@ -4,7 +4,13 @@ use proconio::{fastout, input};
 fn main() {
     input! {
         n: usize,
-        t: [[i128; 50];50]
+        a: [u64; n]
     }
-    unimplemented!()
+    let mut money = 1000;
+    for (x, y) in a.windows(2).map(|s| (s[0], s[1])) {
+        if x < y {
+            money += money / x * (y - x)
+        }
+    }
+    println!("{}", money);
 }
