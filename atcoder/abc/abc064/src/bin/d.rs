@@ -1,6 +1,5 @@
 #![allow(unreachable_code)]
 use proconio::{fastout, input};
-use std::collections::VecDeque;
 
 #[fastout]
 fn main() {
@@ -8,23 +7,21 @@ fn main() {
         _n: usize,
         s: String
     }
-    let mut ans = VecDeque::new();
+    let mut count = 0;
     let mut stack = Vec::new();
     for c in s.chars() {
         if c == '(' {
             stack.push(true);
-            ans.push_back('(');
         } else if stack.is_empty() {
-            ans.push_front('(');
-            ans.push_back(')');
+            count += 1;
         } else {
             stack.pop();
-            ans.push_back(')');
         }
     }
-    for e in ans {
-        print!("{}", e);
+    for _ in 0..count {
+        print!("(");
     }
+    print!("{}", s);
     for _ in stack {
         print!(")");
     }
