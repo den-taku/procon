@@ -22,11 +22,11 @@ fn main() {
             ans.push_back(')');
         }
     }
-    for _ in stack {
-        ans.push_back(')');
-    }
     for e in ans {
         print!("{}", e);
+    }
+    for _ in stack {
+        print!(")");
     }
     println!();
 }
