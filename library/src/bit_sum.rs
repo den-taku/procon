@@ -14,6 +14,7 @@ pub mod bit_sum_library {
         T: From<i32> + Copy,
     {
         /// Make BitSum for g[0]...g[n-1].
+        #[inline]
         pub fn new(n: usize) -> Self {
             Self {
                 tree: vec![T::from(0); n],
@@ -27,6 +28,7 @@ pub mod bit_sum_library {
     {
         /// `sum_in_range(a..b)` calculate sum in [a..b).
         /// Of cource, 0-indexed.
+        #[inline]
         pub fn sum_in_range(&self, range: std::ops::Range<usize>) -> T {
             (match range.end {
                 0 => T::from(0),
@@ -41,6 +43,7 @@ pub mod bit_sum_library {
         /// This calculate sum in [0..i).
         /// Notice that in this function, use 1-indexed array.
         /// 1,2,3,4,... means 0,1,2,3,... in 0-index.
+        #[inline]
         fn sum(&self, mut index: usize) -> T {
             let mut sum = T::from(0);
             while index > 0 {
@@ -56,6 +59,7 @@ pub mod bit_sum_library {
         T: std::ops::AddAssign + Copy,
     {
         /// add(index, value) do (a[index] += value).
+        #[inline]
         pub fn add(&mut self, index: usize, value: T) {
             let mut index = index + 1;
             while index <= self.tree.len() {
@@ -70,14 +74,17 @@ pub mod bit_sum_library {
         T: Ord + From<i32> + std::ops::Sub<Output = T> + Copy + std::ops::AddAssign,
     {
         /// Find index that giving least bit_sum[index] such that is more than value.
+        #[inline]
         pub fn binary_search_least(&self, value: T) -> Option<usize> {
             self.private_binary_search_least(value, 0, self.len() - 1)
         }
 
+        #[inline]
         fn condition_least(&self, est: usize, value: T) -> bool {
             self.sum_in_range(0..est + 1) >= value
         }
 
+        #[inline]
         fn private_binary_search_least(
             &self,
             value: T,
@@ -105,10 +112,12 @@ pub mod bit_sum_library {
 
     impl<T> BitSum<T> {
         /// Retrun length of BitSum.
+        #[inline]
         pub fn len(&self) -> usize {
             self.tree.len()
         }
 
+        #[inline]
         pub fn is_empty(&self) -> bool {
             self.len() == 0
         }
@@ -116,12 +125,14 @@ pub mod bit_sum_library {
 
     impl<T> std::ops::Index<usize> for BitSum<T> {
         type Output = T;
+        #[inline]
         fn index(&self, index: usize) -> &Self::Output {
             &self.tree[index]
         }
     }
 
     impl<T> std::ops::IndexMut<usize> for BitSum<T> {
+        #[inline]
         fn index_mut(&mut self, index: usize) -> &mut Self::Output {
             &mut self.tree[index]
         }
