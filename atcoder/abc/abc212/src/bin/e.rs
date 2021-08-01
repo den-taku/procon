@@ -14,21 +14,17 @@ fn main() {
     let mut dp = vec![0u64; n];
     dp[0] = 1;
     for _j in 1..k + 1 {
-        let mut next = vec![0u64; n];
         let sum = dp.iter().sum::<u64>();
-        for i in 0..n {
-            next[i] = sum - dp[i];
-        }
+        let mut next = dp.iter().map(|v| sum - v).collect::<Vec<_>>();
         for &(u, v) in &broken {
             let u = u - 1;
             let v = v - 1;
-            next[u] -= dp[v];
-            next[v] -= dp[u];
+            unsafe {
+                *next.get_unchecked_mut(u) -= *dp.get_unchecked(v);
+                *next.get_unchecked_mut(v) -= *dp.get_unchecked(u);
+            }
         }
-        for ne in next.iter_mut().take(n) {
-            *ne %= MOD;
-        }
-        dp = next;
+        dp = next.iter().map(|v| v % MOD).collect::<Vec<_>>();
     }
     println!("{}", dp[0]);
 }
