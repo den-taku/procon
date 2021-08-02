@@ -3,13 +3,15 @@
 pub mod primes_library {
     macro_rules! impl_num {
         ( $($e:ty),* ) => {
-            $(impl Prime<$e> {
-                impl_new!($e);
-            }
+            $(
+                impl Prime<$e> {
+                    impl_new!($e);
+                }
 
-            impl Iterator for Prime<$e> {
-                impl_next!($e);
-            })*
+                impl Iterator for Prime<$e> {
+                    impl_next!($e);
+                }
+            )*
         };
     }
 
