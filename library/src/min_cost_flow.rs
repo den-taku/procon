@@ -23,6 +23,7 @@ pub mod min_cost_flow_library {
     where
         T: PartialEq + Eq + Ord,
     {
+        #[inline]
         fn cmp(&self, other: &Self) -> std::cmp::Ordering {
             other.0.cmp(&self.0).then_with(|| self.1.cmp(&other.1))
         }
@@ -32,6 +33,7 @@ pub mod min_cost_flow_library {
     where
         T: PartialEq + Eq + Ord,
     {
+        #[inline]
         fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
             Some(self.cmp(other))
         }
@@ -50,6 +52,7 @@ pub mod min_cost_flow_library {
             + std::ops::AddAssign
             + std::ops::SubAssign,
     {
+        #[inline]
         pub fn new(vertics: usize) -> Self {
             Self {
                 graph: vec![Vec::<Edge<T>>::new(); vertics],
@@ -57,6 +60,7 @@ pub mod min_cost_flow_library {
             }
         }
 
+        #[inline]
         pub fn add_edge(&mut self, from: usize, to: usize, capacity: T, cost: T) {
             unsafe {
                 let rev = self.graph.get_unchecked(to).len();
@@ -77,10 +81,12 @@ pub mod min_cost_flow_library {
             }
         }
 
+        #[inline]
         pub fn edges(&self) -> usize {
             self.edges
         }
 
+        #[inline]
         pub fn min_cost_flow(&mut self, start: usize, terminal: usize, mut f: T) -> Option<T> {
             let mut res = T::from(0);
             let mut potential = vec![T::from(0); self.graph.len()];

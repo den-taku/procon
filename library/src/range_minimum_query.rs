@@ -17,6 +17,7 @@ pub mod rmq_library {
     {
         /// Make Range Minimum Query Tree.
         /// This tree is initialized by T::MAX and sustains n elements.
+        #[inline]
         pub fn new(n: usize) -> Self {
             let mut n_ = 1;
             while n_ < n {
@@ -30,6 +31,7 @@ pub mod rmq_library {
 
         /// Make Range Minimum Query Tree.
         /// This tree is initialized by init: T and sustains n elements.
+        #[inline]
         pub fn init(n: usize, init: T) -> Self {
             let mut n_ = 1;
             while n_ < n {
@@ -48,6 +50,7 @@ pub mod rmq_library {
     {
         /// update Rmq[index] as value.
         /// also update whole of tree.
+        #[inline]
         pub fn update(&mut self, index: usize, value: T) {
             if index >= self.n {
                 panic!("Rmq::update fail: index is out of bounds");
@@ -67,10 +70,12 @@ pub mod rmq_library {
     {
         /// find minimum value in given range.
         /// tree.find(a..b) -> find minimum in [a, b).
+        #[inline]
         pub fn find(&self, range: std::ops::Range<usize>) -> T {
             self.find_rec(range, 0, 0, self.n)
         }
 
+        #[inline]
         fn find_rec(&self, range: std::ops::Range<usize>, k: usize, l: usize, r: usize) -> T {
             if r <= range.start || range.end <= l {
                 T::MAX
@@ -88,10 +93,12 @@ pub mod rmq_library {
     impl<T> Rmq<T> {
         /// return Rmq's length.
         /// Notice that this is not N that first given.
+        #[inline]
         pub fn len(&self) -> usize {
             self.tree.len()
         }
 
+        #[inline]
         pub fn is_empty(&self) -> bool {
             self.len() == 0
         }
@@ -99,12 +106,14 @@ pub mod rmq_library {
 
     impl<T> std::ops::Index<usize> for Rmq<T> {
         type Output = T;
+        #[inline]
         fn index(&self, index: usize) -> &Self::Output {
             &self.tree[index]
         }
     }
 
     impl<T> std::ops::IndexMut<usize> for Rmq<T> {
+        #[inline]
         fn index_mut(&mut self, index: usize) -> &mut Self::Output {
             &mut self.tree[index]
         }
