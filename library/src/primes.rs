@@ -123,6 +123,11 @@ pub mod primes_library {
                 Prime::default().take_while(|&e| e < 200_000).last(),
                 Some(199_999)
             );
+
+            assert_eq!(
+                Prime::default().take_while(|&e| e < 20).collect::<Vec<_>>(),
+                vec![2, 3, 5, 7, 11, 13, 17, 19]
+            )
         }
     }
 }
