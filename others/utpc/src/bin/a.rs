@@ -24,9 +24,11 @@ fn min_cost(
     for j in 0..m {
         let index = n + 1 + j;
         for &i in &keys[j] {
-            flow.add_edge(i, index, std::i128::MAX, cost[j]);
+            // flow.add_edge(i, index, std::i128::MAX, cost[j]);
+            flow.add_edge(i, index, 1, cost[j]);
         }
-        flow.add_edge(index, shop[j] + n + m, std::i128::MAX, 0);
+        // flow.add_edge(index, shop[j] + n + m, std::i128::MAX, 0);
+        flow.add_edge(index, shop[j] + n + m, 1, 0);
     }
     let terminal = n + m + d + 1;
     for i in n + m + 1..n + m + d + 1 {
@@ -56,7 +58,7 @@ fn input() -> (
         let input = read_line::<usize>();
         cost.push(input[0] as i128);
         shop.push(input[1]);
-        keys.push(input.iter().skip(3).map(|e| *e).collect::<Vec<usize>>());
+        keys.push(input.iter().skip(3).copied().collect::<Vec<usize>>());
     });
     let mut bad = Vec::with_capacity(d);
     (0..d).fold((), |_, _| bad.push(read_line::<i128>()[0]));
