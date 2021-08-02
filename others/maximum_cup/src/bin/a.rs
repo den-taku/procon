@@ -7,7 +7,7 @@ fn main() {
     input! {
         n: usize,
         m: usize,
-        mut loads: [(usize, usize, i32); m],
+        mut loads: [(usize, usize, i128); m],
         k: usize,
         mut points: [usize; k],
         q: usize,
@@ -41,7 +41,7 @@ fn main() {
     for i in 0..points.len() - 1 {
         upper_bound = std::cmp::max(
             upper_bound,
-            graph[points[i] * n + points[i + 1]].unwrap_or(std::i32::MAX),
+            graph[points[i] * n + points[i + 1]].unwrap_or(std::i128::MAX),
         );
     }
     println!(
@@ -53,11 +53,11 @@ fn main() {
 #[inline]
 fn binary_search(
     n: usize,
-    upper_bound: i32,
-    graph: &[Option<i32>],
+    upper_bound: i128,
+    graph: &[Option<i128>],
     points: &[usize],
     stones: &[usize],
-) -> Option<i32> {
+) -> Option<i128> {
     let mut upper_bound = upper_bound;
     let mut lower_bound = 0;
     while upper_bound - lower_bound > 1 {
@@ -82,14 +82,14 @@ fn binary_search(
 #[inline]
 fn condition(
     n: usize,
-    est: i32,
-    graph: &[Option<i32>],
+    est: i128,
+    graph: &[Option<i128>],
     points: &[usize],
     stones: &[usize],
 ) -> bool {
     let mut v = Vec::with_capacity(points.len());
     for i in 0..points.len() - 1 {
-        if est < graph[points[i] * n + points[i + 1]].unwrap_or(std::i32::MAX) {
+        if est < graph[points[i] * n + points[i + 1]].unwrap_or(std::i128::MAX) {
             v.push(i);
         }
     }
@@ -109,7 +109,7 @@ fn condition(
         }
         for (index, &i) in v.iter().enumerate() {
             for (j, &stone) in stones.iter().enumerate() {
-                if graph[stone * n + points[i + 1]].unwrap_or(std::i32::MAX) <= est {
+                if graph[stone * n + points[i + 1]].unwrap_or(std::i128::MAX) <= est {
                     edges.push((index + 1, v.len() + 1 + j, 1));
                 }
             }
@@ -356,7 +356,7 @@ fn main() {
     input! {
         n: usize,
         m: usize,
-        loads: [(usize, usize, i32); m],
+        loads: [(usize, usize, i128); m],
         k: usize,
         points: [usize; k],
         q: usize,
@@ -384,7 +384,7 @@ fn main() {
     }
 
     graph = now;
-    let mut flow = MinCostFlow::<i32>::new(2 * k + q);
+    let mut flow = MinCostFlow::<i128>::new(2 * k + q);
     for i in 0..k - 1 {
         flow.add_edge(0, i + 1, 1, 0);
         flow.add_edge(k + i, 2 * k + q - 1, 1, 0);
@@ -395,10 +395,10 @@ fn main() {
     for i in 0..k - 1 {
         let s = points[i] - 1;
         let t = points[i + 1] - 1;
-        let cost = graph[s * n + t].unwrap_or(std::i32::MAX);
+        let cost = graph[s * n + t].unwrap_or(std::i128::MAX);
         flow.add_edge(i + 1, k + i, 1, cost);
         for j in 0..q {
-            let est = graph[(stones[j] - 1) * n + t].unwrap_or(std::i32::MAX);
+            let est = graph[(stones[j] - 1) * n + t].unwrap_or(std::i128::MAX);
             // println!("{} -> {}: {}", i, j, est);
             if est < cost {
                 // println!("add: {:?}", (i, j));
@@ -406,7 +406,7 @@ fn main() {
             }
         }
     }
-    let _cost = flow.min_cost_flow(0, 2 * k + q - 1, k as i32 - 1);
+    let _cost = flow.min_cost_flow(0, 2 * k + q - 1, k as i128 - 1);
     // println!("cost {}", cost.unwrap());
 
     // println!("{:?}", &flow);
