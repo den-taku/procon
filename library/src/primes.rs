@@ -17,6 +17,7 @@ pub mod primes_library {
 
     macro_rules! impl_new {
         ($e:ty) => {
+            #[inline]
             pub fn new() -> Self {
                 Self {
                     iterator: Box::new(2..),
@@ -29,6 +30,7 @@ pub mod primes_library {
     macro_rules! impl_next {
         ($e:ty) => {
             type Item = $e;
+            #[inline]
             fn next(&mut self) -> Option<Self::Item> {
                 while let Some(e) = self.iterator.next() {
                     if self.primes.iter().all(|&p| e % p != 0) {
@@ -47,6 +49,7 @@ pub mod primes_library {
     }
 
     impl Default for Prime<i32> {
+        #[inline]
         fn default() -> Self {
             Self::new()
         }
