@@ -6,30 +6,28 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      3
-      Everest 8849
-      K2 8611
-      Kangchenjunga 8586
+      2
+      2 3
     out: |
-      K2
+      7
   - name: sample2
     in: |
-      4
-      Kita 3193
-      Aino 3189
-      Fuji 3776
-      Okuhotaka 3190
+      3
+      3 3 3
     out: |
-      Kita
+      26
   - name: sample3
     in: |
-      4
-      QCFium 2846
-      chokudai 2992
-      kyoprofriends 2432
-      penguinman 2390
+      1
+      100
     out: |
-      QCFium
+      1
+  - name: sample4
+    in: |
+      10
+      90 52 56 71 44 8 13 30 57 84
+    out: |
+      58921
 
 extend:
   - type: Text
