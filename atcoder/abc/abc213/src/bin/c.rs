@@ -16,17 +16,11 @@ fn main() {
     wb.sort();
     wb.dedup();
     for &(a, b) in &ab {
-        let ah = if let Some(v) = binary_search(&ha, a) {
-            v
-        } else {
-            1
-        };
-        let bw = if let Some(v) = binary_search(&wb, b) {
-            v
-        } else {
-            1
-        };
-        println!("{} {}", ah + 1, bw + 1);
+        println!(
+            "{} {}",
+            binary_search(&ha, a).unwrap_or(1) + 1,
+            binary_search(&wb, b).unwrap_or(1) + 1
+        );
     }
 }
 
