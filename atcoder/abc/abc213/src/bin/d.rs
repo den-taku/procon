@@ -22,7 +22,7 @@ fn main() {
 }
 
 #[inline]
-fn rec(index: usize, ajacent: &[Vec<usize>], used: &mut Vec<bool>, v: &mut String) {
+fn rec(index: usize, ajacent: &[Vec<usize>], used: &mut [bool], v: &mut String) {
     print!("{} ", index + 1);
     used[index] = true;
     for &e in &ajacent[index] {
