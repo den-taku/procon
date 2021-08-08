@@ -1,5 +1,6 @@
 #![allow(unreachable_code)]
 use proconio::{fastout, input};
+use std::fmt::Write;
 
 #[fastout]
 fn main() {
@@ -18,17 +19,17 @@ fn main() {
     let mut used = vec![false; n];
     let mut v = String::new();
     rec(0, &ajacent, &mut used, &mut v);
-    println!("");
+    println!("{}", v.split_at(v.len() - 1).0);
 }
 
 #[inline]
 fn rec(index: usize, ajacent: &[Vec<usize>], used: &mut [bool], v: &mut String) {
-    print!("{} ", index + 1);
+    write!(v, "{} ", index + 1).unwrap();
     used[index] = true;
     for &e in &ajacent[index] {
         if !used[e] {
             rec(e, ajacent, used, v);
-            print!("{} ", index + 1);
+            write!(v, "{} ", index + 1).unwrap();
         }
     }
 }
