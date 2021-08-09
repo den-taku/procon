@@ -17,27 +17,43 @@ pub mod union_find_library {
 
         #[inline]
         pub fn find(&mut self, x: usize) -> usize {
-            let mut represent = x;
-            while self.par[represent] != represent {
-                represent = self.par[represent];
+            if x > self.par.len() {
+                panic!("out of bound.")
             }
-            self.par[x] = represent;
-            represent
+            unsafe {
+                if *self.par.get_unchecked(x) == x {
+                    x
+                } else {
+                    let mut represent = x;
+                    while {
+                        represent = *self.par.get_unchecked(represent);
+                        *self.par.get_unchecked(represent) != represent
+                    } {}
+                    *self.par.get_unchecked_mut(x) = represent;
+                    *self.rank.get_unchecked_mut(x) = 1;
+                    represent
+                }
+            }
         }
 
         #[inline]
         pub fn unite(&mut self, x: usize, y: usize) {
+            if x > self.par.len() || y > self.par.len() {
+                panic!("out of bound.")
+            }
             let x_par = self.find(x);
             let y_par = self.find(y);
             if x_par == y_par {
                 return;
             }
-            if self.rank[x_par] < self.rank[y_par] {
-                self.par[x_par] = y_par;
-            } else {
-                self.par[y_par] = x_par;
-                if self.rank[x_par] == self.rank[y_par] {
-                    self.rank[x_par] += 1;
+            unsafe {
+                if *self.rank.get_unchecked(x_par) < *self.rank.get_unchecked(y_par) {
+                    *self.par.get_unchecked_mut(x_par) = y_par;
+                } else {
+                    *self.par.get_unchecked_mut(y_par) = x_par;
+                    if *self.rank.get_unchecked(x_par) == *self.rank.get_unchecked(y_par) {
+                        self.rank[x_par] += 1;
+                    }
                 }
             }
         }
@@ -54,7 +70,7 @@ pub mod union_find_library {
 
         #[test]
         fn for_union_find() {
-            let query = [
+            let queries = [
                 (0, 1, 2),
                 (0, 3, 2),
                 (1, 1, 3),
@@ -69,7 +85,7 @@ pub mod union_find_library {
             let n = 8;
             let mut uf_tree = UnionFind::new(n);
             let mut index = 0;
-            for (i, x, y) in query {
+            for (i, x, y) in queries {
                 match i {
                     0 => uf_tree.unite(x, y),
                     _ => {
