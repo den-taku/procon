@@ -11,7 +11,6 @@ fn main() {
     let ((si, sj), (gi, gj), mut visited) = convert(s_vec);
     let mut stack = Vec::new();
     stack.push((si, sj));
-    visited[si * (w as usize) + sj] = true;
     let dh = [-1, 0, 1, 0];
     let dw = [0, 1, 0, -1];
     while let Some((i, j)) = stack.pop() {
@@ -45,7 +44,7 @@ fn convert(s_vec: Vec<String>) -> ((usize, usize), (usize, usize), Vec<bool>) {
         for (j, c) in s.chars().enumerate() {
             match c {
                 's' => {
-                    v.push(false);
+                    v.push(true);
                     si = i;
                     sj = j;
                 }
