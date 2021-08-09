@@ -1,27 +1,39 @@
 ---
 type: Batch
 timelimit: 2s
-match:
-  Float:
-    relative_error: 0.00001
-    absolute_error: 0.00001
+match: Lines
 
 cases:
   - name: sample1
     in: |
-      130 100
+      5 5
+      .....
+      .#.#.
+      .###.
+      .#.#.
+      .....
     out: |
-      110
+      3
   - name: sample2
     in: |
-      300 50
+      4 10
+      ##########
+      ....#.....
+      ....#.....
+      ..........
     out: |
-      133.3333333
+      2
   - name: sample3
     in: |
-      123 123
+      6 3
+      ###
+      ##.
+      .##
+      ###
+      ##.
+      ###
     out: |
-      123
+      6
 
 extend:
   - type: Text
