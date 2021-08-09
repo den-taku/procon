@@ -6,20 +6,62 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      3B
-      HR
-      2B
-      H
+      5
+      you
+      ate
+      my
+      hum
+      toast
     out: |
-      Yes
+      e
+      t
+      u
   - name: sample2
     in: |
-      2B
-      3B
-      HR
-      3B
+      7
+      she
+      sells
+      sea
+      shells
+      by
+      the
+      seashore
     out: |
-      No
+      a
+      e
+      y
+  - name: testcase5
+    in: |
+      14
+      x
+      i
+      f
+      c
+      a
+      v
+      n
+      q
+      e
+      k
+      d
+      l
+      h
+      b
+    out: |
+      a
+      b
+      c
+      d
+      e
+      f
+      h
+      i
+      k
+      l
+      n
+      q
+      v
+      x
 
 extend:
   - type: Text
