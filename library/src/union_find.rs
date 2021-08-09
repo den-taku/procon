@@ -43,16 +43,15 @@ pub mod union_find_library {
             }
             let x_par = self.find(x);
             let y_par = self.find(y);
-            if x_par == y_par {
-                return;
-            }
-            unsafe {
-                if *self.rank.get_unchecked(x_par) < *self.rank.get_unchecked(y_par) {
-                    *self.par.get_unchecked_mut(x_par) = y_par;
-                } else {
-                    *self.par.get_unchecked_mut(y_par) = x_par;
-                    if *self.rank.get_unchecked(x_par) == *self.rank.get_unchecked(y_par) {
-                        self.rank[x_par] += 1;
+            if x_par != y_par {
+                unsafe {
+                    if *self.rank.get_unchecked(x_par) < *self.rank.get_unchecked(y_par) {
+                        *self.par.get_unchecked_mut(x_par) = y_par;
+                    } else {
+                        *self.par.get_unchecked_mut(y_par) = x_par;
+                        if *self.rank.get_unchecked(x_par) == *self.rank.get_unchecked(y_par) {
+                            self.rank[x_par] += 1;
+                        }
                     }
                 }
             }
