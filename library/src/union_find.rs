@@ -17,7 +17,7 @@ pub mod union_find_library {
 
         #[inline]
         pub fn find(&mut self, x: usize) -> usize {
-            if x > self.par.len() {
+            if x >= self.par.len() {
                 panic!("out of bound.")
             }
             unsafe {
@@ -38,7 +38,7 @@ pub mod union_find_library {
 
         #[inline]
         pub fn unite(&mut self, x: usize, y: usize) {
-            if x > self.par.len() || y > self.par.len() {
+            if x >= self.par.len() || y >= self.par.len() {
                 panic!("out of bound.")
             }
             let x_par = self.find(x);
