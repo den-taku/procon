@@ -16,7 +16,7 @@ fn main() {
     if n == 1 && m == 1 {
         println!(
             "{}",
-            (knights[0].1 - mages[0].1).abs() + (knights[0].2 - mages[0].2).abs()
+            (knights[0].1 - mages[0].2).abs() + (knights[0].2 - mages[0].3).abs()
         );
         return;
     }
