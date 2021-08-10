@@ -6,19 +6,31 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      2021 4
+      4 4
+      Sigunum 3 2
+      Viita 2 2
+      Shamall 3 3
+      Zafiira 2 3
+      Kame 10 1 1
+      Tora 10 4 1
+      Hebi 10 1 4
+      Niwatori 10 4 4
     out: |
-      50531
-  - name: sample2
+      8
+  - name: minimum
     in: |
-      40000 2
+      1 1
+      Knight 1 1
+      Mage 3 2 2
     out: |
-      1
-  - name: sample3
+      2
+  - name: minimum2
     in: |
-      8691 20
+      1 1
+      Knight 10000 10000
+      MageMageMageMageMage 10000000 0 0
     out: |
-      84875488281
+      20000
 
 extend:
   - type: Text
