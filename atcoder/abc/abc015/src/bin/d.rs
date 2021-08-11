@@ -14,15 +14,18 @@ fn main() {
     for a in 1..w + 1 {
         for b in 1..k + 1 {
             for c in 1..n + 1 {
-                if a >= ab[c - 1].0 {
-                    dp[a * (k + 1) * (n + 1) + b * (n + 1) + c] = max(
-                        dp[a * (k + 1) * (n + 1) + b * (n + 1) + c - 1],
-                        dp[(a - ab[c - 1].0) * (k + 1) * (n + 1) + (b - 1) * (n + 1) + c - 1]
-                            + ab[c - 1].1,
-                    )
-                } else {
-                    dp[a * (k + 1) * (n + 1) + b * (n + 1) + c] =
-                        dp[a * (k + 1) * (n + 1) + b * (n + 1) + c - 1];
+                unsafe {
+                    if a >= ab.get_unchecked(c - 1).0 {
+                        *dp.get_unchecked_mut(a * (k + 1) * (n + 1) + b * (n + 1) + c) = max(
+                            *dp.get_unchecked(a * (k + 1) * (n + 1) + b * (n + 1) + c - 1),
+                            *dp.get_unchecked(
+                                (a - ab[c - 1].0) * (k + 1) * (n + 1) + (b - 1) * (n + 1) + c - 1,
+                            ) + ab.get_unchecked(c - 1).1,
+                        )
+                    } else {
+                        *dp.get_unchecked_mut(a * (k + 1) * (n + 1) + b * (n + 1) + c) =
+                            *dp.get_unchecked(a * (k + 1) * (n + 1) + b * (n + 1) + c - 1);
+                    }
                 }
             }
         }
