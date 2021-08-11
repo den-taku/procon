@@ -42,7 +42,7 @@ pub mod union_find_library {
 
         #[inline]
         /// Unite 2 sets, one containing x and the other containing y.
-        pub fn unite(&mut self, x: usize, y: usize) {
+        pub fn unite(&mut self, x: usize, y: usize) -> bool {
             let x_par = self.find(x);
             let y_par = self.find(y);
             if x_par != y_par {
@@ -57,6 +57,7 @@ pub mod union_find_library {
                     }
                 }
             }
+            x_par != y_par
         }
 
         #[inline]
@@ -88,12 +89,11 @@ pub mod union_find_library {
             let mut uf_tree = UnionFind::new(n);
             let mut index = 0;
             for (i, x, y) in queries {
-                match i {
-                    0 => uf_tree.unite(x, y),
-                    _ => {
-                        assert_eq!(uf_tree.same(x, y), ans[index]);
-                        index += 1;
-                    }
+                if i == 0 {
+                    uf_tree.unite(x, y);
+                } else {
+                    assert_eq!(uf_tree.same(x, y), ans[index]);
+                    index += 1;
                 }
             }
         }
