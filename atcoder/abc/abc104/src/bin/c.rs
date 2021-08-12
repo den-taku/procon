@@ -35,6 +35,7 @@ fn main() {
                         continue 'out;
                     }
                 }
+                continue 'out;
             }
         }
     }
