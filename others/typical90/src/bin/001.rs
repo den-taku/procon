@@ -36,10 +36,10 @@ fn condition(k: usize, l: usize, est: usize, cuts: &[usize]) -> bool {
     let mut last = 0;
     let mut index = 0;
     'out: for _ in 0..k {
-        for i in index..cuts.len() {
-            if cuts[i] - last >= est {
-                last = cuts[i];
-                index = i;
+        for (i, &a) in cuts.iter().skip(index).enumerate() {
+            if a - last >= est {
+                last = a;
+                index += i;
                 continue 'out;
             }
         }
