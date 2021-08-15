@@ -44,8 +44,5 @@ fn main() {
             }
         }
     }
-    println!(
-        "{}",
-        dis.iter().max_by_key(|e| e.unwrap()).unwrap().unwrap()
-    )
+    println!("{}", dis.iter().map(|e| e.unwrap()).max().unwrap())
 }
