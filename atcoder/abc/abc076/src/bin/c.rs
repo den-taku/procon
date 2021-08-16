@@ -13,21 +13,21 @@ fn main() {
         .map(|c| if c == '?' { None } else { Some(c as u8 - A) })
         .collect::<Vec<_>>();
     let t = t.chars().map(|c| c as u8 - A).collect::<Vec<_>>();
-    let mut indexes = Vec::new();
+    let mut index = None;
     'out: for (i, v) in s.windows(t.len()).enumerate() {
         for (c, &m) in v.iter().zip(t.iter()) {
             if !c.is_none() && c.unwrap() != m {
                 continue 'out;
             }
         }
-        indexes.push(i)
+        index = Some(i)
     }
     println!(
         "{}",
-        if indexes.is_empty() {
+        if index.is_none() {
             "UNRESTORABLE".to_string()
         } else {
-            let index = indexes.pop().unwrap();
+            let index = index.unwrap();
             for (i, &c) in t.iter().enumerate() {
                 s[index + i] = Some(c)
             }
