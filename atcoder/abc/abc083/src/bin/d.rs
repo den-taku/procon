@@ -20,12 +20,11 @@ fn main() {
             let all = sum[s.len() - i] - sum[i];
             if all == 0 || all == s.len() as i32 - 2 * (i as i32) {
                 println!("{}", s.len() - i);
-               return;
+                return;
             }
         }
         println!("{}", s.len() / 2);
     }
-    
 }
 
 fn make_cumulative_sum(s: &str) -> Vec<i32> {
@@ -35,7 +34,7 @@ fn make_cumulative_sum(s: &str) -> Vec<i32> {
         match c {
             '0' => v.push(*v.last().unwrap()),
             '1' => v.push(*v.last().unwrap() + 1),
-            _ => unreachable!()
+            _ => unreachable!(),
         }
     }
     v

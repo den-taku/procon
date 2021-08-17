@@ -3,8 +3,13 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        n: usize,
-        t: [[i128; 50];50]
+        mut x: u64,
+        y: u64
     }
-    unimplemented!()
+    let mut count = 0;
+    while x <= y {
+        x *= 2;
+        count += 1;
+    }
+    println!("{}", count);
 }
