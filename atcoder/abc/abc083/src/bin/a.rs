@@ -4,8 +4,19 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        _n: usize,
-        _t: [[i128; 50];50]
+        a: u32,
+        b: u32,
+        c: u32,
+        d: u32
     }
-    unimplemented!()
+    println!(
+        "{}",
+        if a + b > c + d {
+            "Left"
+        } else if a + b == c + d {
+            "Balanced"
+        } else {
+            "Right"
+        }
+    )
 }
