@@ -4,8 +4,16 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        _n: usize,
-        _t: [[i128; 50];50]
+        n: isize,
     }
-    unimplemented!()
+    println!(
+        "{}",
+        if n <= 125 {
+            4
+        } else if n <= 211 {
+            6
+        } else {
+            8
+        }
+    )
 }
