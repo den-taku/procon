@@ -11,11 +11,10 @@ fn main() {
     for (i, a) in path.iter().enumerate() {
         flow.add_edge(i + 1, i + 2, std::i64::MAX, 0);
         if let Some(index) = path.iter().skip(i + 1).position(|e| e == a) {
-            flow.add_edge(i + 1, index + i + 2, 1, -costs[a - 1]);
+            flow.add_edge(i + 2, index + i + 2, 1, -costs[a - 1]);
         }
     }
-    let fv = flow.min_cost_flow(s, t, m as i64).unwrap();
-    println!("{}", fv);
+    let fv = flow.min_cost_flow(s, t, m as i64 - 1).unwrap();
     println!("{}", sum + fv);
 }
 

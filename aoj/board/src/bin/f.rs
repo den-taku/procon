@@ -1,22 +1,28 @@
 #![allow(unreachable_code)]
-//use proconio::{fastout, input};
 
-// #[fastout]
 fn main() {
-    // input! {
-    //     n: usize,
-    //     t: [[i128; 50];50]
-    // }
+    let (n, coins) = input();
+    let mut memo = vec![0; n + 1];
+    for i in 1..n + 1 {
+        memo[i] = coins
+            .iter()
+            .map(|&c| {
+                if c <= i {
+                    memo[i - c] + 1
+                } else {
+                    std::usize::MAX
+                }
+            })
+            .min()
+            .unwrap_or(std::usize::MAX);
+    }
+    println!("{}", memo[n]);
+}
+
+#[inline]
+fn input() -> (usize, Vec<usize>) {
     let n = read_line::<usize>()[0];
-    let mut t = Vec::with_capacity(n);
-    let _ = (0..n)
-        .map(|_| {
-            let elem = read_line::<i64>();
-            t.push(elem);
-        })
-        .collect::<Vec<()>>();
-    let _t = t;
-    unimplemented!()
+    (n, read_line::<usize>())
 }
 
 #[inline]
