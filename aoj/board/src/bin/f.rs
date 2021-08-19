@@ -1,3 +1,4 @@
+// Coin Changing Problem(https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_1_A&lang=jp)
 #![allow(unreachable_code)]
 
 fn main() {
