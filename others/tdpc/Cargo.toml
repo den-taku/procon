@@ -1,30 +1,110 @@
 [package]
-name = "abc001"
+name = "tdpc"
 version = "0.1.0"
-authors = ["DenTaku <dentaku1412@gmail.com>"]
+authors = ["dentaku <dentaku1412@gmail.com>"]
 edition = "2018"
 
 [package.metadata.cargo-compete.bin]
-abc001-a = { alias = "a", problem = "https://atcoder.jp/contests/abc001/tasks/abc001_1" }
-abc001-b = { alias = "b", problem = "https://atcoder.jp/contests/abc001/tasks/abc001_2" }
-abc001-c = { alias = "c", problem = "https://atcoder.jp/contests/abc001/tasks/abc001_3" }
-abc001-d = { alias = "d", problem = "https://atcoder.jp/contests/abc001/tasks/abc001_4" }
+tdpc-a = { alias = "a", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_contest" }
+tdpc-b = { alias = "b", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_game" }
+tdpc-c = { alias = "c", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_tournament" }
+tdpc-d = { alias = "d", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_dice" }
+tdpc-e = { alias = "e", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_number" }
+tdpc-f = { alias = "f", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_semiexp" }
+tdpc-g = { alias = "g", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_lexicographical" }
+tdpc-h = { alias = "h", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_knapsack" }
+tdpc-i = { alias = "i", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_iwi" }
+tdpc-j = { alias = "j", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_ball" }
+tdpc-k = { alias = "k", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_target" }
+tdpc-l = { alias = "l", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_cat" }
+tdpc-m = { alias = "m", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_house" }
+tdpc-n = { alias = "n", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_tree" }
+tdpc-o = { alias = "o", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_string" }
+tdpc-p = { alias = "p", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_eel" }
+tdpc-q = { alias = "q", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_concatenation" }
+tdpc-r = { alias = "r", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_graph" }
+tdpc-s = { alias = "s", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_grid" }
+tdpc-t = { alias = "t", problem = "https://atcoder.jp/contests/tdpc/tasks/tdpc_fibonacci" }
 
 [[bin]]
-name = "abc001-a"
+name = "tdpc-a"
 path = "src/bin/a.rs"
 
 [[bin]]
-name = "abc001-b"
+name = "tdpc-b"
 path = "src/bin/b.rs"
 
 [[bin]]
-name = "abc001-c"
+name = "tdpc-c"
 path = "src/bin/c.rs"
 
 [[bin]]
-name = "abc001-d"
+name = "tdpc-d"
 path = "src/bin/d.rs"
+
+[[bin]]
+name = "tdpc-e"
+path = "src/bin/e.rs"
+
+[[bin]]
+name = "tdpc-f"
+path = "src/bin/f.rs"
+
+[[bin]]
+name = "tdpc-g"
+path = "src/bin/g.rs"
+
+[[bin]]
+name = "tdpc-h"
+path = "src/bin/h.rs"
+
+[[bin]]
+name = "tdpc-i"
+path = "src/bin/i.rs"
+
+[[bin]]
+name = "tdpc-j"
+path = "src/bin/j.rs"
+
+[[bin]]
+name = "tdpc-k"
+path = "src/bin/k.rs"
+
+[[bin]]
+name = "tdpc-l"
+path = "src/bin/l.rs"
+
+[[bin]]
+name = "tdpc-m"
+path = "src/bin/m.rs"
+
+[[bin]]
+name = "tdpc-n"
+path = "src/bin/n.rs"
+
+[[bin]]
+name = "tdpc-o"
+path = "src/bin/o.rs"
+
+[[bin]]
+name = "tdpc-p"
+path = "src/bin/p.rs"
+
+[[bin]]
+name = "tdpc-q"
+path = "src/bin/q.rs"
+
+[[bin]]
+name = "tdpc-r"
+path = "src/bin/r.rs"
+
+[[bin]]
+name = "tdpc-s"
+path = "src/bin/s.rs"
+
+[[bin]]
+name = "tdpc-t"
+path = "src/bin/t.rs"
 [dependencies]
 num = "=0.2.1"
 num-bigint = "=0.2.6"

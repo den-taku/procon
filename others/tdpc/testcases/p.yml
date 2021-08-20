@@ -7,6 +7,6 @@ cases: []
 
 extend:
   - type: Text
-    path: "./a"
+    path: "./p"
     in: /in/*.txt
     out: /out/*.txt

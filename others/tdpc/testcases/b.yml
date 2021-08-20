@@ -1,26 +1,9 @@
 ---
 type: Batch
-timelimit: 2s
+timelimit: ~
 match: Lines
 
-cases:
-  - name: sample1
-    in: |
-      10 2
-      0 1
-      1 0
-    out: |
-      512
-  - name: sample2
-    in: |
-      2 5
-      0 1 1 1 1
-      1 0 1 1 1
-      1 1 0 1 1
-      1 1 1 0 1
-      1 1 1 1 0
-    out: |
-      1025
+cases: []
 
 extend:
   - type: Text
