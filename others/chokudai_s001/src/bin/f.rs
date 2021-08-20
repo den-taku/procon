@@ -4,8 +4,18 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        _n: usize,
-        _t: [[i128; 50];50]
+        n: usize,
+        a: [u64; n]
     }
-    unimplemented!()
+    let mut count = 1;
+    let mut max = a[0];
+    for &e in a.iter().skip(1) {
+        if e < max {
+            // count += 1;
+        } else {
+            max = e;
+            count += 1;
+        }
+    }
+    println!("{}", count);
 }

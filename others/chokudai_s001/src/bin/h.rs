@@ -4,8 +4,31 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        _n: usize,
-        _t: [[i128; 50];50]
+        n: usize,
+        a: [u64; n]
     }
-    unimplemented!()
+    let mut last = Vec::new();
+    last.push(a[0]);
+    for e in a.into_iter().skip(1) {
+        if last[last.len() - 1] < e {
+            last.push(e);
+        } else {
+            let mut lower_bound = 0;
+            let mut upper_bound = last.len() - 1;
+            while upper_bound - lower_bound > 1 {
+                let est = (upper_bound + lower_bound) / 2;
+                if e < last[est] {
+                    upper_bound = est;
+                } else {
+                    lower_bound = est;
+                }
+            }
+            if e < last[lower_bound] {
+                last[lower_bound] = e;
+            } else {
+                last[upper_bound] = e;
+            }
+        }
+    }
+    println!("{}", last.len());
 }
