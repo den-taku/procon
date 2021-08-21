@@ -34,9 +34,7 @@ fn divisor(a: u32, set: &mut HashSet<u32>) {
     while i * i <= a {
         if a % i == 0 {
             set.insert(i);
-            if i != a / i {
-                set.insert(a / i);
-            }
+            set.insert(a / i);
         }
         i += 1;
     }
