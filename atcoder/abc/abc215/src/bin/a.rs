@@ -1,17 +1,9 @@
 #![allow(unreachable_code)]
-use proconio::{fastout, input};
+use proconio::fastout;
 
 #[fastout]
 fn main() {
-    input! {
-        s: String
-    }
-    println!(
-        "{}",
-        if s == "Hello,World!".to_string() {
-            "AC"
-        } else {
-            "WA"
-        }
-    )
+    let mut s = String::new();
+    let _ = std::io::stdin().read_line(&mut s);
+    println!("{}", if s == "Hello,World!\n" { "AC" } else { "WA" })
 }
