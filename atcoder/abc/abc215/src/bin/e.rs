@@ -14,25 +14,26 @@ fn main() {
     for c in s.chars().map(|c| c as usize - A) {
         let mut next = dp.clone();
         next[1 << c][c] += 1;
+        let mut p;
         for set in 1..2 << 10 {
             for last in 0..10 {
                 if last == c {
-                    next[set][last] += dp[set][last];
-                    next[set][last] %= MOD;
+                    p = &mut next[set][last];
+                    *p += dp[set][last];
+                    *p %= MOD;
                 } else if set >> c & 1 == 0 {
-                    next[set | 1 << c][c] += dp[set][last];
-                    next[set | 1 << c][c] %= MOD;
+                    p = &mut next[set | 1 << c][c];
+                    *p += dp[set][last];
+                    *p %= MOD;
                 }
             }
         }
         dp = next;
     }
-    let mut ans = 0;
-    for set in 0..2 << 10 {
-        for last in 0..10 {
-            ans += dp[set][last];
-            ans %= MOD;
-        }
-    }
-    println!("{}", ans);
+    println!(
+        "{}",
+        dp.iter()
+            .map(|v| v.iter().fold(0, |i, e| (i + e) % MOD))
+            .fold(0, |i, e| (i + e) % MOD)
+    )
 }
