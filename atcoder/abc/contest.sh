@@ -12,6 +12,3 @@ cargo compete open
 for f in ./src/bin/*; do
     open $f
 done
-
-open src/bin/a.rs
-open src/bin/b.rs
