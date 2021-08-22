@@ -1,7 +1,7 @@
 #![allow(unreachable_code)]
 use proconio::{fastout, input};
 
-const MOD: u64 = 998244353;
+const MOD: u64 = 998_244_353;
 
 #[fastout]
 fn main() {
@@ -13,9 +13,7 @@ fn main() {
         if i * i > n {
             break;
         } else {
-            let large = n / i;
-            let res = large - i;
-            ans += res / 2 + 1;
+            ans += ((n / i - i) >> 1) + 1;
             ans %= MOD;
         }
     }

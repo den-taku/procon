@@ -16,12 +16,6 @@ cases:
       4
     out: |
       5 4 3 2 1
-  - name: test1
-    in: |
-      7 3
-      3 4 5
-    out: |
-      1 6 2 7 3 4 5
 
 extend:
   - type: Text
