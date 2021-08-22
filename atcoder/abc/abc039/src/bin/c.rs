@@ -4,8 +4,19 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        _n: usize,
-        _t: [[i128; 50];50]
+        s: String
     }
-    unimplemented!()
+    let kanban = "WBWBWWBWBWBW";
+    let onkai = [
+        "Do", "Do", "Re", "Re", "Mi", "Fa", "Fa", "So", "So", "La", "La", "Si",
+    ];
+    'out: for (i, m) in onkai.iter().enumerate() {
+        for (a, c) in kanban.chars().cycle().skip(i).zip(s.chars()) {
+            if a != c {
+                continue 'out;
+            }
+        }
+        println!("{}", m);
+        break;
+    }
 }
