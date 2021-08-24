@@ -1,29 +1,5 @@
-#![allow(unreachable_code)]
 #![allow(dead_code)]
-use geometry_library::*;
-use proconio::{fastout, input};
 
-#[fastout]
-fn main() {
-    input! {
-        a: (i32, i32),
-        b: (i32, i32),
-        n: i32,
-        mut points: [(i32, i32); n]
-    }
-    let a = Point::new(a);
-    let b = Point::new(b);
-    points.push(points[0]);
-    println!(
-        "{}",
-        points
-            .windows(2)
-            .filter(|v| Point::<i32>::is_cross(a, b, Point::new(v[0]), Point::new(v[1])))
-            .count()
-            / 2
-            + 1
-    )
-}
 pub mod geometry_library {
 
     #[derive(Debug, Copy, Clone)]
