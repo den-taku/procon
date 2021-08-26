@@ -4,8 +4,18 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        _n: usize,
-        _t: [[i128; 50];50]
+        s: usize,
+        t: usize
     }
-    unimplemented!()
+    let mut count = 0;
+    for i in 0..s + 1 {
+        for j in 0..s + 1 {
+            for k in 0..s + 1 {
+                if i + j + k <= s && i * j * k <= t {
+                    count += 1;
+                }
+            }
+        }
+    }
+    println!("{}", count)
 }
