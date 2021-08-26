@@ -27,8 +27,8 @@ fn main() {
         "{}",
         match pattern {
             2 => if_v_over_1000(n, w, load),
-            3 => if_w_over_1000(n, w, load, v_max),
-            // 3 => solve3(n, w, load),
+            // 3 => if_w_over_1000(n, w, load, v_max),
+            3 => solve3(n, w, load),
             _ => if_n_30(n, w, load),
         }
     )
@@ -140,7 +140,7 @@ fn if_v_over_1000(n: usize, w: i64, load: Vec<(i64, i64)>) -> i64 {
     dp.pop().unwrap()
 }
 
-fn if_w_over_1000(n: usize, w: i64, load: Vec<(i64, i64)>, v_max: i64) -> i64 {
+fn _if_w_over_1000(n: usize, w: i64, load: Vec<(i64, i64)>, v_max: i64) -> i64 {
     let mut dp = vec![std::i64::MAX; (n + 1) * (n as i64 * v_max + 1) as usize];
     dp[0] = 0;
     for i in 1..n + 1 {
@@ -177,18 +177,18 @@ fn if_w_over_1000(n: usize, w: i64, load: Vec<(i64, i64)>, v_max: i64) -> i64 {
     ans
 }
 
-// fn solve3(n: usize, mw: i64, vw: Vec<(i64, i64)>) -> i64 {
-//     let sv = vw.iter().fold(0, |acc, &(v, _)| acc + v);
-//     let mut dp = vec![std::i64::MAX; sv as usize + 1];
-//     dp[0] = 0;
-//     for i in 0..n {
-//         let (v, w) = vw[i];
-//         for j in (0..(std::cmp::max(0, sv - v) + 1)).rev() {
-//             if dp[j as usize] == std::i64::MAX {
-//                 continue;
-//             }
-//             dp[(j + v) as usize] = std::cmp::min(dp[(j + v) as usize], dp[j as usize] + w);
-//         }
-//     }
-//     (0..(sv + 1)).filter(|&v| dp[v as usize] <= mw).max().unwrap_or(0)
-// }
+fn solve3(n: usize, mw: i64, vw: Vec<(i64, i64)>) -> i64 {
+    let sv = vw.iter().fold(0, |acc, &(v, _)| acc + v);
+    let mut dp = vec![std::i64::MAX; sv as usize + 1];
+    dp[0] = 0;
+    for i in 0..n {
+        let (v, w) = vw[i];
+        for j in (0..(std::cmp::max(0, sv - v) + 1)).rev() {
+            if dp[j as usize] == std::i64::MAX {
+                continue;
+            }
+            dp[(j + v) as usize] = std::cmp::min(dp[(j + v) as usize], dp[j as usize] + w);
+        }
+    }
+    (0..(sv + 1)).filter(|&v| dp[v as usize] <= mw).max().unwrap_or(0)
+}
