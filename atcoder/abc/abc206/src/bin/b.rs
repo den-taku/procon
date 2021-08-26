@@ -4,8 +4,14 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        _n: usize,
-        _t: [[i128; 50];50]
+        n: usize,
     }
-    unimplemented!()
+    let mut sum = 0;
+    for i in 1.. {
+        sum += i;
+        if sum >= n {
+            println!("{}", i);
+            break;
+        }
+    }
 }
