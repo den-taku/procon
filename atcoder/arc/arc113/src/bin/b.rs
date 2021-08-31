@@ -9,7 +9,7 @@ fn main() {
         c: usize
     }
     let t = [1, 1, 4, 4, 2, 1, 1, 4, 4, 2];
-    println!("{}", pow(a % 10, index(b, c, t[a % 10]), 10))
+    println!("{}", pow(a % 10, index(b % t[a % 10], c, t[a % 10]), 10))
 }
 
 #[inline(always)]
