@@ -10,7 +10,7 @@ fn main() {
         t: [String; m]
     }
     let mut blue = HashMap::new();
-    for b in s.clone() {
+    for b in s {
         if let Some(&v) = blue.get(&b) {
             blue.insert(b, v + 1);
         } else {
@@ -28,8 +28,8 @@ fn main() {
     println!(
         "{}",
         std::cmp::max(
-            s.into_iter()
-                .map(|b| { blue.get(&b).unwrap() - red.get(&b).unwrap_or(&0) })
+            blue.into_iter()
+                .map(|(d, c)| { c - red.get(&d).unwrap_or(&0) })
                 .max()
                 .unwrap(),
             0
