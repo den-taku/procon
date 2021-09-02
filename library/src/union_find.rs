@@ -71,7 +71,9 @@ pub mod union_find_library {
         pub fn to_vec(&mut self) -> Vec<Vec<usize>> {
             let mut set = vec![Vec::new(); self.par.len()];
             for (i, &p) in self.par.iter().enumerate() {
-                set[p].push(i);
+                unsafe {
+                    set.get_unchecked_mut(p).push(i);
+                }
             }
             set.into_iter().filter(|s| s.len() > 0).collect()
         }
