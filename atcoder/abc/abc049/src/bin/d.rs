@@ -48,7 +48,7 @@ pub mod union_find_library {
     }
 
     impl UnionFind {
-        #[inline]
+        #[inline(always)]
         /// Create a new Union-Find Tree contains n elements.
         /// At the first state, the elements are mutually disjoint.
         pub fn new(n: usize) -> Self {
@@ -58,7 +58,7 @@ pub mod union_find_library {
             }
         }
 
-        #[inline]
+        #[inline(always)]
         /// Return representative representing set containing x.
         pub fn find(&mut self, x: usize) -> usize {
             if x >= self.par.len() {
@@ -79,7 +79,7 @@ pub mod union_find_library {
             }
         }
 
-        #[inline]
+        #[inline(always)]
         /// Unite 2 sets, one containing x and the other containing y.
         pub fn unite(&mut self, x: usize, y: usize) -> bool {
             let x_par = self.find(x);
@@ -99,14 +99,15 @@ pub mod union_find_library {
             x_par != y_par
         }
 
-        #[inline]
+        #[inline(always)]
         /// Decide whether set, containing x, contains y or not.
         pub fn same(&mut self, x: usize, y: usize) -> bool {
             self.find(x) == self.find(y)
         }
 
-        #[inline]
-        pub fn set(&mut self) -> Vec<Vec<usize>> {
+        #[inline(always)]
+        /// Convert UnionFind to Vec\<Vec\<usize\>\>
+        pub fn to_vec(&mut self) -> Vec<Vec<usize>> {
             let mut set = vec![Vec::new(); self.par.len()];
             for (i, &p) in self.par.iter().enumerate() {
                 set[p].push(i);
