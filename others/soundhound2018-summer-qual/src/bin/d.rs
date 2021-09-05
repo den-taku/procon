@@ -1,8 +1,8 @@
 #![allow(unreachable_code)]
+#![allow(dead_code)]
+use dijkstra_library::*;
 use proconio::{fastout, input};
-use std::cmp::Ordering;
 use std::cmp::Reverse;
-use std::collections::BinaryHeap;
 
 #[fastout]
 fn main() {
@@ -13,31 +13,19 @@ fn main() {
         t: usize,
         trains: [(usize, usize, u64, u64); m]
     }
-    let mut graph_yen = vec![Vec::new(); n];
-    let mut graph_dollar = vec![Vec::new(); n];
-    for (a, b, y, d) in trains {
-        graph_yen[a - 1].push(Edge {
-            node: b - 1,
-            cost: y,
-        });
-        graph_yen[b - 1].push(Edge {
-            node: a - 1,
-            cost: y,
-        });
-        graph_dollar[a - 1].push(Edge {
-            node: b - 1,
-            cost: d,
-        });
-        graph_dollar[b - 1].push(Edge {
-            node: a - 1,
-            cost: d,
-        });
+    let mut yen = Dijkstra::new(n);
+    let mut dollar = Dijkstra::new(n);
+    for (u, v, y, d) in trains {
+        yen.add_edge(u - 1, v - 1, y);
+        yen.add_edge(v - 1, u - 1, y);
+        dollar.add_edge(u - 1, v - 1, d);
+        dollar.add_edge(v - 1, u - 1, d);
     }
-    let shortest_yen = shortest_path(&graph_yen, s - 1, 0);
-    let shortest_doller = shortest_path(&graph_dollar, t - 1, 0);
+    let yen = yen.shortest_path(s - 1);
+    let dollar = dollar.shortest_path(t - 1);
     let mut queue = std::collections::BinaryHeap::new();
     for i in 0..n {
-        queue.push((Reverse(shortest_yen[i] + shortest_doller[i]), i));
+        queue.push((Reverse(yen[i] + dollar[i]), i));
     }
     let mut ans = Vec::new();
     for i in 0..n {
@@ -55,88 +43,151 @@ fn main() {
     println!("{}", ans.join("\n"));
 }
 
-#[derive(Copy, Clone, Eq, PartialEq)]
-struct State {
-    cost: u64,
-    position: usize,
-}
-
-// The priority queue depends on `Ord`.
-// Explicitly implement the trait so the queue becomes a min-heap
-// instead of a max-heap.
-impl Ord for State {
-    fn cmp(&self, other: &Self) -> Ordering {
-        // Notice that the we flip the ordering on costs.
-        // In case of a tie we compare positions - this step is necessary
-        // to make implementations of `PartialEq` and `Ord` consistent.
-        other
-            .cost
-            .cmp(&self.cost)
-            .then_with(|| self.position.cmp(&other.position))
+pub mod dijkstra_library {
+    /// 1. Add edges with add_edge
+    /// 2. Run self.shortest_path(from)
+    #[derive(Clone, Debug)]
+    pub struct Dijkstra<T> {
+        nodes: usize,
+        edges: Vec<Vec<Edge<T>>>,
     }
-}
 
-// `PartialOrd` needs to be implemented as well.
-impl PartialOrd for State {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-// Each node is represented as an `usize`, for a shorter implementation.
-#[derive(Copy, Clone)]
-struct Edge {
-    node: usize,
-    cost: u64,
-}
-
-// Dijkstra's shortest path algorithm.
-
-// Start at `start` and use `dist` to track the current shortest distance
-// to each node. This implementation isn't memory-efficient as it may leave duplicate
-// nodes in the queue. It also uses `usize::MAX` as a sentinel value,
-// for a simpler implementation.
-fn shortest_path(adj_list: &Vec<Vec<Edge>>, start: usize, _goal: usize) -> Vec<u64> {
-    // dist[node] = current shortest distance from `start` to `node`
-    let mut dist: Vec<_> = (0..adj_list.len()).map(|_| std::u64::MAX).collect();
-
-    let mut heap = BinaryHeap::new();
-
-    // We're at `start`, with a zero cost
-    dist[start] = 0;
-    heap.push(State {
-        cost: 0,
-        position: start,
-    });
-
-    // Examine the frontier with lower cost nodes first (min-heap)
-    while let Some(State { cost, position }) = heap.pop() {
-        // Alternatively we could have continued to find all shortest paths
-        // if position == goal { return Some(cost); }
-
-        // Important as we may have already found a better way
-        if cost > dist[position] {
-            continue;
-        }
-
-        // For each node we can reach, see if we can find a way with
-        // a lower cost going through this node
-        for edge in &adj_list[position] {
-            let next = State {
-                cost: cost + edge.cost,
-                position: edge.node,
-            };
-
-            // If so, add it to the frontier and continue
-            if next.cost < dist[next.position] {
-                heap.push(next);
-                // Relaxation, we have now found a better way
-                dist[next.position] = next.cost;
+    impl<T> Dijkstra<T>
+    where
+        T: Clone + Max + Zero + std::cmp::Ord + std::ops::Add<Output = T> + Copy,
+    {
+        #[inline(always)]
+        pub fn new(nodes: usize) -> Self {
+            Self {
+                nodes,
+                edges: vec![Vec::new(); nodes],
             }
         }
+
+        #[inline(always)]
+        pub fn add_edge(&mut self, from: usize, to: usize, cost: T) {
+            if to >= self.nodes || from >= self.nodes {
+                panic!("add_edge: out of bound.")
+            }
+            unsafe { self.edges.get_unchecked_mut(from).push(Edge { to, cost }) };
+        }
+
+        #[inline(always)]
+        pub fn shortest_path(&mut self, start: usize) -> Vec<T> {
+            if start >= self.nodes {
+                panic!("shortest_path: start is out of bound.")
+            }
+            let mut dist: Vec<_> = (0..self.nodes).map(|_| T::MAX).collect();
+
+            let mut heap = std::collections::BinaryHeap::new();
+
+            unsafe {
+                *dist.get_unchecked_mut(start) = T::ZERO;
+            }
+            heap.push(State {
+                cost: T::ZERO,
+                position: start,
+            });
+
+            while let Some(State { cost, position }) = heap.pop() {
+                if cost > unsafe { *dist.get_unchecked(position) } {
+                    continue;
+                }
+
+                unsafe {
+                    for edge in self.edges.get_unchecked(position) {
+                        let next = State {
+                            cost: cost + edge.cost,
+                            position: edge.to,
+                        };
+
+                        if next.cost < *dist.get_unchecked(next.position) {
+                            heap.push(next);
+                            // Relaxation, we have now found a better way
+                            *dist.get_unchecked_mut(next.position) = next.cost;
+                        }
+                    }
+                }
+            }
+
+            dist
+        }
     }
 
-    // Goal not reachable
-    // None
-    dist
+    #[derive(Copy, Clone, Debug)]
+    struct Edge<T> {
+        to: usize,
+        cost: T,
+    }
+
+    #[derive(Copy, Clone, Eq, PartialEq)]
+    struct State<T> {
+        cost: T,
+        position: usize,
+    }
+
+    impl<T> Ord for State<T>
+    where
+        T: std::cmp::Ord,
+    {
+        #[inline(always)]
+        fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+            other
+                .cost
+                .cmp(&self.cost)
+                .then_with(|| self.position.cmp(&other.position))
+        }
+    }
+
+    impl<T> PartialOrd for State<T>
+    where
+        T: std::cmp::Ord + std::cmp::PartialOrd,
+    {
+        #[inline(always)]
+        fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+            Some(self.cmp(other))
+        }
+    }
+
+    pub trait Max {
+        const MAX: Self;
+    }
+
+    macro_rules! impl_max {
+        ( $($e:ident),* ) => {
+            $(
+                impl Max for $e {
+                    const MAX: Self = std::$e::MAX;
+                }
+            )*
+        };
+    }
+
+    impl_max!(isize, i8, i16, i32, i64, i128, usize, u8, u16, u32, u64, u128);
+
+    pub trait Zero {
+        const ZERO: Self;
+    }
+
+    macro_rules! impl_zero {
+        ( $($e:ty),* ) => {
+            $(
+                impl Zero for $e {
+                    const ZERO: Self = 0;
+                }
+            )*
+        };
+    }
+
+    impl_zero!(isize, i8, i16, i32, i64, i128, usize, u8, u16, u32, u64, u128);
+
+    #[cfg(test)]
+    mod tests_dijkstra {
+        use super::*;
+
+        #[test]
+        fn for_dijkstra() {
+            assert_eq!(1 + 2, 3);
+        }
+    }
 }
