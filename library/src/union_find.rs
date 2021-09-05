@@ -75,7 +75,7 @@ pub mod union_find_library {
                     set.get_unchecked_mut(p).push(i);
                 }
             }
-            set.into_iter().filter(|s| s.len() > 0).collect()
+            set.into_iter().filter(|s| !s.is_empty()).collect()
         }
     }
 

@@ -1,4 +1,4 @@
-#![allow(dead_code)]
+#![allow(dead_code, clippy::float_cmp)]
 
 pub mod geometry_library {
 
@@ -16,6 +16,7 @@ pub mod geometry_library {
             + std::ops::Mul<Output = T>
             + std::ops::Div<Output = T>
             + std::cmp::PartialOrd
+            + std::cmp::PartialEq
             + std::convert::From<f64>,
         Circle<f64>: std::convert::From<Circle<T>>,
     {
