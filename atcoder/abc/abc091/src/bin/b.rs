@@ -11,19 +11,11 @@ fn main() {
     }
     let mut blue = HashMap::new();
     for b in s {
-        if let Some(&v) = blue.get(&b) {
-            blue.insert(b, v + 1);
-        } else {
-            blue.insert(b, 1);
-        }
+        *blue.entry(b).or_insert(0) += 1;
     }
     let mut red = HashMap::new();
     for r in t {
-        if let Some(&v) = red.get(&r) {
-            red.insert(r, v + 1);
-        } else {
-            red.insert(r, 1);
-        }
+        *red.entry(r).or_insert(0) += 1;
     }
     println!(
         "{}",
