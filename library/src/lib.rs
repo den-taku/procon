@@ -5,6 +5,7 @@ pub mod enumeration;
 pub mod ford_fulkerson;
 pub mod geometry;
 pub mod hungarian;
+pub mod kruskal;
 pub mod min_cost_flow;
 pub mod primes;
 pub mod range_minimum_query;

@@ -1,49 +1,7 @@
-// Minimum Spanning Tree(https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_2_A)
-#![allow(unreachable_code)]
 #![allow(dead_code)]
 
-fn main() {
-    let (v, edges) = input();
-    let mut kruskal = kruskal_library::Kruskal::new(v);
-    for (u, v, w) in edges {
-        kruskal.add_edge(u, v, w);
-    }
-    let minimum_spanning_tree = kruskal.minimum_spanning_tree().unwrap();
-    println!(
-        "{}",
-        minimum_spanning_tree.iter().map(|e| e.2).sum::<usize>()
-    )
-}
-
-#[inline]
-fn input() -> (usize, Vec<(usize, usize, usize)>) {
-    let (v, e) = {
-        let e = read_line::<usize>();
-        (e[0], e[1])
-    };
-    let mut edges = Vec::with_capacity(e);
-    for _ in 0..e {
-        let e = read_line::<usize>();
-        edges.push((e[0], e[1], e[2]));
-    }
-    (v, edges)
-}
-
-#[inline]
-fn read_line<T>() -> Vec<T>
-where
-    T: std::str::FromStr,
-    <T as std::str::FromStr>::Err: std::fmt::Debug,
-{
-    let mut s = String::new();
-    std::io::stdin().read_line(&mut s).unwrap();
-    s.trim()
-        .split_whitespace()
-        .map(|c| T::from_str(c).unwrap())
-        .collect()
-}
-
 pub mod kruskal_library {
+    /// verified by this(https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5857344#1).
     pub struct Kruskal<T> {
         vertics: usize,
         edges: Vec<(usize, usize, T)>,
