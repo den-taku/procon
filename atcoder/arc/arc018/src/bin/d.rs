@@ -1,4 +1,5 @@
 // need to consider e1(not contain), e2(not contain), and e3(contain)
+// maybe new instance push to candidates?
 #![allow(dead_code)]
 #![allow(unreachable_code)]
 use proconio::{fastout, input};
@@ -16,6 +17,11 @@ fn main() {
     for &(u, v, c) in &edges {
         kruskal.add_edge(u - 1, v - 1, c);
     }
+    let set = edges
+        .iter()
+        .enumerate()
+        .map(|(i, e)| (e, i))
+        .collect::<std::collections::HashMap<_, _>>();
     let mst = kruskal.minimum_spanning_tree().unwrap();
     let min_cost = mst.iter().map(|e| e.2).sum::<u64>();
     let map = mst
