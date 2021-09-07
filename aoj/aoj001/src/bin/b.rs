@@ -9,7 +9,7 @@ fn main() {
     let dist = bellman_fold.shortest_path(start);
     println!(
         "{}",
-        if let Some(d) = dist {
+        if let Some(d) = dist.0 {
             let mut ans = d
                 .iter()
                 .map(|&e| {
@@ -84,22 +84,24 @@ pub mod bellman_ford_library {
         }
 
         #[inline(always)]
-        pub fn shortest_path(&self, start: usize) -> Option<Vec<T>> {
+        pub fn shortest_path(&self, start: usize) -> (Option<Vec<T>>, Vec<usize>) {
             let mut dist = vec![T::MAX; self.nodes];
+            let mut pre = vec![0; self.nodes];
             dist[start] = T::ZERO;
-            for _ in 0..self.edges.len() + 1 {
+            for _ in 0..std::cmp::min(self.nodes, self.edges.len() + 1) {
                 let mut update = false;
                 for &(u, v, w) in &self.edges {
                     if dist[u] != T::MAX && dist[v] > dist[u] + w {
                         dist[v] = dist[u] + w;
+                        pre[v] = u;
                         update = true;
                     }
                 }
                 if !update {
-                    return Some(dist);
+                    return (Some(dist), pre);
                 }
             }
-            None
+            (None, pre)
         }
     }
 
