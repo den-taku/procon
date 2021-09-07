@@ -1,3 +1,4 @@
+pub mod bellman_ford;
 pub mod bit_sum;
 pub mod dijkstra;
 pub mod dinic;
