@@ -34,10 +34,10 @@ fn main() {
                 if let Some(s) = dp[dp.len() - damage] {
                     if let Some(e) = est {
                         if s + cost < e {
-                            est = Some(s + cost)
+                            est = Some(s + cost);
                         }
                     } else {
-                        est = Some(s + cost)
+                        est = Some(s + cost);
                     }
                 }
             }
