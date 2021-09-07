@@ -120,44 +120,21 @@ pub mod rmq_library {
     }
 
     /// Return T::MAX
-    pub trait Max
-    where
-        Self: Copy,
-    {
+    pub trait Max {
         const MAX: Self;
     }
 
-    impl Max for i32 {
-        const MAX: Self = std::i32::MAX;
+    macro_rules! impl_max {
+        ( $($e:ident),* ) => {
+            $(
+                impl Max for $e {
+                    const MAX: Self = std::$e::MAX;
+                }
+            )*
+        };
     }
 
-    impl Max for u32 {
-        const MAX: Self = std::u32::MAX;
-    }
-
-    impl Max for i64 {
-        const MAX: Self = std::i64::MAX;
-    }
-
-    impl Max for u64 {
-        const MAX: Self = std::u64::MAX;
-    }
-
-    impl Max for i128 {
-        const MAX: Self = std::i128::MAX;
-    }
-
-    impl Max for u128 {
-        const MAX: Self = std::u128::MAX;
-    }
-
-    impl Max for usize {
-        const MAX: Self = std::usize::MAX;
-    }
-
-    impl Max for isize {
-        const MAX: Self = std::isize::MAX;
-    }
+    impl_max!(isize, i8, i16, i32, i64, i128, usize, u8, u16, u32, u64, u128);
 
     #[cfg(test)]
     mod tests_range_minimum_query {
