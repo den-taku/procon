@@ -3,6 +3,7 @@ pub mod bit_sum;
 pub mod dijkstra;
 pub mod dinic;
 pub mod enumeration;
+pub mod floyd_warshall;
 pub mod ford_fulkerson;
 pub mod geometry;
 pub mod hungarian;

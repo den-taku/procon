@@ -1,6 +1,9 @@
+#![allow(dead_code)]
+
 pub mod bellman_ford_library {
     /// verified by this(https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5858542#1)
     /// and this(https://atcoder.jp/contests/abc061/submissions/25667916)
+    /// O(|E|*min(|V|, |E|))
     pub struct Bellmanford<T> {
         nodes: usize,
         edges: Vec<(usize, usize, T)>,

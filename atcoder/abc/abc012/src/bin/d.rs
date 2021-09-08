@@ -16,49 +16,19 @@ fn main() {
 
 #[inline]
 fn floyd_warshall_ans(n: usize, abt: &[(usize, usize, usize)]) -> usize {
-    let mut graph = vec![None; n * n];
+    let mut fw = floyd_warshall_library::FloydWarshall::new(n);
     for &(a, b, c) in abt {
         let x = a - 1;
         let y = b - 1;
-        graph[x * n + y] = Some(c);
-        graph[y * n + x] = Some(c);
+        fw.add_edge(x, y, c);
+        fw.add_edge(y, x, c);
     }
-    for i in 0..n {
-        graph[i * n + i] = Some(0);
-    }
-    let mut now;
-    for k in 0..n {
-        now = graph.clone();
-        for i in 0..n {
-            for j in 0..n {
-                now[i * n + j] = min(now[i * n + j], graph[i * n + k], graph[k * n + j])
-            }
-        }
-        graph = now;
-    }
-    graph
+    fw.shortest_path()
         .chunks(n)
         .map(|v| v.iter().copied().max().unwrap())
         .min()
         .unwrap()
         .unwrap()
-}
-
-#[inline]
-fn min(a: Option<usize>, b: Option<usize>, c: Option<usize>) -> Option<usize> {
-    if let Some(v2) = b {
-        if let Some(v3) = c {
-            if let Some(v1) = a {
-                Some(std::cmp::min(v1, v2 + v3))
-            } else {
-                Some(v2 + v3)
-            }
-        } else {
-            a
-        }
-    } else {
-        a
-    }
 }
 
 #[inline]
@@ -68,11 +38,10 @@ fn bellman_ford_ans(n: usize, abt: &[(usize, usize, usize)]) -> usize {
         bf.add_edge(x - 1, y - 1, c);
         bf.add_edge(y - 1, x - 1, c);
     }
-    let mut ans = std::usize::MAX;
-    for i in 0..n {
-        ans = std::cmp::min(ans, *bf.shortest_path(i).0.unwrap().iter().max().unwrap())
-    }
-    ans
+    (0..n)
+        .map(|i| *bf.shortest_path(i).0.unwrap().iter().max().unwrap())
+        .min()
+        .unwrap()
 }
 
 #[inline]
@@ -82,11 +51,140 @@ fn dijkstra_ans(n: usize, abt: &[(usize, usize, usize)]) -> usize {
         dijkstra.add_edge(x - 1, y - 1, c);
         dijkstra.add_edge(y - 1, x - 1, c);
     }
-    let mut ans = std::usize::MAX;
-    for i in 0..n {
-        ans = std::cmp::min(ans, *dijkstra.shortest_path(i).iter().max().unwrap())
+    (0..n)
+        .map(|i| *dijkstra.shortest_path(i).iter().max().unwrap())
+        .min()
+        .unwrap()
+}
+
+pub mod floyd_warshall_library {
+    /// O(|V|^3)
+    pub struct FloydWarshall<T> {
+        nodes: usize,
+        graph: Vec<Option<T>>,
     }
-    ans
+
+    impl<T> FloydWarshall<T>
+    where
+        T: std::ops::Add<Output = T> + Zero + Copy + std::cmp::Ord,
+    {
+        #[inline]
+        pub fn new(nodes: usize) -> Self {
+            let mut graph = vec![None; nodes * nodes];
+            for i in 0..nodes {
+                graph[i * nodes + i] = Some(T::ZERO);
+            }
+            Self { nodes, graph }
+        }
+
+        #[inline]
+        pub fn add_edge(&mut self, from: usize, to: usize, cost: T) {
+            self.graph[from * self.nodes + to] = Some(cost);
+        }
+
+        #[inline]
+        pub fn shortest_path(&self) -> Vec<Option<T>> {
+            let mut graph = self.graph.clone();
+            let mut now;
+            for k in 0..self.nodes {
+                now = graph.clone();
+                for i in 0..self.nodes {
+                    for j in 0..self.nodes {
+                        unsafe {
+                            *now.get_unchecked_mut(i * self.nodes + j) = min(
+                                *now.get_unchecked(i * self.nodes + j),
+                                *graph.get_unchecked(i * self.nodes + k),
+                                *graph.get_unchecked(k * self.nodes + j),
+                            )
+                        }
+                    }
+                }
+                graph = now;
+            }
+            graph
+        }
+    }
+
+    #[inline]
+    fn min<T: std::ops::Add<Output = T> + std::cmp::Ord>(
+        dij: Option<T>,
+        dik: Option<T>,
+        dkj: Option<T>,
+    ) -> Option<T> {
+        if let Some(v2) = dik {
+            if let Some(v3) = dkj {
+                if let Some(v1) = dij {
+                    Some(std::cmp::min(v1, v2 + v3))
+                } else {
+                    Some(v2 + v3)
+                }
+            } else {
+                dij
+            }
+        } else {
+            dij
+        }
+    }
+
+    pub trait Zero {
+        const ZERO: Self;
+    }
+
+    macro_rules! impl_zero {
+        ( $($e:ty),* ) => {
+            $(
+                impl Zero for $e {
+                    const ZERO: Self = 0;
+                }
+            )*
+        };
+    }
+
+    impl_zero!(isize, i8, i16, i32, i64, i128, usize, u8, u16, u32, u64, u128);
+
+    #[cfg(test)]
+    mod for_floyd_warshall {
+        use super::*;
+
+        #[test]
+        fn for_floyd_warshall() {
+            let n = 3;
+            let abt = [(1, 2, 10), (2, 3, 10)];
+            assert_eq!(floyd_warshall_ans(n, &abt), 10);
+
+            let n = 5;
+            let abt = [(1, 2, 12), (2, 3, 14), (3, 4, 7), (4, 5, 9), (5, 1, 18)];
+            assert_eq!(floyd_warshall_ans(n, &abt), 26);
+
+            let n = 4;
+            let abt = [
+                (1, 2, 1),
+                (2, 3, 1),
+                (3, 4, 1),
+                (4, 1, 1),
+                (1, 3, 1),
+                (4, 2, 1),
+            ];
+            assert_eq!(floyd_warshall_ans(n, &abt), 1)
+        }
+
+        #[inline]
+        fn floyd_warshall_ans(n: usize, abt: &[(usize, usize, usize)]) -> usize {
+            let mut fw = FloydWarshall::new(n);
+            for &(a, b, c) in abt {
+                let x = a - 1;
+                let y = b - 1;
+                fw.add_edge(x, y, c);
+                fw.add_edge(y, x, c);
+            }
+            fw.shortest_path()
+                .chunks(n)
+                .map(|v| v.iter().copied().max().unwrap())
+                .min()
+                .unwrap()
+                .unwrap()
+        }
+    }
 }
 
 pub mod bellman_ford_library {
