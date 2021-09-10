@@ -26,10 +26,7 @@ pub mod graham_scan_library {
                     std::cmp::Ordering::Greater
                 }
             });
-            let mut indexes = Vec::new();
-            indexes.push(p0);
-            indexes.push(v[0]);
-            indexes.push(v[1]);
+            let mut indexes = vec![p0, v[0], v[1]];
             for &e in v.iter().skip(2) {
                 while {
                     let top = indexes[indexes.len() - 1];
