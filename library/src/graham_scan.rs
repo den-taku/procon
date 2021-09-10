@@ -1,37 +1,4 @@
 #![allow(dead_code, clippy::float_cmp)]
-#![allow(unreachable_code)]
-use graham_scan_library::*;
-use proconio::{fastout, input};
-
-#[fastout]
-fn main() {
-    input! {
-        n: usize,
-        a: [(f64, f64); n],
-        b: [(f64, f64); n]
-    }
-    if n == 2 {
-        let d1 =
-            ((a[0].0 - a[1].0) * (a[0].0 - a[1].0) + (a[0].1 - a[1].1) * (a[0].1 - a[1].1)).sqrt();
-        let d2 =
-            ((b[0].0 - b[1].0) * (b[0].0 - b[1].0) + (b[0].1 - b[1].1) * (b[0].1 - b[1].1)).sqrt();
-        println!("{}", d2 / d1);
-        return;
-    }
-    let mut graham1 = GrahamScan::run(&a);
-    graham1.push(graham1[0]);
-    let mut graham2 = GrahamScan::run(&b);
-    graham2.push(graham2[0]);
-    let mut sum1 = 0.0;
-    for ((x1, y1, _), (x2, y2, _)) in graham1.windows(2).map(|v| (v[0], v[1])) {
-        sum1 += ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)).sqrt();
-    }
-    let mut sum2 = 0.0;
-    for ((x1, y1, _), (x2, y2, _)) in graham2.windows(2).map(|v| (v[0], v[1])) {
-        sum2 += ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)).sqrt();
-    }
-    println!("{}", sum2 / sum1);
-}
 
 pub mod graham_scan_library {
     pub struct GrahamScan {}

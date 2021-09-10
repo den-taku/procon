@@ -6,6 +6,7 @@ pub mod enumeration;
 pub mod floyd_warshall;
 pub mod ford_fulkerson;
 pub mod geometry;
+pub mod graham_scan;
 pub mod hungarian;
 pub mod kruskal;
 pub mod min_cost_flow;
