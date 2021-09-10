@@ -1,6 +1,7 @@
 #![allow(dead_code, clippy::float_cmp)]
 
 pub mod graham_scan_library {
+    /// verified by this(https://atcoder.jp/contests/abc022/submissions/25718038)
     pub struct GrahamScan {}
 
     impl GrahamScan {
@@ -11,14 +12,12 @@ pub mod graham_scan_library {
                 .enumerate()
                 .map(|e| ((e.1).0, (e.1).1, e.0))
                 .collect::<Vec<_>>();
-            v.sort_by(|a, b| {
+            v.sort_by(|b, a| {
                 a.1.partial_cmp(&b.1)
                     .unwrap()
                     .then_with(|| b.0.partial_cmp(&a.0).unwrap())
             });
-            let p0 = v[0];
-            v.reverse();
-            v.pop();
+            let p0 = v.pop().unwrap();
             v.sort_by(|a, b| {
                 if direction(p0.0, p0.1, a.0, a.1, b.0, b.1) > 0.0 {
                     std::cmp::Ordering::Less
