@@ -9,28 +9,12 @@ fn main() {
         m: usize,
         edges: [(usize, usize); m]
     }
-    let mut ans = Vec::new();
     let mut dijkstra = dijkstra_library::Dijkstra::new(n);
-    for (a, b) in &edges {
-        dijkstra.add_edge(a - 1, b - 1, 1 as usize);
+    for &(a, b) in &edges {
+        dijkstra.add_edge(a - 1, b - 1, 1);
     }
-    for i in 0..m {
-        dijkstra.remove_edge(edges[i].0 - 1, edges[i].1 - 1, 1);
-        let shortest = dijkstra.shortest_path(0, n - 1)[n - 1];
-        if shortest == std::usize::MAX {
-            ans.push("-1".to_string())
-        } else {
-            ans.push(shortest.to_string())
-        }
-        dijkstra.add_edge(edges[i].0 - 1, edges[i].1 - 1, 1);
-    }
-    println!("{}", ans.join("\n"))
-}
-
-fn bfs(a: &[Vec<usize>]) -> usize {
-    let mut visited = vec![None; a.len()];
-    visited[0] = Some(0);
-    unimplemented!()
+    let (dist, pre) = dijkstra.shortest_path(0);
+    println!("{:?}", pre);
 }
 
 pub mod dijkstra_library {
@@ -65,20 +49,12 @@ pub mod dijkstra_library {
         }
 
         #[inline(always)]
-        pub fn remove_edge(&mut self, from: usize, to: usize, cost: T) {
-            self.edges[from] = self.edges[from]
-                .iter()
-                .copied()
-                .filter(|e| e.to != to || e.cost != cost)
-                .collect();
-        }
-
-        #[inline(always)]
-        pub fn shortest_path(&mut self, start: usize, goal: usize) -> Vec<T> {
+        pub fn shortest_path(&mut self, start: usize) -> (Vec<T>, Vec<usize>) {
             if start >= self.nodes {
                 panic!("shortest_path: start is out of bound.")
             }
             let mut dist: Vec<_> = (0..self.nodes).map(|_| T::MAX).collect();
+            let mut pre: Vec<_> = (0..self.nodes).collect();
 
             let mut heap = std::collections::BinaryHeap::new();
 
@@ -106,16 +82,13 @@ pub mod dijkstra_library {
                             heap.push(next);
                             // Relaxation, we have now found a better way
                             *dist.get_unchecked_mut(next.position) = next.cost;
+                            *pre.get_unchecked_mut(next.position) = position;
                         }
                     }
                 }
-
-                if position == goal {
-                    return dist;
-                }
             }
 
-            dist
+            (dist, pre)
         }
     }
 

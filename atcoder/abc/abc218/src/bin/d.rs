@@ -1,3 +1,4 @@
+// O(n^3)
 #![allow(unreachable_code)]
 #![allow(dead_code)]
 use proconio::{fastout, input};

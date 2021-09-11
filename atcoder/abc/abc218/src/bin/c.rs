@@ -32,7 +32,6 @@ fn main() {
         .map(|v| v.chars().skip(minj).take(maxj - minj + 1))
         .flatten()
         .collect::<Vec<_>>();
-    // println!("{:?}", s);
     for _ in 0..4 {
         let mut tmini = n;
         let mut tmaxi = 0;
@@ -55,14 +54,6 @@ fn main() {
                     tmp.push(t[i * n + j]);
                 }
             }
-            // let t = ts
-            //     .iter()
-            //     .skip(tmini)
-            //     .take(tmaxi - tmini + 1)
-            //     .map(|v| v.chars().skip(tminj).take(tmaxj - tminj + 1))
-            //     .flatten()
-            //     .collect::<Vec<_>>();
-            // println!("{:?}", tmp);
             if s == tmp {
                 println!("Yes");
                 return;

@@ -32,11 +32,12 @@ pub mod dijkstra_library {
         }
 
         #[inline(always)]
-        pub fn shortest_path(&mut self, start: usize) -> Vec<T> {
+        pub fn shortest_path(&mut self, start: usize) -> (Vec<T>, Vec<usize>) {
             if start >= self.nodes {
                 panic!("shortest_path: start is out of bound.")
             }
             let mut dist: Vec<_> = (0..self.nodes).map(|_| T::MAX).collect();
+            let mut pre: Vec<_> = (0..self.nodes).collect();
 
             let mut heap = std::collections::BinaryHeap::new();
 
@@ -64,12 +65,13 @@ pub mod dijkstra_library {
                             heap.push(next);
                             // Relaxation, we have now found a better way
                             *dist.get_unchecked_mut(next.position) = next.cost;
+                            *pre.get_unchecked_mut(next.position) = position;
                         }
                     }
                 }
             }
 
-            dist
+            (dist, pre)
         }
     }
 
@@ -183,11 +185,11 @@ pub mod dijkstra_library {
             dijkstra.add_edge(3, 4, 2);
             // Node 4
 
-            assert_eq!(dijkstra.shortest_path(0)[1], 1);
-            assert_eq!(dijkstra.shortest_path(0)[3], 3);
-            assert_eq!(dijkstra.shortest_path(3)[0], 7);
-            assert_eq!(dijkstra.shortest_path(0)[4], 5);
-            assert_eq!(dijkstra.shortest_path(4)[0], std::usize::MAX);
+            assert_eq!(dijkstra.shortest_path(0).0[1], 1);
+            assert_eq!(dijkstra.shortest_path(0).0[3], 3);
+            assert_eq!(dijkstra.shortest_path(3).0[0], 7);
+            assert_eq!(dijkstra.shortest_path(0).0[4], 5);
+            assert_eq!(dijkstra.shortest_path(4).0[0], std::usize::MAX);
         }
     }
 }

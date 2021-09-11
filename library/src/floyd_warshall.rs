@@ -25,25 +25,58 @@ pub mod floyd_warshall_library {
         }
 
         #[inline]
-        pub fn shortest_path(&self) -> Vec<Option<T>> {
+        pub fn shortest_path(&self) -> (Vec<Option<T>>, Vec<usize>) {
             let mut graph = self.graph.clone();
-            let mut now;
+            let mut pre: Vec<_> = (0..self.nodes).collect();
             for k in 0..self.nodes {
-                now = graph.clone();
-                for i in 0..self.nodes {
+                for (i, pi) in pre.iter_mut().enumerate() {
                     for j in 0..self.nodes {
                         unsafe {
-                            *now.get_unchecked_mut(i * self.nodes + j) = min(
-                                *now.get_unchecked(i * self.nodes + j),
-                                *graph.get_unchecked(i * self.nodes + k),
-                                *graph.get_unchecked(k * self.nodes + j),
-                            )
+                            if let Some(v2) = *graph.get_unchecked(i * self.nodes + k) {
+                                if let Some(v3) = *graph.get_unchecked(k * self.nodes + j) {
+                                    let v = v2 + v3;
+                                    if let Some(v1) = *graph.get_unchecked_mut(i * self.nodes + j) {
+                                        if v1 > v {
+                                            *graph.get_unchecked_mut(i * self.nodes + j) = Some(v);
+                                        }
+                                    } else {
+                                        *graph.get_unchecked_mut(i * self.nodes + j) = Some(v);
+                                    }
+                                    *pi = k;
+                                }
+                            }
                         }
                     }
                 }
-                graph = now;
             }
-            graph
+            (graph, pre)
+        }
+    }
+
+    #[inline(always)]
+    fn update<T: std::ops::Add<Output = T> + std::cmp::Ord + Copy>(
+        pij: &mut Option<T>,
+        pik: &mut Option<T>,
+        pkj: &mut Option<T>,
+    ) -> bool {
+        if let Some(v2) = *pik {
+            if let Some(v3) = *pkj {
+                if let Some(v1) = *pij {
+                    if v1 > v2 + v3 {
+                        *pij = Some(v2 + v3);
+                        true
+                    } else {
+                        false
+                    }
+                } else {
+                    *pij = Some(v2 + v3);
+                    true
+                }
+            } else {
+                false
+            }
+        } else {
+            false
         }
     }
 
@@ -120,6 +153,7 @@ pub mod floyd_warshall_library {
                 fw.add_edge(y, x, c);
             }
             fw.shortest_path()
+                .0
                 .chunks(n)
                 .map(|v| v.iter().copied().max().unwrap())
                 .min()
