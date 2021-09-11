@@ -1,51 +1,7 @@
-#![allow(unreachable_code)]
 #![allow(dead_code)]
-use proconio::{fastout, input};
-
-#[fastout]
-fn main() {
-    input! {
-        n: usize,
-        m: usize,
-        edges: [(usize, usize); m]
-    }
-    let mut tree = tree_dist_library::TreeDist::new(n);
-    for &(a, b) in &edges {
-        tree.add_edge(a - 1, b - 1);
-    }
-    let (dist, pre) = tree.distance(0);
-    if dist[n - 1].is_none() {
-        println!("{}", vec!["-1".to_string(); m].join("\n"))
-    } else {
-        let mut set = std::collections::HashSet::new();
-        let mut u = pre[n - 1];
-        let mut v = n - 1;
-        set.insert((u, v));
-        while v != 0 {
-            v = u;
-            u = pre[u];
-            set.insert((u, v));
-        }
-        let mut ans = Vec::new();
-        for &(a, b) in &edges {
-            if set.contains(&(a - 1, b - 1)) {
-                tree.remove_edge(a - 1, b - 1);
-                let (dist, _) = tree.distance(0);
-                tree.add_edge(a - 1, b - 1);
-                if let Some(d) = dist[n - 1] {
-                    ans.push(d.to_string())
-                } else {
-                    ans.push("-1".to_string())
-                }
-            } else {
-                ans.push(dist[n - 1].unwrap().to_string())
-            }
-        }
-        println!("{}", ans.join("\n"))
-    }
-}
 
 pub mod tree_dist_library {
+    /// verified by this(https://atcoder.jp/contests/abc218/submissions/25794641)
     pub struct TreeDist {
         nodes: usize,
         adjacent: Vec<Vec<usize>>,
@@ -127,6 +83,50 @@ pub mod tree_dist_library {
     #[cfg(test)]
     mod tests_tree_dist {
         use super::*;
+
+        #[test]
+        fn for_count() {
+            let n = 5;
+            let edges = [
+                (1, 2),
+                (1, 4),
+                (1, 5),
+                (2, 1),
+                (2, 3),
+                (3, 1),
+                (3, 2),
+                (3, 5),
+                (4, 2),
+                (4, 3),
+            ];
+            let mut tree = TreeDist::new(n);
+            for &(u, v) in edges.iter() {
+                tree.add_edge(u - 1, v - 1);
+            }
+            assert_eq!(
+                tree.count_distance_for_circuit(0, n - 1),
+                (
+                    vec![Some(0), Some(1), Some(2), Some(1), Some(1)],
+                    vec![0, 0, 1, 0, 0],
+                    vec![1, 1, 2, 1, 1]
+                )
+            );
+
+            let n = 4;
+            let edges = [(1, 2)];
+            let mut tree = TreeDist::new(n);
+            for &(u, v) in &edges {
+                tree.add_edge(u - 1, v - 1);
+            }
+            assert_eq!(
+                tree.count_distance_for_circuit(0, n - 1),
+                (
+                    vec![Some(0), Some(1), None, None],
+                    vec![0, 0, 2, 3],
+                    vec![1, 1, 0, 0]
+                )
+            )
+        }
 
         #[test]
         fn for_dist() {

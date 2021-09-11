@@ -1,9 +1,9 @@
 // O(n^3)
 #![allow(unreachable_code)]
 #![allow(dead_code)]
-use proconio::{fastout, input};
+use proconio::input;
 
-#[fastout]
+// #[fastout]
 fn main() {
     input! {
         n: usize,
@@ -12,7 +12,7 @@ fn main() {
     points.sort();
     let set = points.iter().collect::<std::collections::HashSet<_>>();
     let mut ans = 0;
-    for i in 0..n {
+    'out: for i in 0..n {
         for j in i + 1..n {
             if points[i].0 == points[j].0 {
                 for k in j + 1..n {
@@ -20,6 +20,8 @@ fn main() {
                         ans += 1;
                     }
                 }
+            } else {
+                continue 'out;
             }
         }
     }

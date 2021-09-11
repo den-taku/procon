@@ -13,4 +13,5 @@ pub mod min_cost_flow;
 pub mod primes;
 pub mod range_minimum_query;
 pub mod red_black_tree;
+pub mod tree_dist;
 pub mod union_find;

@@ -32,7 +32,16 @@ pub mod dijkstra_library {
         }
 
         #[inline(always)]
-        pub fn shortest_path(&mut self, start: usize) -> (Vec<T>, Vec<usize>) {
+        pub fn remove_edge(&mut self, from: usize, to: usize, cost: T) {
+            self.edges[from] = self.edges[from]
+                .iter()
+                .copied()
+                .filter(|e| !(e.to == to && e.cost == cost))
+                .collect();
+        }
+
+        #[inline(always)]
+        pub fn shortest_path(&self, start: usize) -> (Vec<T>, Vec<usize>) {
             if start >= self.nodes {
                 panic!("shortest_path: start is out of bound.")
             }
