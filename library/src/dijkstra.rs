@@ -72,7 +72,6 @@ pub mod dijkstra_library {
 
                         if next.cost < *dist.get_unchecked(next.position) {
                             heap.push(next);
-                            // Relaxation, we have now found a better way
                             *dist.get_unchecked_mut(next.position) = next.cost;
                             *pre.get_unchecked_mut(next.position) = position;
                         }
