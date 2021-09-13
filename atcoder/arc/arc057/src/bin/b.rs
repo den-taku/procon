@@ -27,9 +27,7 @@ fn main() {
             if let Some((p1, _c1)) = dp[i * (n + 1) + j - 1] {
                 if let Some((p2, _c2)) = dp[(i - 1) * (n + 1) + j - 1] {
                     let new_k = (p2 * a[j - 1]) / sum[j - 2] + 1;
-                    if new_k + p2 > k || new_k > a[j - 1] {
-                        dp[i * (n + 1) + j] = Some((p1, 0));
-                    } else if p1 < new_k + p2 {
+                    if new_k + p2 > k || p1 < new_k + p2 || new_k > a[j - 1] {
                         dp[i * (n + 1) + j] = Some((p1, 0));
                     } else {
                         dp[i * (n + 1) + j] = Some((p2 + new_k, new_k));
@@ -42,8 +40,6 @@ fn main() {
                 if new_k + p2 <= k && new_k <= a[j - 1] {
                     dp[i * (n + 1) + j] = Some((p2 + new_k, new_k));
                 }
-            } else {
-                dp[i * (n + 1) + j] = None;
             }
         }
     }
@@ -83,8 +79,8 @@ fn main() {
                             break;
                         }
                         index -= 1;
-                        p = dp[index * (n + 1) + j - 1].unwrap_or((0, 0)).0;
-                        c = dp[index * (n + 1) + j - 1].unwrap_or((0, 0)).1;
+                        p = dp[index * (n + 1) + j - 1].unwrap().0;
+                        c = dp[index * (n + 1) + j - 1].unwrap().1;
                     } else {
                         p = dp[index * (n + 1) + j - 1].unwrap().0;
                         c = dp[index * (n + 1) + j - 1].unwrap().1;
