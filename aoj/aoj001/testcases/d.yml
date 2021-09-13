@@ -6,25 +6,13 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      3 3
-      ---
-      +-+
-      +--
+      10
+      3
+      11
     out: |
-      Takahashi
-  - name: sample2
-    in: |
-      2 4
-      +++-
-      -+-+
-    out: |
-      Aoki
-  - name: sample3
-    in: |
-      1 1
-      -
-    out: |
-      Draw
+      4
+      2
+      5
 
 extend:
   - type: Text

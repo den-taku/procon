@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+// maybe this implementation is bad...(https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5876410#1)
 pub mod primes_library {
     macro_rules! impl_num {
         ( $($e:ty),* ) => {
