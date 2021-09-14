@@ -12,6 +12,10 @@ fn main() {
         println!("1");
         return;
     }
+    if k == 0 {
+        println!("0");
+        return;
+    }
     let mut dp = vec![None; (n + 1) * n];
     let mut sum = vec![0; n];
     sum[0] = a[0];
@@ -44,49 +48,49 @@ fn main() {
         }
     }
     for i in (0..n).rev() {
-        if let Some((mut p, mut c)) = dp[i * (n + 1) + n] {
-            if p == k {
-                println!("{}", i + 1);
-                return;
-            } else {
-                let mut d = k - p;
-                let mut past = 100.1;
-                let mut index = i;
-                for j in (1..n + 1).rev() {
-                    let mut x = a[j - 1] - p;
-                    if x > 0 {
-                        while {
-                            if ((p + x) as f64 * 100.0 / sum[j - 1] as f64) < past {
-                                false
-                            } else {
-                                x -= 1;
-                                x > 0
-                            }
-                        } {}
-                        if d < x {
-                            d = 0;
-                        } else {
-                            d -= x;
-                        }
-                    }
-                    past = (p + x) as f64 * 100.0 / sum[j - 1] as f64;
-                    if d == 0 {
-                        println!("{}", i + 1);
-                        return;
-                    }
-                    if c > 0 {
-                        if index == 0 {
-                            break;
-                        }
-                        index -= 1;
-                        p = dp[index * (n + 1) + j - 1].unwrap().0;
-                        c = dp[index * (n + 1) + j - 1].unwrap().1;
-                    } else {
-                        p = dp[index * (n + 1) + j - 1].unwrap().0;
-                        c = dp[index * (n + 1) + j - 1].unwrap().1;
-                    }
-                }
-            }
+        if let Some((mut _p, mut _c)) = dp[i * (n + 1) + n] {
+            // if p == k {
+            println!("{}", i + 1);
+            return;
+            // } else {
+            //     let mut d = k - p;
+            //     let mut past = 100.1;
+            //     let mut index = i;
+            //     for j in (1..n + 1).rev() {
+            //         let mut x = a[j - 1] - p;
+            //         if x > 0 {
+            //             while {
+            //                 if ((p + x) as f64 * 100.0 / sum[j - 1] as f64) < past {
+            //                     false
+            //                 } else {
+            //                     x -= 1;
+            //                     x > 0
+            //                 }
+            //             } {}
+            //             if d < x {
+            //                 d = 0;
+            //             } else {
+            //                 d -= x;
+            //             }
+            //         }
+            //         past = (p + x) as f64 * 100.0 / sum[j - 1] as f64;
+            //         if d == 0 {
+            //             println!("{}", i + 1);
+            //             return;
+            //         }
+            //         if c > 0 {
+            //             if index == 0 {
+            //                 break;
+            //             }
+            //             index -= 1;
+            //             p = dp[index * (n + 1) + j - 1].unwrap().0;
+            //             c = dp[index * (n + 1) + j - 1].unwrap().1;
+            //         } else {
+            //             p = dp[index * (n + 1) + j - 1].unwrap().0;
+            //             c = dp[index * (n + 1) + j - 1].unwrap().1;
+            //         }
+            //     }
+            // }
         }
     }
     println!("{}", 0);
