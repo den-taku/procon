@@ -1,0 +1,22 @@
+---
+type: Batch
+timelimit: 2s
+match: Lines
+
+cases:
+  - name: sample1
+    in: |
+      CQSAS10SQH10SKSJD3
+    out: |
+      CQH10
+  - name: sample2
+    in: |
+      S10SJSQSKSAC2
+    out: |
+      0
+
+extend:
+  - type: Text
+    path: "./b"
+    in: /in/*.txt
+    out: /out/*.txt
