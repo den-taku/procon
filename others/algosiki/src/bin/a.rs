@@ -6,7 +6,7 @@ fn main() {
         let e = read_line::<u64>();
         (e[0], e[1])
     };
-    let p = primes_library::segment_sieve(a, b + 1);
+    let p = primes_library::SegmentSieve::segment_sieve(a, b + 1);
     // println!("{:?}", p);
     println!("{}", p.len())
 }
@@ -106,36 +106,97 @@ pub mod primes_library {
     }
 
     /// Return prime number in [a, b)
-    pub fn segment_sieve(a: u64, b: u64) -> Vec<u64> {
-        let mut is_prime_small = vec![true; (b as f64).sqrt() as usize + 1];
-        let mut is_prime = vec![true; (b - a) as usize];
-
-        let mut i = 2;
-        while i * i < b {
-            if is_prime_small[i as usize] {
-                let mut j = 2 * i;
-                while j * j < b {
-                    is_prime_small[j as usize] = false;
-                    j += i;
-                }
-                j = std::cmp::max(2, (a + i - 1) / i) * i;
-                while j < b {
-                    is_prime[(j - a) as usize] = false;
-                    j += i;
-                }
-            }
-            i += 1;
-        }
-
-        is_prime
-            .iter()
-            .enumerate()
-            .filter(|(_, &b)| b)
-            .map(|(i, _)| i as u64 + a)
-            .collect()
+    /// verified by this (https://algo-method.com/submissions/69300)
+    /// and this (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5878533#1) (00:03)
+    pub trait SegmentSieve {
+        type Item;
+        fn segment_sieve(a: Self, b: Self) -> Vec<Self::Item>;
     }
 
-    /// verified by this (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5878112#1)
+    macro_rules! impl_segment_sieve {
+        ( $($e:ty), *) => {
+            $(
+                impl SegmentSieve for $e {
+                    type Item = $e;
+                    fn segment_sieve(a: Self, b: Self) -> Vec<Self::Item> {
+                        let mut is_prime_small = vec![true; (b as f64).sqrt() as usize + 1];
+                        let mut is_prime = vec![true; (b - a) as usize];
+
+                        let mut i = 2;
+                        while i * i < b {
+                            if is_prime_small[i as usize] {
+                                let mut j = 2 * i;
+                                while j * j < b {
+                                    is_prime_small[j as usize] = false;
+                                    j += i;
+                                }
+                                j = std::cmp::max(2, (a + i - 1) / i) * i;
+                                while j < b {
+                                    is_prime[(j - a) as usize] = false;
+                                    j += i;
+                                }
+                            }
+                            i += 1;
+                        }
+
+                        is_prime
+                            .iter()
+                            .enumerate()
+                            .filter(|(_, &b)| b)
+                            .map(|(i, _)| i as $e + a)
+                            .collect()
+                    }
+                }
+            )*
+        };
+    }
+
+    impl_segment_sieve!(isize, i8, i16, i32, i64, i128, usize, u8, u16, u32, u64, u128);
+
+    // pub fn segment_sieve<T>(a: T, b: T) -> Vec<T>
+    // where
+    //     T: Copy
+    //         + std::convert::Into<f64>
+    //         + std::ops::Add<Output = T>
+    //         + std::ops::Sub<Output = T>
+    //         + std::ops::Mul<Output = T>
+    //         + std::ops::Div<Output = T>
+    //         + std::ops::AddAssign
+    //         + std::convert::From<usize>
+    //         + Two
+    //         + One
+    //         + std::cmp::Ord,
+    //     usize: std::convert::From<T>,
+    // {
+    //     let mut is_prime_small = vec![true; std::convert::Into::<f64>::into(b).sqrt() as usize + 1];
+    //     let mut is_prime = vec![true; usize::from(b - a)];
+
+    //     let mut i = T::TWO;
+    //     while i * i < b {
+    //         if is_prime_small[usize::from(i)] {
+    //             let mut j = T::TWO * i;
+    //             while j * j < b {
+    //                 is_prime_small[usize::from(j)] = false;
+    //                 j += i;
+    //             }
+    //             j = std::cmp::max(T::TWO, (a + i - T::ONE) / i) * i;
+    //             while j < b {
+    //                 is_prime[usize::from(j - a)] = false;
+    //                 j += i;
+    //             }
+    //         }
+    //         i += T::ONE;
+    //     }
+
+    //     is_prime
+    //         .iter()
+    //         .enumerate()
+    //         .filter(|(_, &b)| b)
+    //         .map(|(i, _)| T::from(i) + a)
+    //         .collect()
+    // }
+
+    /// verified by this (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5878112#1) (00:60)
     /// and this (https://atcoder.jp/contests/tenka1-2012-qualc/submissions/25847422)
     pub struct Seive<T> {
         iter: Box<std::iter::Chain<std::ops::Range<T>, P<T>>>,

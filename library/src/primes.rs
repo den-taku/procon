@@ -1,7 +1,8 @@
 #![allow(dead_code)]
 
 pub mod primes_library {
-    // verified (https://atcoder.jp/contests/arc017/submissions/25846247)
+    /// verified (https://atcoder.jp/contests/arc017/submissions/25846247)
+    /// decide whiether n is prime or not
     pub fn is_prime<T>(n: T) -> bool
     where
         T: Two
@@ -23,7 +24,113 @@ pub mod primes_library {
         n != T::ONE
     }
 
-    // verified (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5878112#1)
+    /// List all divisors of n
+    pub fn divisor<T>(n: T) -> Vec<T>
+    where
+        T: Copy
+            + One
+            + Zero
+            + std::cmp::Ord
+            + std::ops::AddAssign
+            + std::ops::Mul<Output = T>
+            + std::ops::Div<Output = T>
+            + std::ops::Rem<Output = T>,
+    {
+        let mut v = Vec::new();
+        let mut i = T::ONE;
+        while i * i <= n {
+            if n % i == T::ZERO {
+                v.push(i);
+                if i != n / i {
+                    v.push(n / i)
+                }
+            }
+            i += T::ONE;
+        }
+        v
+    }
+
+    /// verified (https://atcoder.jp/contests/abc052/submissions/25846932)
+    /// Return map s.t. n = p1^b1 * p2^b2 * ... then factor[pi] = bi.
+    pub fn prime_factor<T>(mut n: T) -> std::collections::HashMap<T, T>
+    where
+        T: Copy
+            + One
+            + Two
+            + Zero
+            + std::cmp::Ord
+            + std::hash::Hash
+            + std::ops::AddAssign
+            + std::ops::Mul<Output = T>
+            + std::ops::DivAssign
+            + std::ops::Rem<Output = T>,
+    {
+        let mut factor = std::collections::HashMap::new();
+        let mut i = T::TWO;
+        while i * i <= n {
+            while n % i == T::ZERO {
+                *factor.entry(i).or_insert(T::ZERO) += T::ONE;
+                n /= i;
+            }
+            i += T::ONE;
+        }
+        if n != T::ONE {
+            factor.insert(n, T::ONE);
+        }
+        factor
+    }
+
+    /// Return prime number in [a, b)
+    /// verified by this (https://algo-method.com/submissions/69387)
+    /// and this (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5878533#1) (00:03)
+    pub trait SegmentSieve
+    where
+        Self: Sized,
+    {
+        fn segment_sieve(a: Self, b: Self) -> Vec<Self>;
+    }
+
+    macro_rules! impl_segment_sieve {
+        ( $($e:ty), *) => {
+            $(
+                impl SegmentSieve for $e {
+                    fn segment_sieve(a: Self, b: Self) -> Vec<Self> {
+                        let mut is_prime_small = vec![true; (b as f64).sqrt() as usize + 1];
+                        let mut is_prime = vec![true; (b - a) as usize];
+
+                        let mut i = 2;
+                        while i * i < b {
+                            if is_prime_small[i as usize] {
+                                let mut j = 2 * i;
+                                while j * j < b {
+                                    is_prime_small[j as usize] = false;
+                                    j += i;
+                                }
+                                j = std::cmp::max(2, (a + i - 1) / i) * i;
+                                while j < b {
+                                    is_prime[(j - a) as usize] = false;
+                                    j += i;
+                                }
+                            }
+                            i += 1;
+                        }
+
+                        is_prime
+                            .iter()
+                            .enumerate()
+                            .filter(|(_, &b)| b)
+                            .map(|(i, _)| i as $e + a)
+                            .collect()
+                    }
+                }
+            )*
+        };
+    }
+
+    impl_segment_sieve!(isize, i8, i16, i32, i64, i128, usize, u8, u16, u32, u64, u128);
+
+    /// verified by this (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5878112#1) (00:60)
+    /// and this (https://atcoder.jp/contests/tenka1-2012-qualc/submissions/25847422)
     pub struct Seive<T> {
         iter: Box<std::iter::Chain<std::ops::Range<T>, P<T>>>,
     }
@@ -165,6 +272,41 @@ pub mod primes_library {
         }
 
         #[test]
+        fn for_divisor() {
+            assert_eq!(
+                divisor(12).iter().collect::<std::collections::HashSet<_>>(),
+                vec![1, 2, 3, 4, 6, 12]
+                    .iter()
+                    .collect::<std::collections::HashSet<_>>()
+            );
+            assert_eq!(divisor(12), vec![1, 12, 2, 6, 3, 4]);
+            assert_eq!(divisor(1), vec![1]);
+            assert_eq!(divisor(7), vec![1, 7]);
+        }
+
+        #[test]
+        fn for_prime_factor() {
+            assert_eq!(
+                prime_factor(12),
+                vec![(2, 2), (3, 1)]
+                    .into_iter()
+                    .collect::<std::collections::HashMap<_, _>>()
+            );
+            assert_eq!(
+                prime_factor(57),
+                vec![(3, 1), (19, 1)]
+                    .into_iter()
+                    .collect::<std::collections::HashMap<_, _>>()
+            );
+            assert_eq!(
+                prime_factor(3),
+                vec![(3, 1)]
+                    .into_iter()
+                    .collect::<std::collections::HashMap<_, _>>()
+            );
+        }
+
+        #[test]
         fn for_seive() {
             assert_eq!(Seive::<isize>::new().take(100).last(), Some(541));
             assert_eq!(Seive::<usize>::new().take(100).last(), Some(541));
@@ -185,6 +327,14 @@ pub mod primes_library {
             assert_eq!(
                 Seive::default().take_while(|&e| e < 20).collect::<Vec<_>>(),
                 vec![2, 3, 5, 7, 11, 13, 17, 19]
+            )
+        }
+
+        #[test]
+        fn for_segment_seive() {
+            assert_eq!(
+                SegmentSieve::segment_sieve(2u64, 14),
+                vec![2, 3, 5, 7, 11, 13]
             )
         }
     }
