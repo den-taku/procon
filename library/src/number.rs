@@ -2,6 +2,7 @@
 
 pub mod number_library {
     #[inline]
+    /// O(lg n)
     pub fn gcd<T>(a: T, b: T) -> T
     where
         T: std::ops::Rem<Output = T> + Zero + std::cmp::Eq + Copy + std::cmp::Ord,
@@ -17,6 +18,7 @@ pub mod number_library {
     }
 
     #[inline]
+    /// O(lg n)
     pub fn lcm<T>(a: T, b: T) -> T
     where
         T: Copy
@@ -33,6 +35,7 @@ pub mod number_library {
     #[inline]
     /// return gcd(a, b), x, y s.t. ax + by = gcd(a, b)
     /// verified (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5877610#1)
+    /// O(lg n)
     pub fn ext_gcd<T>(a: T, b: T) -> (T, T, T)
     where
         T: std::ops::Rem<Output = T>
@@ -53,6 +56,7 @@ pub mod number_library {
     }
 
     #[inline]
+    /// O(lg n)
     pub fn mod_inverse<T>(a: T, m: T) -> Option<T>
     where
         T: std::ops::Rem<Output = T>

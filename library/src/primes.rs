@@ -3,6 +3,7 @@
 pub mod primes_library {
     /// verified (https://atcoder.jp/contests/arc017/submissions/25846247)
     /// decide whiether n is prime or not
+    /// O(n^(1/2))
     pub fn is_prime<T>(n: T) -> bool
     where
         T: Two
@@ -52,6 +53,7 @@ pub mod primes_library {
 
     /// verified (https://atcoder.jp/contests/abc052/submissions/25846932)
     /// Return map s.t. n = p1^b1 * p2^b2 * ... then factor[pi] = bi.
+    /// O(n^(1/2))
     pub fn prime_factor<T>(mut n: T) -> std::collections::HashMap<T, T>
     where
         T: Copy
@@ -83,6 +85,7 @@ pub mod primes_library {
     /// Return prime number in [a, b)
     /// verified by this (https://algo-method.com/submissions/69387)
     /// and this (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5878533#1) (00:03)
+    /// O((b - a) * b^(1/2) / lg(b))
     pub trait SegmentSieve
     where
         Self: Sized,
@@ -131,6 +134,7 @@ pub mod primes_library {
 
     /// verified by this (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5878112#1) (00:60)
     /// and this (https://atcoder.jp/contests/tenka1-2012-qualc/submissions/25847422)
+    /// O(n * n^(1/2))
     pub struct Seive<T> {
         iter: Box<std::iter::Chain<std::ops::Range<T>, P<T>>>,
     }
