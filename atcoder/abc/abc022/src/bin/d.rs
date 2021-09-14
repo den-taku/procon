@@ -25,16 +25,16 @@ fn main() {
     let mut la = 0.0;
     let mut lb = 0.0;
     for i in 0..n {
-        let da = ((a[i].0 - m_a.0) * (a[i].0 - m_a.0) + (a[i].1 - m_a.1) * (a[i].1 - m_a.1)).sqrt();
+        let da = (a[i].0 - m_a.0) * (a[i].0 - m_a.0) + (a[i].1 - m_a.1) * (a[i].1 - m_a.1);
         if la < da {
             la = da;
         }
-        let db = ((b[i].0 - m_b.0) * (b[i].0 - m_b.0) + (b[i].1 - m_b.1) * (b[i].1 - m_b.1)).sqrt();
+        let db = (b[i].0 - m_b.0) * (b[i].0 - m_b.0) + (b[i].1 - m_b.1) * (b[i].1 - m_b.1);
         if lb < db {
             lb = db;
         }
     }
-    println!("{}", lb / la);
+    println!("{}", (lb / la).sqrt());
     // if n == 2 {
     //     let d1 =
     //         ((a[0].0 - a[1].0) * (a[0].0 - a[1].0) + (a[0].1 - a[1].1) * (a[0].1 - a[1].1)).sqrt();
