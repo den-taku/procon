@@ -1,6 +1,28 @@
 #![allow(dead_code)]
 
 pub mod primes_library {
+    // verified (https://atcoder.jp/contests/arc017/submissions/25846247)
+    pub fn is_prime<T>(n: T) -> bool
+    where
+        T: Two
+            + Copy
+            + One
+            + Zero
+            + std::cmp::Ord
+            + std::ops::AddAssign
+            + std::ops::Mul<Output = T>
+            + std::ops::Rem<Output = T>,
+    {
+        let mut i = T::TWO;
+        while i * i <= n {
+            if n % i == T::ZERO {
+                return false;
+            }
+            i += T::ONE;
+        }
+        n != T::ONE
+    }
+
     // verified (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5878112#1)
     pub struct Seive<T> {
         iter: Box<std::iter::Chain<std::ops::Range<T>, P<T>>>,
@@ -18,7 +40,7 @@ pub mod primes_library {
         }
     }
 
-    macro_rules! impl_num {
+    macro_rules! impl_seive {
         ( $($e:ty), *) => {
             $(
                 impl Seive<$e> {
@@ -79,7 +101,39 @@ pub mod primes_library {
         };
     }
 
-    impl_num!(isize, i32, i64, i128, usize, u32, u64, u128);
+    impl_seive!(isize, i32, i64, i128, usize, u32, u64, u128);
+
+    pub trait Zero {
+        const ZERO: Self;
+    }
+
+    macro_rules! impl_zero {
+        ( $($e:ty),* ) => {
+            $(
+                impl Zero for $e {
+                    const ZERO: Self = 0;
+                }
+            )*
+        };
+    }
+
+    impl_zero!(isize, i8, i16, i32, i64, i128, usize, u8, u16, u32, u64, u128);
+
+    pub trait One {
+        const ONE: Self;
+    }
+
+    macro_rules! impl_one {
+        ( $($e:ty),* ) => {
+            $(
+                impl One for $e {
+                    const ONE: Self = 1;
+                }
+            )*
+        };
+    }
+
+    impl_one!(isize, i8, i16, i32, i64, i128, usize, u8, u16, u32, u64, u128);
 
     pub trait Two {
         const TWO: Self;
@@ -102,7 +156,16 @@ pub mod primes_library {
         use super::*;
 
         #[test]
-        fn for_primes() {
+        fn for_is_prime() {
+            assert_eq!(is_prime(64), false);
+            assert_eq!(is_prime(1), false);
+            assert_eq!(is_prime(57), false);
+            assert_eq!(is_prime(541), true);
+            assert_eq!(is_prime(2), true);
+        }
+
+        #[test]
+        fn for_seive() {
             assert_eq!(Seive::<isize>::new().take(100).last(), Some(541));
             assert_eq!(Seive::<usize>::new().take(100).last(), Some(541));
             assert_eq!(Seive::<i32>::new().take(100).last(), Some(541));
