@@ -52,6 +52,26 @@ pub mod number_library {
         }
     }
 
+    #[inline]
+    pub fn mod_inverse<T>(a: T, m: T) -> Option<T>
+    where
+        T: std::ops::Rem<Output = T>
+            + std::ops::Div<Output = T>
+            + std::ops::Mul<Output = T>
+            + std::ops::Sub<Output = T>
+            + Zero
+            + One
+            + std::cmp::Eq
+            + Copy,
+    {
+        let (d, x, _) = ext_gcd(a, m);
+        if d == T::ONE {
+            Some(x)
+        } else {
+            None
+        }
+    }
+
     pub trait Zero {
         const ZERO: Self;
     }
@@ -102,6 +122,12 @@ pub mod number_library {
         fn for_ext_gcd() {
             assert_eq!(ext_gcd(4, 12), (4, 1, 0));
             assert_eq!(ext_gcd(3, 8), (1, 3, -1));
+        }
+
+        #[test]
+        fn for_mod_inverse() {
+            assert_eq!(mod_inverse(4, 11), Some(3));
+            assert_eq!(mod_inverse(7, 13), Some(2));
         }
     }
 }
