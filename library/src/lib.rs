@@ -10,6 +10,7 @@ pub mod graham_scan;
 pub mod hungarian;
 pub mod kruskal;
 pub mod min_cost_flow;
+pub mod number;
 pub mod primes;
 pub mod range_minimum_query;
 pub mod red_black_tree;
