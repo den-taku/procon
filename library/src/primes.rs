@@ -4,12 +4,13 @@ pub mod primes_library {
     /// verified (https://atcoder.jp/contests/arc017/submissions/25846247)
     /// decide whiether n is prime or not
     /// O(n^(1/2))
+    #[inline]
     pub fn is_prime<T>(n: T) -> bool
     where
-        T: Two
-            + Copy
-            + One
+        T: Copy
             + Zero
+            + One
+            + Two
             + std::cmp::Ord
             + std::ops::AddAssign
             + std::ops::Mul<Output = T>
@@ -26,6 +27,7 @@ pub mod primes_library {
     }
 
     /// List all divisors of n
+    #[inline]
     pub fn divisor<T>(n: T) -> Vec<T>
     where
         T: Copy
@@ -54,17 +56,18 @@ pub mod primes_library {
     /// verified (https://atcoder.jp/contests/abc052/submissions/25846932)
     /// Return map s.t. n = p1^b1 * p2^b2 * ... then factor[pi] = bi.
     /// O(n^(1/2))
+    #[inline]
     pub fn prime_factor<T>(mut n: T) -> std::collections::HashMap<T, T>
     where
         T: Copy
+            + Zero
             + One
             + Two
-            + Zero
             + std::cmp::Ord
             + std::hash::Hash
             + std::ops::AddAssign
-            + std::ops::Mul<Output = T>
             + std::ops::DivAssign
+            + std::ops::Mul<Output = T>
             + std::ops::Rem<Output = T>,
     {
         let mut factor = std::collections::HashMap::new();
@@ -97,6 +100,7 @@ pub mod primes_library {
         ( $($e:ty), *) => {
             $(
                 impl SegmentSieve for $e {
+                    #[inline]
                     fn segment_sieve(a: Self, b: Self) -> Vec<Self> {
                         let mut is_prime_small = vec![true; (b as f64).sqrt() as usize + 1];
                         let mut is_prime = vec![true; (b - a) as usize];
@@ -155,6 +159,7 @@ pub mod primes_library {
         ( $($e:ty), *) => {
             $(
                 impl Seive<$e> {
+                    #[inline]
                     pub fn new() -> Self {
                         Self {
                             iter: Box::new((2..3).chain(P::<$e>::new()))
@@ -171,6 +176,7 @@ pub mod primes_library {
                 }
 
                 impl P<$e> {
+                    #[inline]
                     fn new() -> Self {
                         Self {
                             dict: std::collections::HashMap::new(),
