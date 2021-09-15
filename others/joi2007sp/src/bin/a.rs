@@ -10,17 +10,24 @@ fn main() {
     let mut count = vec![0; p];
     for i in 0..p {
         let v = pow(i, n, p);
-        count[v] += 1;
+        unsafe { *count.get_unchecked_mut(v) += 1 }
     }
     let mut ans = 0;
     for i in 0..p {
-        for j in i+1..p {
-            ans += count[i] * count[j] * count[(i + j) % p];
+        for j in i + 1..p {
+            unsafe {
+                ans += *count.get_unchecked(i)
+                    * *count.get_unchecked(j)
+                    * count.get_unchecked((i + j) % p)
+            }
         }
     }
     ans *= 2;
     for i in 0..p {
-        ans += count[i] * count[i] * count[(i + i) % p];
+        unsafe {
+            ans +=
+                *count.get_unchecked(i) * count.get_unchecked(i) * *count.get_unchecked((i + i) % p)
+        }
     }
     println!("{}", ans);
 }
