@@ -4,8 +4,17 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        _n: usize,
-        _t: [[i128; 50];50]
+        n: u64
     }
-    unimplemented!()
+    let mut p = vec![0u64; 60];
+    for i in 0..60 {
+        p[i] = 2u64.pow(i as u32);
+    }
+    let mut min = n;
+    for b in 1..60 {
+        let a = n / p[b];
+        let c = n % p[b];
+        min = std::cmp::min(min, a + c + b as u64)
+    }
+    println!("{}", min)
 }
