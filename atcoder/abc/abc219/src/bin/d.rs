@@ -31,3 +31,65 @@ fn main() {
         println!("-1")
     }
 }
+
+// #![allow(unreachable_code)]
+// use proconio::{fastout, input};
+
+// #[fastout]
+// fn main() {
+//     input! {
+//         n: usize,
+//         x: usize,
+//         y: usize,
+//         ab: [(usize, usize); n]
+//     }
+//     let asm = ab.iter().map(|e| e.0).sum::<usize>();
+//     let bsm = ab.iter().map(|e| e.1).sum::<usize>();
+//     if asm < x || bsm < y {
+//         println!("-1");
+//         return;
+//     } else if asm == x {
+//         println!("{}", n);
+//         return;
+//     } else if bsm == y {
+//         println!("{}", n);
+//         return;
+//     } else {
+//         let maxx = ab.iter().map(|e| e.0).max().unwrap();
+//         let maxy = ab.iter().map(|e| e.1).max().unwrap();
+//         let mut dp = vec![vec![None; y + maxy + 3]; x + maxx + 3];
+//         for i in 0..n {
+//             dp[0][0] = Some(0);
+//             let mut next = dp.clone();
+//             let a = ab[i].0;
+//             let b = ab[i].1;
+//             for j in 0..x + maxx + 3 {
+//                 for k in 0..y + maxy + 3 {
+//                     if a <= j && b <= k {
+//                         if let Some(c1) = dp[j - a][k - b] {
+//                             if let Some(c2) = dp[j][k] {
+//                                 next[j][k] = Some(std::cmp::min(c1 + 1, c2))
+//                             } else {
+//                                 next[j][k] = Some(c1 + 1)
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+//             dp = next;
+//         }
+//         let mut min = std::usize::MAX;
+//         for j in x..x + maxx + 3 {
+//             for k in y..y + maxy + 3 {
+//                 if let Some(c) = dp[j][k] {
+//                     min = std::cmp::min(min, c);
+//                 }
+//             }
+//         }
+//         if min == std::usize::MAX {
+//             println!("-1")
+//         } else {
+//             println!("{}", min)
+//         }
+//     }
+// }
