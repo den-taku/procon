@@ -9,6 +9,7 @@ pub mod geometry;
 pub mod graham_scan;
 pub mod hungarian;
 pub mod kruskal;
+pub mod matrix;
 pub mod min_cost_flow;
 pub mod number;
 pub mod primes;
