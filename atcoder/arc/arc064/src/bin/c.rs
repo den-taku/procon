@@ -4,8 +4,16 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        _n: usize,
-        _t: [[i128; 50];50]
+        n: usize,
+        x: usize,
+        mut a: [usize; n]
     }
-    unimplemented!()
+    let mut ans = 0;
+    for i in 1..n {
+        if a[i - 1] + a[i] > x {
+            ans += a[i - 1] + a[i] - x;
+            a[i] -= std::cmp::min(a[i - 1] + a[i] - x, a[i]);
+        }
+    }
+    println!("{}", ans);
 }
