@@ -7,17 +7,17 @@ const MOD: u64 = 998244353;
 fn main() {
     input! {
         n: usize,
-        a: [u64; n]
+        a: [usize; n]
     }
     let mut dp = vec![0; 10];
-    dp[a[0] as usize] = 1;
+    dp[a[0]] = 1;
     for e in a.into_iter().skip(1) {
         let mut next = vec![0; 10];
         for (i, &s) in dp.iter().enumerate() {
-            next[(i * e as usize) % 10] += s;
-            next[(i * e as usize) % 10] %= MOD;
-            next[(i + e as usize) % 10] += s;
-            next[(i + e as usize) % 10] %= MOD;
+            next[(i * e) % 10] += s;
+            next[(i * e) % 10] %= MOD;
+            next[(i + e) % 10] += s;
+            next[(i + e) % 10] %= MOD;
         }
         dp = next;
     }
