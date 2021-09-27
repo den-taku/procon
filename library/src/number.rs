@@ -55,6 +55,8 @@ pub mod number_library {
         }
     }
 
+    /// return inverse element a^-1 s.t. a * a^-1 ≡ 1 (mod m)
+    /// verified (https://atcoder.jp/contests/abc024/submissions/26192341)
     /// O(lg n)
     #[inline]
     pub fn mod_inverse<T>(a: T, m: T) -> Option<T>
