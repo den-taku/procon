@@ -6,14 +6,46 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      123 456 100
+      10 20
+      10 30
+      10 40
     out: |
-      200
+      10
   - name: sample2
     in: |
-      630 940 314
+      10 20
+      10 30
+      30 40
+    out: |
+      70
+  - name: sample3
+    in: |
+      1 2
+      0 4
+      5 17
     out: |
       -1
+  - name: sample4
+    in: |
+      80712 221549
+      320302 699312
+      140367 496729
+    out: |
+      38774484298448350
+  - name: testcaseF
+    in: |
+      0 750992
+      0 596522
+      0 718614
+    out: |
+      80481758772255984
+  - name: testcaseG
+    in: |
+      0 539848
+      0 760946
+      0 118044
+    out: |
+      6061488222537144
 
 extend:
   - type: Text

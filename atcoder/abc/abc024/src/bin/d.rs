@@ -129,6 +129,7 @@ pub mod number_library {
     pub fn mod_inverse<T>(a: T, m: T) -> Option<T>
     where
         T: std::ops::Rem<Output = T>
+            + std::ops::Add<Output = T>
             + std::ops::Div<Output = T>
             + std::ops::Mul<Output = T>
             + std::ops::Sub<Output = T>
@@ -139,7 +140,7 @@ pub mod number_library {
     {
         let (d, x, _) = ext_gcd(a, m);
         if d == T::ONE {
-            Some(x)
+            Some((m + x % m) % m)
         } else {
             None
         }
