@@ -3,11 +3,26 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        n: i128,
-        l: i128,
-        t: i128
+        n: usize,
+        l: isize,
+        t: isize,
+        xw: [(isize, isize); n]
     }
-    unimplemented!()
+    let mut place = vec![0; n];
+    for (i, &(x, w)) in xw.iter().enumerate() {
+        if w == 1 {
+            place[i] = (x + t) % l;
+        } else {
+            place[i] = {
+                let tmp = (x - t) % l;
+                if tmp < 0 {
+                    l + tmp
+                } else {
+                    tmp
+                }
+            };
+        }
+    }
 }
 
 // use proconio::{fastout, input};
@@ -44,7 +59,7 @@ fn main() {
 //         ants[0].0 % l
 //     } else {
 //         l - (- ants[0].0 % l)
-//     }; 
+//     };
 //     let mut array = vec![0i128; n];
 //     let mut tmp = vec![0i128; n];
 //     for i in 0..n {
@@ -59,7 +74,7 @@ fn main() {
 //                 j = i;
 //                 break;
 //             }
-//         } 
+//         }
 //         j
 //     };
 //     for i in 0..n {
