@@ -1,0 +1,32 @@
+---
+type: Batch
+timelimit: 1s
+match: Lines
+
+cases:
+  - name: example1
+    in: |
+      8
+      4 4 2
+      2 3 0
+      3 2 3
+      1 2 0
+      2 4 2
+      5 2 2
+      2 17 16
+      2 1 1
+    out: |
+      YES
+      YES
+      YES
+      NO
+      YES
+      NO
+      YES
+      NO
+
+extend:
+  - type: Text
+    path: "./d1"
+    in: /in/*.txt
+    out: /out/*.txt

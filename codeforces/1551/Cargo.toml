@@ -1,0 +1,49 @@
+[package]
+name = "contest1551"
+version = "0.1.0"
+authors = ["dentaku <dentaku1412@gmail.com>"]
+edition = "2018"
+
+[package.metadata.cargo-compete.bin]
+contest1551-a = { alias = "a", problem = "https://codeforces.com/contest/1551/problem/A" }
+contest1551-b1 = { alias = "b1", problem = "https://codeforces.com/contest/1551/problem/B1" }
+contest1551-b2 = { alias = "b2", problem = "https://codeforces.com/contest/1551/problem/B2" }
+contest1551-c = { alias = "c", problem = "https://codeforces.com/contest/1551/problem/C" }
+contest1551-d1 = { alias = "d1", problem = "https://codeforces.com/contest/1551/problem/D1" }
+contest1551-d2 = { alias = "d2", problem = "https://codeforces.com/contest/1551/problem/D2" }
+contest1551-e = { alias = "e", problem = "https://codeforces.com/contest/1551/problem/E" }
+contest1551-f = { alias = "f", problem = "https://codeforces.com/contest/1551/problem/F" }
+
+[[bin]]
+name = "contest1551-a"
+path = "src/bin/a.rs"
+
+[[bin]]
+name = "contest1551-b1"
+path = "src/bin/b1.rs"
+
+[[bin]]
+name = "contest1551-b2"
+path = "src/bin/b2.rs"
+
+[[bin]]
+name = "contest1551-c"
+path = "src/bin/c.rs"
+
+[[bin]]
+name = "contest1551-d1"
+path = "src/bin/d1.rs"
+
+[[bin]]
+name = "contest1551-d2"
+path = "src/bin/d2.rs"
+
+[[bin]]
+name = "contest1551-e"
+path = "src/bin/e.rs"
+
+[[bin]]
+name = "contest1551-f"
+path = "src/bin/f.rs"
+[dependencies]
+[dev-dependencies]
