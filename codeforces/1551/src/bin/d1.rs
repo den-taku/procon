@@ -1,7 +1,7 @@
 #![allow(unreachable_code)]
 
 fn main() {
-    let n = input();
+    let _n = input();
     unimplemented!()
 }
 
