@@ -4,7 +4,7 @@ pub mod tree_dist_library {
     /// verified by this(https://atcoder.jp/contests/abc218/submissions/25794641)
     pub struct TreeDist {
         nodes: usize,
-        adjacent: Vec<Vec<usize>>,
+        pub adjacent: Vec<Vec<usize>>,
     }
 
     impl TreeDist {
@@ -77,6 +77,26 @@ pub mod tree_dist_library {
                 }
             }
             (dist, pre, count)
+        }
+
+        /// virifid (https://atcoder.jp/contests/abc220/submissions/26208107)
+        /// count subtree's size
+        pub fn count_subtree_from(&self, start: usize) -> Vec<usize> {
+            let mut count = vec![0; self.nodes];
+            self.rec_subtree(self.nodes, start, &mut count);
+            count
+        }
+
+        fn rec_subtree(&self, from: usize, now: usize, count: &mut [usize]) -> usize {
+            let mut sum = 1;
+            for &v in &self.adjacent[now] {
+                if v == from {
+                    continue;
+                }
+                sum += self.rec_subtree(now, v, count);
+            }
+            count[now] = sum;
+            sum
         }
     }
 
@@ -165,6 +185,46 @@ pub mod tree_dist_library {
                 tree.distance(0),
                 (vec![Some(0), Some(1), None, None], vec![0, 0, 2, 3])
             )
+        }
+
+        #[test]
+        fn for_count_subtree() {
+            let nodes = 6;
+            let edges = vec![(1, 2), (1, 3), (1, 4), (1, 5), (1, 6)];
+            let mut tree = TreeDist::new(nodes);
+            for (u, v) in edges {
+                tree.add_edge(u - 1, v - 1);
+                tree.add_edge(v - 1, u - 1);
+            }
+            assert_eq!(tree.count_subtree_from(0), vec![6, 1, 1, 1, 1, 1]);
+
+            let nodes = 12;
+            let edges = vec![
+                (1, 2),
+                (1, 3),
+                (1, 4),
+                (2, 5),
+                (2, 6),
+                (3, 7),
+                (4, 8),
+                (7, 9),
+                (7, 10),
+                (8, 11),
+                (8, 12),
+            ];
+            let mut tree = TreeDist::new(nodes);
+            for (u, v) in edges {
+                tree.add_edge(u - 1, v - 1);
+                tree.add_edge(v - 1, u - 1);
+            }
+            assert_eq!(
+                tree.count_subtree_from(0),
+                vec![12, 3, 4, 4, 1, 1, 3, 3, 1, 1, 1, 1]
+            );
+            assert_eq!(
+                tree.count_subtree_from(6),
+                vec![8, 3, 9, 4, 1, 1, 12, 3, 1, 1, 1, 1]
+            );
         }
     }
 }
