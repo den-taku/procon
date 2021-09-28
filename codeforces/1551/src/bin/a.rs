@@ -11,11 +11,13 @@ fn main() {
 }
 
 fn solve(n: usize) -> (usize, usize) {
-    match n % 3 {
-        0 => (n / 3, n / 3),
-        1 => (n / 3 + 1, n / 3),
-        2 => (n / 3, n / 3 + 1),
-        _ => unreachable!(),
+    let m = n % 3;
+    if m == 0 {
+        (n / 3, n / 3)
+    } else if m == 1 {
+        (n / 3 + 1, n / 3)
+    } else {
+        (n / 3, n / 3 + 1)
     }
 }
 
