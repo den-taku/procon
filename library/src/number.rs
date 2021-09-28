@@ -122,6 +122,60 @@ pub mod number_library {
         Some((x % m1, m1))
     }
 
+    // /// calculate nCr
+    // pub struct BinomialCoefficient<T> {
+    //     maximum: usize,
+    //     modular: T,
+    //     factorial: Vec<T>,
+    //     finverse: Vec<T>,
+    // }
+
+    // impl<T> BinomialCoefficient<T>
+    // where
+    //     T: Zero
+    //         + One
+    //         + Copy
+    //         + std::ops::Add<Output = T>
+    //         + std::ops::Rem<Output = T>
+    //         + std::ops::Mul<Output = T>
+    //         + std::ops::Sub<Output = T>
+    //         + std::ops::Div<Output = T>
+    //         + std::cmp::Ord
+    //         + std::convert::From<usize>
+    //         + std::convert::Into<usize>,
+    // {
+    //     pub fn new(maximum: usize, modular: T) -> Self {
+    //         let mut factorial = vec![T::ONE; std::cmp::max(maximum, modular.into()) + 1];
+    //         let mut finverse = vec![T::ONE; std::cmp::max(maximum, modular.into()) + 1];
+    //         let mut inverse = vec![T::ONE; std::cmp::max(maximum, modular.into()) + 1];
+    //         for i in 2..maximum + 1 {
+    //             factorial[i] = factorial[i - 1] * T::from(i) % modular;
+    //             inverse[i] =
+    //                 modular - inverse[modular.into() - i] * (modular / T::from(i)) % modular;
+    //             finverse[i] = finverse[i - 1] * inverse[i] % modular;
+    //         }
+    //         Self {
+    //             maximum,
+    //             modular,
+    //             factorial,
+    //             finverse,
+    //         }
+    //     }
+
+    //     /// return nCr
+    //     pub fn comp(&self, n: usize, r: usize) -> T {
+    //         if n > self.maximum {
+    //             panic!("out of range: nCr")
+    //         }
+    //         if n < r {
+    //             T::ZERO
+    //         } else {
+    //             self.factorial[n] * (self.finverse[r] - self.finverse[n - r] % self.modular)
+    //                 % self.modular
+    //         }
+    //     }
+    // }
+
     pub trait Zero {
         const ZERO: Self;
     }
