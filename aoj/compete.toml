@@ -23,25 +23,18 @@ test-suite = "{{ manifest_dir }}/testcases/{{ bin_alias }}.yml"
 [template]
 src = '''
 #![allow(unreachable_code)]
-//use proconio::{fastout, input};
 
-// #[fastout]
 fn main() {
-    // input! {
-    //     n: usize,
-    //     t: [[i128; 50];50]
-    // }
-    let n = read_line::<usize>()[0];
-    let mut t = Vec::with_capacity(n);
-    let _ = (0..n).map(|_| {
-        let elem = read_line::<i64>();
-        t.push(elem);
-    }).collect::<Vec<()>>();
-    let _t = t;
+    let n = input();
     unimplemented!()
 }
 
-#[inline]
+#[inline(always)]
+fn input() -> usize {
+    read_line::<usize>()[0]
+}
+
+#[inline(always)]
 fn read_line<T>() -> Vec<T>
 where
     T: std::str::FromStr,
