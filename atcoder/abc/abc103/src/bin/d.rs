@@ -20,12 +20,15 @@ fn main() {
     }
     let mut count = 0;
     let mut index = 0;
-    for (i, &e) in v.iter().enumerate() {
-        if let Some(start) = e {
-            if start >= index {
-                count += 1;
-                index = i + 1;
-            }
+    for (i, e) in v
+        .iter()
+        .enumerate()
+        .filter(|e| e.1.is_some())
+        .map(|e| (e.0, e.1.unwrap()))
+    {
+        if e >= index {
+            count += 1;
+            index = i + 1;
         }
     }
     println!("{}", count);
