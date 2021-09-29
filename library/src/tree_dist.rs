@@ -529,6 +529,15 @@ pub mod tree_dist_library {
                 tree.strongly_connected_component(),
                 vec![1, 1, 0, 2, 2, 1, 1]
             );
+            // decide this graph can have topological ordering
+            assert_eq!(
+                {
+                    let mut v = tree.strongly_connected_component();
+                    v.sort();
+                    v.iter().zip(v.iter().skip(1)).all(|(&a, &b)| a != b)
+                },
+                false
+            );
             let mut tree = TreeDistStrongly::new(7);
             let edges = vec![(0, 1), (0, 2), (1, 3), (1, 4), (2, 5), (4, 6), (5, 6)];
             for (v, w) in edges {
@@ -537,6 +546,15 @@ pub mod tree_dist_library {
             assert_eq!(
                 tree.strongly_connected_component(),
                 vec![0, 3, 1, 6, 4, 2, 5]
+            );
+            // decide this graph can have topological ordering
+            assert_eq!(
+                {
+                    let mut v = tree.strongly_connected_component();
+                    v.sort();
+                    v.iter().zip(v.iter().skip(1)).all(|(&a, &b)| a != b)
+                },
+                true
             );
         }
     }
