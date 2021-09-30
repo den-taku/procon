@@ -104,6 +104,40 @@ pub mod tree_dist_library {
             count[now] = sum;
             sum
         }
+
+        pub fn eulerian_walk(&self) -> std::collections::LinkedList<(usize, usize)> {
+            let mut edges = vec![std::collections::HashSet::new(); self.nodes];
+            for (i, v) in self.adjacent.iter().enumerate() {
+                for &e in v {
+                    edges[i].insert(e);
+                }
+            }
+            self.eulerian_walk_rec(0, &mut edges)
+        }
+
+        fn eulerian_walk_rec(
+            &self,
+            start: usize,
+            edges: &mut [std::collections::HashSet<usize>],
+        ) -> std::collections::LinkedList<(usize, usize)> {
+            let mut path = vec![start];
+            let mut v = start;
+            while !edges[v].is_empty() {
+                let &w = edges[v].iter().last().unwrap();
+                edges[v].remove(&w);
+                path.push(w);
+                v = w;
+            }
+            let mut walk = std::collections::LinkedList::new();
+            if path.len() >= 2 {
+                walk.push_back((path[0], path[1]))
+            }
+            for (&v, &w) in path.iter().zip(path.iter().skip(1)).skip(1) {
+                walk.append(&mut self.eulerian_walk_rec(v, edges));
+                walk.push_back((v, w));
+            }
+            walk
+        }
     }
 
     impl TreeDistStrongly {
@@ -129,6 +163,40 @@ pub mod tree_dist_library {
                 }
             }
             comp
+        }
+
+        pub fn eulerian_walk(&self) -> std::collections::LinkedList<(usize, usize)> {
+            let mut edges = vec![std::collections::HashSet::new(); self.nodes];
+            for (i, v) in self.adjacent.iter().enumerate() {
+                for &e in v {
+                    edges[i].insert(e);
+                }
+            }
+            self.eulerian_walk_rec(0, &mut edges)
+        }
+
+        fn eulerian_walk_rec(
+            &self,
+            start: usize,
+            edges: &mut [std::collections::HashSet<usize>],
+        ) -> std::collections::LinkedList<(usize, usize)> {
+            let mut path = vec![start];
+            let mut v = start;
+            while !edges[v].is_empty() {
+                let &w = edges[v].iter().last().unwrap();
+                edges[v].remove(&w);
+                path.push(w);
+                v = w;
+            }
+            let mut walk = std::collections::LinkedList::new();
+            if path.len() >= 2 {
+                walk.push_back((path[0], path[1]))
+            }
+            for (&v, &w) in path.iter().zip(path.iter().skip(1)).skip(1) {
+                walk.append(&mut self.eulerian_walk_rec(v, edges));
+                walk.push_back((v, w));
+            }
+            walk
         }
 
         fn visit1(
@@ -556,6 +624,70 @@ pub mod tree_dist_library {
                 },
                 true
             );
+        }
+
+        #[test]
+        fn for_euler_walk_strongly() {
+            let mut tree = TreeDistStrongly::new(5);
+            let edges = vec![
+                (0, 1),
+                (1, 2),
+                (2, 3),
+                (3, 4),
+                (4, 0),
+                (0, 2),
+                (2, 4),
+                (4, 1),
+                (1, 3),
+                (3, 0),
+            ];
+            for &(v, w) in &edges {
+                tree.add_edge(v, w);
+            }
+            let walk = tree.eulerian_walk();
+            let mut edges = edges.into_iter().collect::<std::collections::HashSet<_>>();
+            let mut past = walk.iter().last().unwrap().1;
+            for &(v, w) in &walk {
+                // connected
+                assert_eq!(past, v);
+                // edges contains walk's edge
+                assert!(edges.remove(&(v, w)));
+                past = w;
+            }
+            // all edges are used
+            assert_eq!(edges.len(), 0);
+        }
+
+        #[test]
+        fn for_euler_walk() {
+            let mut tree = TreeDist::new(5);
+            let edges = vec![
+                (0, 1),
+                (1, 2),
+                (2, 3),
+                (3, 4),
+                (4, 0),
+                (0, 2),
+                (2, 4),
+                (4, 1),
+                (1, 3),
+                (3, 0),
+            ];
+            for &(v, w) in &edges {
+                tree.add_edge(v, w);
+            }
+            let walk = tree.eulerian_walk();
+            let mut edges = edges.into_iter().collect::<std::collections::HashSet<_>>();
+            let mut past = walk.iter().last().unwrap().1;
+            for &(v, w) in &walk {
+                // connected
+                assert_eq!(past, v);
+                // edges contains walk's edge
+                assert!(edges.remove(&(v, w)));
+                past = w;
+            }
+            // all edges are used
+            assert_eq!(edges.len(), 0);
         }
     }
 }
