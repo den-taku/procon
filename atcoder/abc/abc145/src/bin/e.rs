@@ -1,10 +1,11 @@
+#![allow(unreachable_code)]
 use proconio::{fastout, input};
 
 #[fastout]
 fn main() {
     input! {
-        n: usize,
-        t: [[i128; 50];50]
+        _n: usize,
+        _t: [[i128; 50];50]
     }
     unimplemented!()
 }
