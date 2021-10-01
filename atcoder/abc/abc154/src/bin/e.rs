@@ -11,31 +11,33 @@ fn main() {
         .chars()
         .map(|c| (c as u8 - zero) as usize)
         .collect::<Vec<_>>();
-    let mut dp = vec![vec![vec![0usize; c + 1]; 2]; digit.len() + 1];
-    dp[0][0][0] = 1;
-    for i in 0..digit.len() {
+    let mut dp = vec![0usize; (c + 1) * 2];
+    dp[0] = 1;
+    for d in digit {
+        let mut next = vec![0usize; (c + 1) * 2];
         for j in 0..2 {
             for k in 0..c + 1 {
                 if j == 0 {
-                    if digit[i] == 0 {
-                        dp[i + 1][0][k] += dp[i][j][k];
+                    if d == 0 {
+                        next[k] += dp[k];
                     } else {
-                        dp[i + 1][1][k] += dp[i][j][k];
+                        next[c + 1 + k] += dp[k];
                     }
-                    if k < c && digit[i] > 0 {
-                        dp[i + 1][0][k + 1] += dp[i][j][k];
-                        dp[i + 1][1][k + 1] += dp[i][j][k] * (digit[i] - 1);
+                    if k < c && d > 0 {
+                        next[k + 1] += dp[k];
+                        next[c + 1 + k + 1] += dp[k] * (d - 1);
                     }
                 } else {
-                    dp[i + 1][1][k] += dp[i][j][k];
+                    next[c + 1 + k] += dp[c + 1 + k];
                     if k < c {
-                        dp[i + 1][1][k + 1] += dp[i][j][k] * 9;
+                        next[c + 1 + k + 1] += dp[c + 1 + k] * 9;
                     }
                 }
             }
         }
+        dp = next;
     }
-    println!("{}", dp[digit.len()][0][c] + dp[digit.len()][1][c])
+    println!("{}", dp[c] + dp[2 * c + 1])
 }
 
 // my first implementation
