@@ -4,6 +4,7 @@ use proconio::{fastout, input};
 
 const MOD: u64 = 998244353;
 
+// BIT and Compress
 #[fastout]
 fn main() {
     input! {

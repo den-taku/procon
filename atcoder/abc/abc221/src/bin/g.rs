@@ -7,7 +7,7 @@ fn main() {
         n: usize,
         ab: [(usize, usize); n]
     }
-    let mut ans = vec![0; n];
+    let ans = vec![0; n];
     let map = compress(&ab);
     println!("{:?}", map);
     println!(
