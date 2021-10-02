@@ -19,6 +19,11 @@ cases:
       100
     out: |
       543
+  - name: test
+    in: |
+      20
+    out: |
+      8
 
 extend:
   - type: Text
