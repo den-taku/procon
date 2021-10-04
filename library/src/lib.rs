@@ -1,5 +1,6 @@
 pub mod bellman_ford;
 pub mod bit_sum;
+pub mod compress;
 pub mod dijkstra;
 pub mod dinic;
 pub mod enumeration;
