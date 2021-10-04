@@ -122,59 +122,47 @@ pub mod number_library {
         Some((x % m1, m1))
     }
 
-    // /// calculate nCr
-    // pub struct BinomialCoefficient<T> {
-    //     maximum: usize,
-    //     modular: T,
-    //     factorial: Vec<T>,
-    //     finverse: Vec<T>,
-    // }
+    /// calculate nCr
+    /// verified (https://atcoder.jp/contests/arc077/submissions/26354506)
+    pub struct BinomialCoefficient {
+        maximum: usize,
+        modular: usize,
+        factorial: Vec<i128>,
+        finverse: Vec<i128>,
+    }
 
-    // impl<T> BinomialCoefficient<T>
-    // where
-    //     T: Zero
-    //         + One
-    //         + Copy
-    //         + std::ops::Add<Output = T>
-    //         + std::ops::Rem<Output = T>
-    //         + std::ops::Mul<Output = T>
-    //         + std::ops::Sub<Output = T>
-    //         + std::ops::Div<Output = T>
-    //         + std::cmp::Ord
-    //         + std::convert::From<usize>
-    //         + std::convert::Into<usize>,
-    // {
-    //     pub fn new(maximum: usize, modular: T) -> Self {
-    //         let mut factorial = vec![T::ONE; std::cmp::max(maximum, modular.into()) + 1];
-    //         let mut finverse = vec![T::ONE; std::cmp::max(maximum, modular.into()) + 1];
-    //         let mut inverse = vec![T::ONE; std::cmp::max(maximum, modular.into()) + 1];
-    //         for i in 2..maximum + 1 {
-    //             factorial[i] = factorial[i - 1] * T::from(i) % modular;
-    //             inverse[i] =
-    //                 modular - inverse[modular.into() - i] * (modular / T::from(i)) % modular;
-    //             finverse[i] = finverse[i - 1] * inverse[i] % modular;
-    //         }
-    //         Self {
-    //             maximum,
-    //             modular,
-    //             factorial,
-    //             finverse,
-    //         }
-    //     }
+    impl BinomialCoefficient {
+        pub fn new(maximum: usize, modular: usize) -> Self {
+            let mut factorial = vec![1i128; maximum + 1];
+            let mut finverse = vec![0; maximum + 1];
+            finverse[0] = mod_inverse(1, modular as i128).unwrap();
+            finverse[1] = finverse[0];
+            for i in 2..=maximum {
+                factorial[i] = factorial[i - 1] * i as i128 % modular as i128;
+                finverse[i] = finverse[i - 1] * mod_inverse(i as i128, modular as i128).unwrap()
+                    % modular as i128;
+            }
+            Self {
+                maximum,
+                modular,
+                factorial,
+                finverse,
+            }
+        }
 
-    //     /// return nCr
-    //     pub fn comp(&self, n: usize, r: usize) -> T {
-    //         if n > self.maximum {
-    //             panic!("out of range: nCr")
-    //         }
-    //         if n < r {
-    //             T::ZERO
-    //         } else {
-    //             self.factorial[n] * (self.finverse[r] - self.finverse[n - r] % self.modular)
-    //                 % self.modular
-    //         }
-    //     }
-    // }
+        /// return nCr
+        pub fn comp(&self, n: usize, r: usize) -> i128 {
+            if n > self.maximum {
+                panic!("out of range: nCr")
+            }
+            if n < r {
+                0
+            } else {
+                self.factorial[n] * (self.finverse[r] * self.finverse[n - r] % self.modular as i128)
+                    % self.modular as i128
+            }
+        }
+    }
 
     pub trait Zero {
         const ZERO: Self;
@@ -245,6 +233,52 @@ pub mod number_library {
             for (p, a) in problems.iter().zip(answers) {
                 assert_eq!(solve_simultaneous_linear_congruent(p).unwrap().0, a);
             }
+        }
+
+        #[test]
+        fn for_binomial_coefficient() {
+            // This is https://atcoder.jp/contests/arc077/tasks/arc077_b.
+            let modular = 1_000_000_007;
+            let n = 32;
+            let a = vec![
+                29, 19, 7, 10, 26, 32, 27, 4, 11, 20, 2, 8, 16, 23, 5, 14, 6, 12, 17, 22, 18, 30,
+                28, 24, 15, 1, 25, 3, 13, 21, 19, 31, 9,
+            ];
+            let mut double = vec![false; n + 1];
+            let mut value = 0;
+            let mut b = n;
+            for (i, &e) in a.iter().enumerate() {
+                if double[e - 1] {
+                    value = e;
+                    b -= i;
+                    break;
+                }
+                double[e - 1] = true;
+            }
+            let f = a.iter().position(|&e| e == value).unwrap();
+            let n_c_r = BinomialCoefficient::new(n + 1, modular);
+            let mut ans = Vec::new();
+            ans.push(n as i128);
+            for k in 2..=n {
+                // n+1Ck
+                let all = n_c_r.comp(n + 1, k);
+                // f+bCk-1
+                let sub = n_c_r.comp(f + b, k - 1);
+                let v = if all > sub {
+                    all - sub
+                } else {
+                    modular as i128 + all - sub
+                };
+                ans.push(v)
+            }
+            ans.push(1);
+            let answers = vec![
+                32, 525, 5453, 40919, 237336, 1107568, 4272048, 13884156, 38567100, 92561040,
+                193536720, 354817320, 573166440, 818809200, 37158313, 166803103, 166803103,
+                37158313, 818809200, 573166440, 354817320, 193536720, 92561040, 38567100, 13884156,
+                4272048, 1107568, 237336, 40920, 5456, 528, 33, 1,
+            ];
+            assert_eq!(ans, answers);
         }
     }
 }
