@@ -6,28 +6,24 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      mari
-      to
-      zzo
-      1321
+      3 5
+      0 0 1
+      0 1 2
+      0 2 3
+      1 0 2
+      1 1 2
     out: |
-      marizzotomari
+      1
+      2
   - name: sample2
     in: |
-      abra
-      cad
-      abra
-      123
+      1 3
+      1 0 0
+      0 0 5
+      1 0 0
     out: |
-      abracadabra
-  - name: sample3
-    in: |
-      a
-      b
-      c
-      1
-    out: |
-      a
+      2147483647
+      5
 
 extend:
   - type: Text
