@@ -1,4 +1,5 @@
 pub mod bellman_ford;
+pub mod bit;
 pub mod bit_sum;
 pub mod compress;
 pub mod dijkstra;
