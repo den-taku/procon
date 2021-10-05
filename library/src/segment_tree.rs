@@ -1,6 +1,8 @@
 #![allow(dead_code)]
 
 pub mod segment_tree_library {
+    /// verified (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5939671#2)
+    /// Segment Tree for Monoid (T, F)
     #[derive(Debug)]
     pub struct SegmentTree<T, F>
     where
@@ -17,6 +19,7 @@ pub mod segment_tree_library {
         T: Copy,
         F: Fn(T, T) -> T,
     {
+        /// O(n)
         #[inline]
         pub fn new(n: usize, f: F, unit: T) -> Self {
             let mut n_ = 1;
@@ -31,6 +34,8 @@ pub mod segment_tree_library {
             }
         }
 
+        /// O(lg n)
+        /// a_index <- value
         #[inline]
         pub fn update(&mut self, index: usize, value: T) {
             if index >= self.n {
@@ -44,6 +49,8 @@ pub mod segment_tree_library {
             }
         }
 
+        /// O(lg n)
+        /// return a_s * a_s+1 * ... * a_t
         #[inline]
         pub fn find(&self, range: std::ops::Range<usize>) -> T {
             self.find_rec(range, 0, 0, self.n)
