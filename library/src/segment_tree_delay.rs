@@ -111,13 +111,13 @@ pub mod segment_tree_delay_library {
                 (self.f)(self[k], (self.act)(self.tree_range[k], r - l))
             } else {
                 (self.f)(
+                    (self.f)(
+                        self.find_rec(range.clone(), k * 2 + 1, l, (l + r) / 2),
+                        self.find_rec(range.clone(), k * 2 + 2, (l + r) / 2, r),
+                    ),
                     (self.act)(
                         self.tree_range[k],
                         std::cmp::min(range.end, r) - std::cmp::max(range.start, l),
-                    ),
-                    (self.f)(
-                        self.find_rec(range.clone(), k * 2 + 1, l, (l + r) / 2),
-                        self.find_rec(range, k * 2 + 2, (l + r) / 2, r),
                     ),
                 )
             }
