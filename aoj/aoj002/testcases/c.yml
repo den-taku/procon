@@ -6,32 +6,24 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      bacdefghijklmnopqrstuvwxzy
-      4
-      abx
-      bzz
-      bzy
-      caa
+      3 5
+      0 1 2 1
+      0 2 3 2
+      0 3 3 3
+      1 1 2
+      1 2 3
     out: |
-      bzz
-      bzy
-      abx
-      caa
+      4
+      8
   - name: sample2
     in: |
-      zyxwvutsrqponmlkjihgfedcba
-      5
-      a
-      ab
-      abc
-      ac
-      b
+      4 3
+      1 1 4
+      0 1 4 1
+      1 1 4
     out: |
-      b
-      a
-      ac
-      ab
-      abc
+      0
+      4
 
 extend:
   - type: Text
