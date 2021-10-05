@@ -16,5 +16,6 @@ pub mod number;
 pub mod primes;
 pub mod range_minimum_query;
 pub mod red_black_tree;
+pub mod segment_tree;
 pub mod tree_dist;
 pub mod union_find;
