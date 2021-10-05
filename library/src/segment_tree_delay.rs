@@ -4,12 +4,13 @@ pub mod segment_tree_delay_library {
     /// Delayed Segment Tree for M-act Monoid
     /// (T, F) : Monoid
     /// (U, G) : Monoid
-    /// act: T × U -> T, isomorphic.
+    /// act: T × U -> T
+    /// isomorphic:
     /// (xy) act m = (x act m) (y act m)
     /// x act (mn) = (x act m) (x act n)
     ///
     /// In this implementation, Act is ^, then return a_s * ... a_t * m ^ range
-    /// unit of U is 0 scinse U is usize
+    /// unit of U is 0 since U is usize
     ///
     /// verified (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5940499#1)
     #[derive(Debug)]
