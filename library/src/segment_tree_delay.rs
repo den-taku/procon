@@ -9,15 +9,16 @@ pub mod segment_tree_delay_library {
     /// (xy) act m = (x act m) (y act m)
     /// x act (mn) = (x act m) (x act n)
     ///
-    /// In this implementation, Act is ^, then return a_s * ... a_t * m ^ range
+    /// In this implementation, Act is @ and ^, then return a_s * ... a_t @ m ^ range
+    /// Act: T × T × U -> T, (a_s * ... a_t) @ m ^ range, a_i, m ∈ T, range ∈ U
     /// unit of U is 0 since U is usize
     ///
-    /// verified (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5940499#1)
+    /// verified (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5940599#1)
     #[derive(Debug)]
     pub struct DelayedSegmentTree<T, F, Act>
     where
         F: Fn(T, T) -> T,
-        Act: Fn(T, usize) -> T,
+        Act: Fn(T, T, usize) -> T,
     {
         tree: Vec<T>,
         tree_range: Vec<T>,
@@ -31,7 +32,7 @@ pub mod segment_tree_delay_library {
     where
         T: Copy,
         F: Fn(T, T) -> T,
-        Act: Fn(T, usize) -> T,
+        Act: Fn(T, T, usize) -> T,
     {
         /// O(n)
         #[inline]
@@ -43,6 +44,23 @@ pub mod segment_tree_delay_library {
             Self {
                 tree: vec![unit; n_ * 2 - 1],
                 tree_range: vec![unit; n_ * 2 - 1],
+                n: n_,
+                f,
+                unit,
+                act,
+            }
+        }
+
+        /// O(n)
+        #[inline]
+        pub fn init(n: usize, f: F, unit: T, act: Act, initializer1: T, initializer2: T) -> Self {
+            let mut n_ = 1;
+            while n_ < n {
+                n_ *= 2
+            }
+            Self {
+                tree: vec![initializer1; n_ * 2 - 1],
+                tree_range: vec![initializer2; n_ * 2 - 1],
                 n: n_,
                 f,
                 unit,
@@ -83,14 +101,12 @@ pub mod segment_tree_delay_library {
             r: usize,
         ) {
             if range.start <= l && r <= range.end {
-                self.tree_range[k] = (self.f)(self.tree_range[k], value)
+                self.tree_range[k] = (self.act)(self.tree_range[k], value, 1)
             } else if l < range.end && range.start < r {
-                self[k] = (self.f)(
+                self[k] = (self.act)(
                     self[k],
-                    (self.act)(
-                        value,
-                        std::cmp::min(range.end, r) - std::cmp::max(range.start, l),
-                    ),
+                    value,
+                    std::cmp::min(range.end, r) - std::cmp::max(range.start, l),
                 );
                 self.act_in_range_rec(range.clone(), value, k * 2 + 1, l, (l + r) / 2);
                 self.act_in_range_rec(range, value, k * 2 + 2, (l + r) / 2, r);
@@ -108,17 +124,15 @@ pub mod segment_tree_delay_library {
             if r <= range.start || range.end <= l {
                 self.unit
             } else if range.start <= l && r <= range.end {
-                (self.f)(self[k], (self.act)(self.tree_range[k], r - l))
+                (self.act)(self[k], self.tree_range[k], r - l)
             } else {
-                (self.f)(
+                (self.act)(
                     (self.f)(
                         self.find_rec(range.clone(), k * 2 + 1, l, (l + r) / 2),
                         self.find_rec(range.clone(), k * 2 + 2, (l + r) / 2, r),
                     ),
-                    (self.act)(
-                        self.tree_range[k],
-                        std::cmp::min(range.end, r) - std::cmp::max(range.start, l),
-                    ),
+                    self.tree_range[k],
+                    std::cmp::min(range.end, r) - std::cmp::max(range.start, l),
                 )
             }
         }
@@ -127,7 +141,7 @@ pub mod segment_tree_delay_library {
     impl<T, F, Act> std::ops::Index<usize> for DelayedSegmentTree<T, F, Act>
     where
         F: Fn(T, T) -> T,
-        Act: Fn(T, usize) -> T,
+        Act: Fn(T, T, usize) -> T,
     {
         type Output = T;
         #[inline]
@@ -139,7 +153,7 @@ pub mod segment_tree_delay_library {
     impl<T, F, Act> std::ops::IndexMut<usize> for DelayedSegmentTree<T, F, Act>
     where
         F: Fn(T, T) -> T,
-        Act: Fn(T, usize) -> T,
+        Act: Fn(T, T, usize) -> T,
     {
         #[inline]
         fn index_mut(&mut self, index: usize) -> &mut Self::Output {
@@ -157,7 +171,14 @@ pub mod segment_tree_delay_library {
             let _q = 5;
             let com = [(0, 0, 1), (0, 1, 2), (0, 2, 3), (1, 0, 2), (1, 1, 2)];
             let answers = &[1, 2];
-            let mut rmq = DelayedSegmentTree::new(n, std::cmp::min, std::usize::MAX, |a, b| a * b);
+            let mut rmq = DelayedSegmentTree::init(
+                n,
+                std::cmp::min,
+                std::usize::MAX,
+                |a, _b, _c| a,
+                std::usize::MAX,
+                0,
+            );
             let mut i = 0;
             for &(d, x, y) in &com {
                 match d {
@@ -173,7 +194,14 @@ pub mod segment_tree_delay_library {
             let _q = 3;
             let com = [(1, 0, 0), (0, 0, 5), (1, 0, 0)];
             let answers = &[std::usize::MAX, 5];
-            let mut rmq = DelayedSegmentTree::new(n, std::cmp::min, std::usize::MAX, |a, b| a * b);
+            let mut rmq = DelayedSegmentTree::init(
+                n,
+                std::cmp::min,
+                std::usize::MAX,
+                |a, _b, _c| a,
+                std::usize::MAX,
+                0,
+            );
             let mut i = 0;
             for &(d, x, y) in &com {
                 match d {
@@ -203,7 +231,7 @@ pub mod segment_tree_delay_library {
             let answers = vec![4, 8, 0, 4];
             let mut index = 0;
             for (n, queries) in ns.into_iter().zip(queriess.into_iter()) {
-                let mut tree = DelayedSegmentTree::new(n, |a, b| a + b, 0, |a, b| a * b);
+                let mut tree = DelayedSegmentTree::new(n, |a, b| a + b, 0, |a, b, c| a + b * c);
                 for query in queries {
                     if query[0] == 0 {
                         tree.act_in_range(query[1] - 1..query[2], query[3])
