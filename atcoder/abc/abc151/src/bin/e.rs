@@ -18,12 +18,12 @@ fn main() {
     a.sort();
     let bi = number_library::BinomialCoefficient::new(n, MOD as usize);
     let mut ans = 0;
-    for i in k - 1..n {
-        ans += a[i] * bi.comp(i, k - 1);
+    for (i, &e) in a.iter().enumerate().skip(k - 2) {
+        ans += e * bi.comp(i, k - 1);
         ans %= MOD;
     }
-    for i in 0..n - k + 1 {
-        ans -= a[i] * bi.comp(n - i - 1, k - 1);
+    for (i, &e) in a.iter().take(n - k + 1).enumerate() {
+        ans -= e * bi.comp(n - i - 1, k - 1);
         ans %= MOD;
     }
     println!("{}", if ans < 0 { ans + MOD } else { ans })
