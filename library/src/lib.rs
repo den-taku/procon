@@ -14,7 +14,6 @@ pub mod kruskal;
 pub mod matrix;
 pub mod min_cost_flow;
 pub mod number;
-pub mod primes;
 pub mod range_minimum_query;
 pub mod red_black_tree;
 pub mod segment_tree;

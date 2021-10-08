@@ -1,5 +1,5 @@
 use library::enumeration::enumeration_library::path_enumeration_algorithm;
-use library::primes::primes_library::Seive;
+use library::number::number_library::Seive;
 
 fn main() {
     let mut buffer = Vec::new();
