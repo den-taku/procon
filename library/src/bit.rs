@@ -1,5 +1,17 @@
 #![allow(dead_code)]
 
+/// BIT for Group (T, F, I)
+/// T: Type
+/// F: Binary operator
+/// I: Inverse
+///
+/// new
+/// sum
+/// add
+/// len
+/// is_empty
+/// lower_bound
+/// upper_bound
 pub mod bit_library {
     /// verified (https://atcoder.jp/contests/arc033/submissions/26370305)
     /// BIT for Group (T, F, I)

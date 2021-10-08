@@ -1,5 +1,11 @@
 #![allow(dead_code)]
 
+/// Bellmanford
+///
+/// new
+/// add_edge
+/// shortest_path
+/// shortest_path_complete (return value if do not toutch negative loop)
 pub mod bellman_ford_library {
     /// verified by this(https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5858542#1)
     /// and this(https://atcoder.jp/contests/abc061/submissions/25667916)

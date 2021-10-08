@@ -1,5 +1,9 @@
 #![allow(dead_code, clippy::float_cmp)]
 
+/// Circle::new
+/// Circle::cross_points
+/// Point::new, Point::convert
+/// Point::is_cross, Point::direction, Point::is_on_segment, Point::distance
 pub mod geometry_library {
 
     #[derive(Debug, Copy, Clone)]

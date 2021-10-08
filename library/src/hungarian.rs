@@ -1,5 +1,6 @@
 #![allow(dead_code, clippy::unnecessary_fold)]
 
+/// Bad implementation O(n^4)
 pub mod hungarian_library {
 
     #[derive(Clone, Debug)]

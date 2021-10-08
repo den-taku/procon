@@ -1,5 +1,12 @@
 #![allow(dead_code)]
 
+/// Segment Tree for Monoid (T, F)
+/// T: Type
+/// F: Binomial operator
+///
+/// new
+/// update
+/// find
 pub mod segment_tree_library {
     /// verified (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5939671#2)
     /// Segment Tree for Monoid (T, F)

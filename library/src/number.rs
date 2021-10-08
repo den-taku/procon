@@ -1,5 +1,18 @@
 #![allow(dead_code)]
 
+/// for numbers
+///
+/// gcd
+/// lcm
+/// ext_gcd
+/// mod_inverse
+/// solve_simultaneous_linear_congruent
+/// BinomialCoefficient:new, comp
+/// is_prime
+/// divisor
+/// prime_factor
+/// segment_seive
+/// Seive (bad implmentation)
 pub mod number_library {
     /// O(lg n)
     #[inline]

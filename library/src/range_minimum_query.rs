@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+/// maybe not needed
 pub mod rmq_library {
 
     /// Range Minimum Query Tree.

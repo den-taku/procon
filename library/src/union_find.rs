@@ -1,5 +1,13 @@
 #![allow(dead_code)]
 
+/// Disjoint Set
+///
+/// new
+/// unite
+/// find
+/// same
+/// count
+/// to_vec
 pub mod union_find_library {
     /// Union-Find Tree, that treats disjoint sets efficiently.
     /// verified by this(https://atcoder.jp/contests/atc001/submissions/24929276).

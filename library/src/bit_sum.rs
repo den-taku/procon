@@ -1,5 +1,7 @@
 #![allow(dead_code)]
 
+/// BIT for sum
+/// maybe not needed
 pub mod bit_sum_library {
 
     /// Binary Index Tree for query sum of range.

@@ -1,5 +1,10 @@
 #![allow(dead_code)]
 
+/// MinCostFlow
+///
+/// new
+/// add_edge
+/// min_cost_flow
 pub mod min_cost_flow_library {
 
     #[derive(Copy, Clone, Debug)]

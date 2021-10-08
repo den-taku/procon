@@ -1,5 +1,9 @@
 #![allow(dead_code)]
 
+/// enumeration
+/// maybe Itertool can be alternative
+///
+/// path_enumeration_algorithm
 pub mod enumeration_library {
 
     #[inline]

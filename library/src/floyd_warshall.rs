@@ -1,4 +1,10 @@
 #![allow(dead_code)]
+
+/// Floyd Warchall O(|V|^3)
+///
+/// new
+/// add_edge
+/// shortest_path
 pub mod floyd_warshall_library {
     /// O(|V|^3)
     pub struct FloydWarshall<T> {

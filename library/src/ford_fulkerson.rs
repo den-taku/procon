@@ -1,5 +1,10 @@
 #![allow(dead_code)]
 
+/// FordFulkerson
+///
+/// new
+/// add_edge
+/// max_flow
 pub mod ford_fulkerson_library {
     /// edges is expressed as adjacency list.
     #[derive(Clone, Debug)]

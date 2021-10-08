@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+/// Too big
 pub mod algebra_library {
     #[derive(Clone, Debug, PartialEq, PartialOrd)]
     pub struct Matrix<T> {

@@ -1,5 +1,11 @@
 #![allow(dead_code)]
 
+/// Dijkstra
+///
+/// new
+/// add_edge
+/// remove_edge
+/// shortest_path
 pub mod dijkstra_library {
     /// virifid with this(https://atcoder.jp/contests/soundhound2018-summer-qual/submissions/25632891)
     /// 1. Add edges with add_edge

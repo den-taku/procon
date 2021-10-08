@@ -1,5 +1,10 @@
 #![allow(dead_code)]
 
+/// Dinic for maximum flow
+///
+/// new
+/// add_edge
+/// max_flow
 pub mod dinic_library {
     /// edges is expressed as adjacency list.
     #[derive(Clone, Debug)]

@@ -1,5 +1,8 @@
 #![allow(dead_code, clippy::float_cmp)]
 
+/// Calculate convex envelope
+///
+/// run
 pub mod graham_scan_library {
     /// verified by this(https://atcoder.jp/contests/abc022/submissions/25718038)
     pub struct GrahamScan {}

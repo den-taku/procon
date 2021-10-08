@@ -1,3 +1,6 @@
+/// compress values
+///
+/// compress
 pub mod compress_library {
     pub fn compress<T>(a: &[T]) -> std::collections::HashMap<T, usize>
     where

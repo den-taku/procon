@@ -1,5 +1,15 @@
 #![allow(dead_code)]
 
+/// Manage Tree
+///
+/// new
+/// add_edge
+/// remove_edge
+/// distance
+/// count_distance_for_circuit
+/// count_subtree_from
+/// eulerian_walk
+/// strongly_connected_components
 pub mod tree_dist_library {
     /// verified by this(https://atcoder.jp/contests/abc218/submissions/25794641)
     pub struct TreeDist {

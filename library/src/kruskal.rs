@@ -1,5 +1,10 @@
 #![allow(dead_code)]
 
+/// Kruskall
+///
+/// new
+/// add_edge
+/// minimum_spanning_tree
 pub mod kruskal_library {
     /// verified by this(https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5857344#1).
     pub struct Kruskal<T> {
