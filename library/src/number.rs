@@ -13,6 +13,7 @@
 /// prime_factor
 /// segment_seive
 /// Seive (bad implmentation)
+/// ModInteger
 pub mod number_library {
     /// O(lg n)
     #[inline]
@@ -139,21 +140,20 @@ pub mod number_library {
     /// verified (https://atcoder.jp/contests/arc077/submissions/26354506)
     pub struct BinomialCoefficient {
         maximum: usize,
-        modular: usize,
-        factorial: Vec<i128>,
-        finverse: Vec<i128>,
+        modular: u64,
+        factorial: Vec<ModInteger>,
+        finverse: Vec<ModInteger>,
     }
 
     impl BinomialCoefficient {
-        pub fn new(maximum: usize, modular: usize) -> Self {
-            let mut factorial = vec![1i128; maximum + 1];
-            let mut finverse = vec![0; maximum + 1];
-            finverse[0] = mod_inverse(1, modular as i128).unwrap();
+        pub fn new(maximum: usize, modular: u64) -> Self {
+            let mut factorial = vec![ModInteger::new(1, modular); maximum + 1];
+            let mut finverse = vec![ModInteger::new(0, modular); maximum + 1];
+            finverse[0] = ModInteger::inverse_from(1, modular);
             finverse[1] = finverse[0];
             for i in 2..=maximum {
-                factorial[i] = factorial[i - 1] * i as i128 % modular as i128;
-                finverse[i] = finverse[i - 1] * mod_inverse(i as i128, modular as i128).unwrap()
-                    % modular as i128;
+                factorial[i] = factorial[i - 1] * i as u64;
+                finverse[i] = finverse[i - 1] * ModInteger::inverse_from(i as u64, modular);
             }
             Self {
                 maximum,
@@ -164,15 +164,14 @@ pub mod number_library {
         }
 
         /// return nCr
-        pub fn comp(&self, n: usize, r: usize) -> i128 {
+        pub fn comp(&self, n: usize, r: usize) -> ModInteger {
             if n > self.maximum {
                 panic!("out of range: nCr")
             }
             if n < r {
-                0
+                ModInteger::new(0, self.modular)
             } else {
-                self.factorial[n] * (self.finverse[r] * self.finverse[n - r] % self.modular as i128)
-                    % self.modular as i128
+                self.factorial[n] * self.finverse[r] * self.finverse[n - r]
             }
         }
     }
@@ -396,6 +395,233 @@ pub mod number_library {
 
     impl_seive!(isize, i32, i64, i128, usize, u32, u64, u128);
 
+    /// virifid (https://atcoder.jp/contests/abc151/submissions/26416209)
+    #[derive(Copy, Clone, Debug)]
+    pub struct ModInteger {
+        value: u64,
+        modular: u64,
+    }
+
+    impl ModInteger {
+        pub fn new(value: u64, modular: u64) -> Self {
+            Self {
+                value: value % modular,
+                modular,
+            }
+        }
+
+        pub fn value(&self) -> u64 {
+            self.value
+        }
+
+        pub fn powu(&self, n: usize) -> Self {
+            let mut n = n;
+            let mut value = self.value;
+            let mut ret = 1u64;
+            while n > 0 {
+                if n % 2 == 1 {
+                    ret = (ret * value) % self.modular;
+                }
+                value = (value * value) % self.modular;
+                n /= 2;
+            }
+            Self {
+                value,
+                modular: self.modular,
+            }
+        }
+
+        pub fn pow(&self, n: Self) -> Self {
+            let n = n.value() as usize;
+            self.powu(n)
+        }
+
+        pub fn inverse(&self) -> Self {
+            let value = mod_inverse(self.value as i128, self.modular as i128).unwrap();
+            Self {
+                value: (value + self.modular as i128) as u64 % self.modular,
+                modular: self.modular,
+            }
+        }
+
+        pub fn inverse_from(value: u64, modular: u64) -> Self {
+            let value = (mod_inverse(value as i128, modular as i128).unwrap() + modular as i128)
+                as u64
+                % modular;
+            Self { value, modular }
+        }
+    }
+
+    impl std::ops::Add<Self> for ModInteger {
+        type Output = Self;
+        fn add(self, rhs: Self) -> Self::Output {
+            Self {
+                value: (self.value + rhs.value) % self.modular,
+                modular: self.modular,
+            }
+        }
+    }
+
+    impl std::ops::Add<u64> for ModInteger {
+        type Output = Self;
+        fn add(self, rhs: u64) -> Self::Output {
+            Self {
+                value: (self.value + rhs) % self.modular,
+                modular: self.modular,
+            }
+        }
+    }
+
+    impl std::ops::AddAssign<Self> for ModInteger {
+        fn add_assign(&mut self, rhs: Self) {
+            self.value += rhs.value;
+            self.value %= self.modular;
+        }
+    }
+
+    impl std::ops::AddAssign<u64> for ModInteger {
+        fn add_assign(&mut self, rhs: u64) {
+            self.value += rhs;
+            self.value %= self.modular;
+        }
+    }
+
+    impl std::fmt::Display for ModInteger {
+        fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+            write!(f, "{}", self.value)
+        }
+    }
+
+    impl std::ops::Sub<Self> for ModInteger {
+        type Output = Self;
+        fn sub(self, rhs: Self) -> Self::Output {
+            Self {
+                value: (self.value + self.modular - rhs.value) % self.modular,
+                modular: self.modular,
+            }
+        }
+    }
+
+    impl std::ops::Sub<u64> for ModInteger {
+        type Output = Self;
+        fn sub(self, rhs: u64) -> Self::Output {
+            Self {
+                value: (self.value + self.modular - rhs) % self.modular,
+                modular: self.modular,
+            }
+        }
+    }
+
+    impl std::ops::SubAssign<Self> for ModInteger {
+        fn sub_assign(&mut self, rhs: Self) {
+            self.value += self.modular;
+            self.value -= rhs.value;
+            self.value %= self.modular;
+        }
+    }
+
+    impl std::ops::SubAssign<u64> for ModInteger {
+        fn sub_assign(&mut self, rhs: u64) {
+            self.value += self.modular;
+            self.value -= rhs % self.modular;
+            self.value %= self.modular;
+        }
+    }
+
+    impl std::ops::Mul<Self> for ModInteger {
+        type Output = Self;
+        fn mul(self, rhs: Self) -> Self::Output {
+            Self {
+                value: (self.value * rhs.value) % self.modular,
+                modular: self.modular,
+            }
+        }
+    }
+
+    impl std::ops::Mul<u64> for ModInteger {
+        type Output = Self;
+        fn mul(self, rhs: u64) -> Self::Output {
+            Self {
+                value: rhs % self.modular * self.value % self.modular,
+                modular: self.modular,
+            }
+        }
+    }
+
+    impl std::ops::MulAssign<Self> for ModInteger {
+        fn mul_assign(&mut self, rhs: Self) {
+            self.value *= rhs.value;
+            self.value %= self.modular;
+        }
+    }
+
+    impl std::ops::MulAssign<u64> for ModInteger {
+        fn mul_assign(&mut self, rhs: u64) {
+            self.value *= rhs % self.modular;
+            self.value %= self.modular;
+        }
+    }
+
+    impl std::ops::Div<Self> for ModInteger {
+        type Output = Self;
+        fn div(self, rhs: Self) -> Self::Output {
+            Self {
+                value: (self.value * rhs.inverse().value) % self.modular,
+                modular: self.modular,
+            }
+        }
+    }
+
+    impl std::ops::Div<u64> for ModInteger {
+        type Output = Self;
+        fn div(self, rhs: u64) -> Self::Output {
+            let i = (mod_inverse((rhs % self.modular) as i128, self.modular as i128).unwrap()
+                + self.modular as i128) as u64
+                % self.modular;
+            Self {
+                value: i * self.value % self.modular,
+                modular: self.modular,
+            }
+        }
+    }
+
+    impl std::ops::DivAssign<Self> for ModInteger {
+        fn div_assign(&mut self, rhs: Self) {
+            self.value *= rhs.inverse().value;
+            self.value %= self.modular;
+        }
+    }
+
+    impl std::ops::DivAssign<u64> for ModInteger {
+        fn div_assign(&mut self, rhs: u64) {
+            let i = (mod_inverse((rhs % self.modular) as i128, self.modular as i128).unwrap()
+                + self.modular as i128) as u64
+                % self.modular;
+            self.value *= i;
+            self.value %= self.modular;
+        }
+    }
+
+    impl std::cmp::PartialEq for ModInteger {
+        fn eq(&self, other: &Self) -> bool {
+            self.value == other.value
+        }
+    }
+
+    impl std::cmp::Eq for ModInteger {}
+
+    impl std::cmp::PartialOrd for ModInteger {
+        fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+            Some(self.cmp(other))
+        }
+    }
+
+    impl std::cmp::Ord for ModInteger {
+        fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+            self.value.cmp(&other.value)
+        }
+    }
+
     pub trait Zero {
         const ZERO: Self;
     }
@@ -447,6 +673,7 @@ pub mod number_library {
     #[cfg(test)]
     mod tests_number {
         use super::*;
+        const MOD: u64 = 1_000_000_007;
 
         #[test]
         fn for_gcd() {
@@ -486,7 +713,6 @@ pub mod number_library {
         #[test]
         fn for_binomial_coefficient() {
             // This is https://atcoder.jp/contests/arc077/tasks/arc077_b.
-            let modular = 1_000_000_007;
             let n = 32;
             let a = vec![
                 29, 19, 7, 10, 26, 32, 27, 4, 11, 20, 2, 8, 16, 23, 5, 14, 6, 12, 17, 22, 18, 30,
@@ -504,29 +730,31 @@ pub mod number_library {
                 double[e - 1] = true;
             }
             let f = a.iter().position(|&e| e == value).unwrap();
-            let n_c_r = BinomialCoefficient::new(n + 1, modular);
+            let n_c_r = BinomialCoefficient::new(n + 1, MOD);
             let mut ans = Vec::new();
-            ans.push(n as i128);
+            ans.push(ModInteger::new(n as u64, MOD));
             for k in 2..=n {
                 // n+1Ck
                 let all = n_c_r.comp(n + 1, k);
                 // f+bCk-1
                 let sub = n_c_r.comp(f + b, k - 1);
-                let v = if all > sub {
-                    all - sub
-                } else {
-                    modular as i128 + all - sub
-                };
+                let v = all - sub;
                 ans.push(v)
             }
-            ans.push(1);
+            ans.push(ModInteger::new(1, MOD));
             let answers = vec![
                 32, 525, 5453, 40919, 237336, 1107568, 4272048, 13884156, 38567100, 92561040,
                 193536720, 354817320, 573166440, 818809200, 37158313, 166803103, 166803103,
                 37158313, 818809200, 573166440, 354817320, 193536720, 92561040, 38567100, 13884156,
                 4272048, 1107568, 237336, 40920, 5456, 528, 33, 1,
             ];
-            assert_eq!(ans, answers);
+            assert_eq!(
+                ans,
+                answers
+                    .into_iter()
+                    .map(|e| ModInteger::new(e, MOD))
+                    .collect::<Vec<_>>()
+            );
         }
 
         #[test]
