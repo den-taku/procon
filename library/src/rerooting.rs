@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-/// Reloting for (Value, Weight, Tree, Func, Unit, Merge, Leaf, Nodes)
+/// Rerooting for (Value, Weight, Tree, Func, Unit, Merge, Leaf, Nodes)
 /// verified (https://atcoder.jp/contests/abc222/submissions/26477219)
 ///
 /// Value: type of object
