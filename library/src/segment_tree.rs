@@ -8,7 +8,7 @@
 /// update
 /// find
 pub mod segment_tree_library {
-    /// verified (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5939671#2)
+    /// verified (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5953641#1)
     /// Segment Tree for Monoid (T, F)
     #[derive(Debug)]
     pub struct SegmentTree<T, F>
@@ -60,7 +60,11 @@ pub mod segment_tree_library {
         /// return a_s * a_s+1 * ... * a_t
         #[inline]
         pub fn find(&self, range: std::ops::Range<usize>) -> T {
-            self.find_rec(range, 0, 0, self.n)
+            if range.end <= range.start {
+                self.unit
+            } else {
+                self.find_rec(range, 0, 0, self.n)
+            }
         }
 
         fn find_rec(&self, range: std::ops::Range<usize>, k: usize, l: usize, r: usize) -> T {

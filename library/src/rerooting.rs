@@ -1,36 +1,4 @@
 #![allow(dead_code)]
-#![allow(unreachable_code)]
-use proconio::{fastout, input};
-
-#[fastout]
-fn main() {
-    input! {
-        n: usize,
-        edges: [(usize, usize, u64); n - 1],
-        d: [u64; n]
-    }
-    let mut adjacent = vec![vec![]; n];
-    let mut cost = vec![vec![]; n];
-    for (u, v, w) in edges {
-        adjacent[u - 1].push(v - 1);
-        cost[u - 1].push(w);
-        adjacent[v - 1].push(u - 1);
-        cost[v - 1].push(w);
-    }
-    let mut rerooting = rerooting_library::Rerooting::new(
-        adjacent,
-        cost,
-        d,
-        std::cmp::max,
-        0,
-        |sub, no, _p, _i, c| std::cmp::max(sub, no) + c,
-        |no, _p, _i, c| no + c,
-    );
-    let dp = rerooting.solve();
-    for value in dp {
-        println!("{}", value);
-    }
-}
 
 /// Reloting for (Value, Weight, Tree, Func, Unit, Merge, Leaf, Nodes)
 /// verified (https://atcoder.jp/contests/abc222/submissions/26477167)

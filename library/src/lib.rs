@@ -16,6 +16,7 @@ pub mod min_cost_flow;
 pub mod number;
 pub mod range_minimum_query;
 pub mod red_black_tree;
+pub mod rerooting;
 pub mod segment_tree;
 pub mod segment_tree_delay;
 pub mod tree_dist;
