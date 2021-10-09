@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
 /// Reloting for (Value, Weight, Tree, Func, Unit, Merge, Leaf, Nodes)
-/// verified (https://atcoder.jp/contests/abc222/submissions/26477167)
+/// verified (https://atcoder.jp/contests/abc222/submissions/26477219)
 ///
 /// Value: type of object
 /// Weight: type of weight
