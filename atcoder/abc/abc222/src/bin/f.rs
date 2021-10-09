@@ -23,7 +23,8 @@ fn main() {
         d,
         std::cmp::max,
         0,
-        |sub, no, _p, _i, c| std::cmp::max(sub, no) + c,
+        |sub, _, no, _p, _i, c| std::cmp::max(sub, no) + c,
+        |sub, _, no, _p, _i, c| std::cmp::max(sub, no) + c,
         |no, _p, _i, c| no + c,
     );
     let dp = rerooting.solve();
@@ -31,17 +32,18 @@ fn main() {
         println!("{}", value);
     }
 }
-
-/// Reloting for (Value, Weight, Tree, Func, Unit, Merge, Leaf, Nodes)
-/// verified (https://atcoder.jp/contests/abc222/submissions/26477167)
+/// Rerooting for (Value, Weight, Tree, Func, Unit, Merge, Leaf, Nodes)
+/// verified (https://atcoder.jp/contests/abc222/submissions/26477219)
 ///
 /// Value: type of object
 /// Weight: type of weight
 /// Tree: has edge usize x usize -> Weight
 /// Func: Value × Value -> Value
 /// Unit: unit of Value
-/// Merge: Value × Value × usize × usize -> Value
-///     Subproblem, Node value, parent, edge number -> Answer
+/// Merge1: Value × Value × Value × usize × usize × Weight -> Value (for first)
+///     Subproblem, Parent value, Node value, parent, edge number -> Answer
+/// Merge2: Value × Value × Value × usize × usize × Weight -> Value (for second)
+///     Subproblem, Parent value, Node value, parent, edge number -> Answer
 /// Leaf: Value × usize × usize -> Value
 ///     Node value, parent, edge number -> Answer
 /// Nodes: usize -> Value
@@ -49,10 +51,11 @@ pub mod rerooting_library {
     use segment_tree_library::*;
 
     #[derive(Debug, Clone)]
-    pub struct Rerooting<Value, Weight, F, Merge, Leaf>
+    pub struct Rerooting<Value, Weight, F, Merge1, Merge2, Leaf>
     where
         F: Fn(Value, Value) -> Value,
-        Merge: Fn(Value, Value, usize, usize, Weight) -> Value,
+        Merge1: Fn(Value, Value, Value, usize, usize, Weight) -> Value,
+        Merge2: Fn(Value, Value, Value, usize, usize, Weight) -> Value,
         Leaf: Fn(Value, usize, usize, Weight) -> Value,
     {
         adjacent: Vec<Vec<usize>>,
@@ -62,17 +65,19 @@ pub mod rerooting_library {
         root: Vec<SegmentTree<Value, F>>,
         f: F,
         unit: Value,
-        merge: Merge,
+        merge1: Merge1,
+        merge2: Merge2,
         leaf: Leaf,
         n: usize,
     }
 
-    impl<Value, Weight, F, Merge, Leaf> Rerooting<Value, Weight, F, Merge, Leaf>
+    impl<Value, Weight, F, Merge1, Merge2, Leaf> Rerooting<Value, Weight, F, Merge1, Merge2, Leaf>
     where
         Value: Clone,
         Weight: Clone,
         F: Fn(Value, Value) -> Value + Clone,
-        Merge: Fn(Value, Value, usize, usize, Weight) -> Value,
+        Merge1: Fn(Value, Value, Value, usize, usize, Weight) -> Value,
+        Merge2: Fn(Value, Value, Value, usize, usize, Weight) -> Value,
         Leaf: Fn(Value, usize, usize, Weight) -> Value,
     {
         pub fn new(
@@ -81,7 +86,8 @@ pub mod rerooting_library {
             nodes: Vec<Value>,
             f: F,
             unit: Value,
-            merge: Merge,
+            merge1: Merge1,
+            merge2: Merge2,
             leaf: Leaf,
         ) -> Self {
             let parents = vec![0; adjacent.len()];
@@ -98,7 +104,8 @@ pub mod rerooting_library {
                 root,
                 f,
                 unit,
-                merge,
+                merge1,
+                merge2,
                 leaf,
             }
         }
@@ -132,8 +139,9 @@ pub mod rerooting_library {
                         let sub_ans = self.root[node].find(0..self.adjacent[node].len());
                         self.root[parent].update(
                             i,
-                            (self.merge)(
+                            (self.merge1)(
                                 sub_ans,
+                                self.nodes[parent].clone(),
                                 self.nodes[node].clone(),
                                 parent,
                                 i,
@@ -159,8 +167,9 @@ pub mod rerooting_library {
                     let left = self.root[parent].find(0..i);
                     let right = self.root[parent].find(i + 1..self.adjacent[parent].len());
                     let value = (self.f)(left, right);
-                    let parent_ans = (self.merge)(
+                    let parent_ans = (self.merge2)(
                         value,
+                        self.nodes[node].clone(),
                         self.nodes[parent].clone(),
                         node,
                         self.parents[node],
@@ -227,7 +236,8 @@ pub mod rerooting_library {
                     d,
                     std::cmp::max,
                     0,
-                    |sub, no, _p, _i, c| std::cmp::max(sub, no) + c,
+                    |sub, _pv, no, _p, _i, c| std::cmp::max(sub, no) + c,
+                    |sub, _pv, no, _p, _i, c| std::cmp::max(sub, no) + c,
                     |no, _p, _i, c| no + c,
                 );
                 let dp = rerooting.solve();
