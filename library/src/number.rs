@@ -437,15 +437,15 @@ pub mod number_library {
         }
 
         pub fn inverse(&self) -> Self {
-            let value = mod_inverse(self.value as i128, self.modular as i128).unwrap();
+            let value = mod_inverse(self.value as i64, self.modular as i64).unwrap();
             Self {
-                value: (value + self.modular as i128) as u64 % self.modular,
+                value: (value + self.modular as i64) as u64 % self.modular,
                 modular: self.modular,
             }
         }
 
         pub fn inverse_from(value: u64, modular: u64) -> Self {
-            let value = (mod_inverse(value as i128, modular as i128).unwrap() + modular as i128)
+            let value = (mod_inverse(value as i64, modular as i64).unwrap() + modular as i64)
                 as u64
                 % modular;
             Self { value, modular }
@@ -575,8 +575,8 @@ pub mod number_library {
     impl std::ops::Div<u64> for ModInteger {
         type Output = Self;
         fn div(self, rhs: u64) -> Self::Output {
-            let i = (mod_inverse((rhs % self.modular) as i128, self.modular as i128).unwrap()
-                + self.modular as i128) as u64
+            let i = (mod_inverse((rhs % self.modular) as i64, self.modular as i64).unwrap()
+                + self.modular as i64) as u64
                 % self.modular;
             Self {
                 value: i * self.value % self.modular,
@@ -594,8 +594,8 @@ pub mod number_library {
 
     impl std::ops::DivAssign<u64> for ModInteger {
         fn div_assign(&mut self, rhs: u64) {
-            let i = (mod_inverse((rhs % self.modular) as i128, self.modular as i128).unwrap()
-                + self.modular as i128) as u64
+            let i = (mod_inverse((rhs % self.modular) as i64, self.modular as i64).unwrap()
+                + self.modular as i64) as u64
                 % self.modular;
             self.value *= i;
             self.value %= self.modular;
