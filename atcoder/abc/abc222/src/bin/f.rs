@@ -1,7 +1,6 @@
 #![allow(dead_code)]
 #![allow(unreachable_code)]
 use proconio::{fastout, input};
-use segment_tree_library::*;
 
 #[fastout]
 fn main() {
@@ -12,48 +11,92 @@ fn main() {
     }
     let mut adjacent = vec![vec![]; n];
     let mut cost = vec![vec![]; n];
-    let mut dp = vec![vec![]; n];
-    for (u, v, c) in edges {
+    for (u, v, w) in edges {
         adjacent[u - 1].push(v - 1);
-        cost[u - 1].push(c);
-        dp[u - 1].push(None);
+        cost[u - 1].push(w);
         adjacent[v - 1].push(u - 1);
-        cost[v - 1].push(c);
-        dp[v - 1].push(None);
+        cost[v - 1].push(w);
     }
-    let mut visited = vec![false; n];
-    visited[0] = true;
-    for i in 0..adjacent[0].len() {
-        rec(0, i, &mut dp, &adjacent, &cost, &d, &mut visited);
+    let mut nodes = vec![];
+    let f = |a, b| std::cmp::max(a, b);
+    for v in &adjacent {
+        let tree = segment_tree_library::SegmentTree::new(v.len(), f, 0);
+        nodes.push(tree);
     }
-    println!("{:?}", dp);
+    let mut parents: Vec<Option<usize>> = vec![None; n];
+    for (i, &_sub) in adjacent[0].iter().enumerate() {
+        let value = dfs(0, i, &adjacent, &cost, &d, &mut parents, &mut nodes);
+        // let sub_ans = std::cmp::max(d[0], value + cost[0][i]);
+        let sub_ans = value;
+        nodes[0].update(i, sub_ans);
+    }
+    let mut dp = d.clone();
+    // dp[0] = std::cmp::max(nodes[0].find(0..adjacent[0].len()), d[0]);
+    dp[0] = nodes[0].find(0..adjacent[0].len());
+    for (i, &_sub) in adjacent[0].iter().enumerate() {
+        dfs2(0, i, &adjacent, &cost, &d, &parents, &mut nodes, &mut dp);
+    }
+    for value in dp {
+        println!("{}", value);
+    }
 }
 
-fn rec(
-    start: usize,
+fn dfs2<F>(
+    parent: usize,
     i: usize,
-    dp: &mut [Vec<Option<u64>>],
     adjacent: &[Vec<usize>],
     cost: &[Vec<u64>],
     d: &[u64],
-    visited: &mut [bool],
-) -> u64 {
-    let to = adjacent[start][i];
-    visited[to] = true;
-    if let Some(value) = dp[start][i] {
-        value
-    } else {
-        let mut max = 0;
-        for (j, &v) in adjacent[to].iter().enumerate() {
-            if visited[v] {
-                max = std::cmp::max(dp[to][j].unwrap(), max);
-            }
-            visited[v] = true;
-            max = std::cmp::max(rec(to, j, dp, adjacent, cost, d, visited), max);
+    parents: &[Option<usize>],
+    nodes: &mut [segment_tree_library::SegmentTree<u64, F>],
+    dp: &mut [u64],
+) where
+    F: Fn(u64, u64) -> u64,
+{
+    let node = adjacent[parent][i];
+    let left = nodes[parent].find(0..i);
+    let right = nodes[parent].find(i + 1..adjacent[parent].len());
+    let value = std::cmp::max(left, right);
+    let parent_ans = std::cmp::max(d[parent], value) + cost[parent][i];
+    let index = parents[node].unwrap();
+    nodes[node].update(index, parent_ans);
+    dp[node] = nodes[node].find(0..adjacent[node].len());
+    for (j, &sub) in adjacent[node].iter().enumerate() {
+        if sub == parent {
+            continue;
         }
-        let ans = std::cmp::max(d[to], max) + cost[start][i];
-        dp[start][i] = Some(ans);
-        ans
+        dfs2(node, j, adjacent, cost, d, parents, nodes, dp);
+    }
+}
+
+fn dfs<F>(
+    parent: usize,
+    i: usize,
+    adjacent: &[Vec<usize>],
+    cost: &[Vec<u64>],
+    d: &[u64],
+    parents: &mut [Option<usize>],
+    nodes: &mut [segment_tree_library::SegmentTree<u64, F>],
+) -> u64
+where
+    F: Fn(u64, u64) -> u64,
+{
+    let node = adjacent[parent][i];
+    for (j, &sub) in adjacent[node].iter().enumerate() {
+        if sub == parent {
+            parents[node] = Some(j);
+            continue;
+        }
+        let value = dfs(node, j, adjacent, cost, d, parents, nodes);
+        // let sub_ans = std::cmp::max(d[node], value + cost[node][j]);
+        let sub_ans = value;
+        nodes[node].update(j, sub_ans);
+    }
+    if adjacent[node].len() == 1 {
+        // This is a leaf
+        d[node] + cost[parent][i]
+    } else {
+        std::cmp::max(nodes[node].find(0..adjacent[node].len()), d[node]) + cost[parent][i]
     }
 }
 
@@ -65,7 +108,7 @@ fn rec(
 /// update
 /// find
 pub mod segment_tree_library {
-    /// verified (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5939671#2)
+    /// verified (https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=5953641#1)
     /// Segment Tree for Monoid (T, F)
     #[derive(Debug)]
     pub struct SegmentTree<T, F>
@@ -117,7 +160,11 @@ pub mod segment_tree_library {
         /// return a_s * a_s+1 * ... * a_t
         #[inline]
         pub fn find(&self, range: std::ops::Range<usize>) -> T {
-            self.find_rec(range, 0, 0, self.n)
+            if range.end <= range.start {
+                self.unit
+            } else {
+                self.find_rec(range, 0, 0, self.n)
+            }
         }
 
         fn find_rec(&self, range: std::ops::Range<usize>, k: usize, l: usize, r: usize) -> T {
