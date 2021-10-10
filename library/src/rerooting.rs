@@ -1,4 +1,5 @@
 #![allow(dead_code)]
+#![allow(clippy::too_many_arguments)]
 
 /// Rerooting for (Value, Weight, Tree, Func, Unit, Merge, Leaf, Nodes)
 /// verified (https://atcoder.jp/contests/abc222/submissions/26477468)
@@ -18,7 +19,6 @@
 /// Nodes: usize -> Value
 pub mod rerooting_library {
     use segment_tree_library::*;
-
     #[derive(Debug, Clone)]
     pub struct Rerooting<Value, Weight, F, Merge1, Merge2, Leaf>
     where
