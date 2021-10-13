@@ -19,8 +19,9 @@ fn main() {
     }
     let mut ans = String::new();
     for (c, &i) in count.iter().enumerate() {
+        let c = (c as u8 + b'a') as char;
         for _ in 0..i {
-            ans.push((c as u8 + b'a') as char)
+            ans.push(c)
         }
     }
     if !ans.is_empty() {
