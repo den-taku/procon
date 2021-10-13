@@ -3,7 +3,21 @@ type: Batch
 timelimit: ~
 match: Lines
 
-cases: []
+cases:
+  - name: sample1
+    in: |
+      1 2
+      1
+      2 10
+    out: |
+      11
+  - name: sample2
+    in: |
+      5 5
+      2 4 5 4 2
+      2 8 3 4 5
+    out: |
+      21
 
 extend:
   - type: Text
