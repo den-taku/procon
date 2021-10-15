@@ -19,6 +19,12 @@ cases:
       999999 999999
     out: |
       151840682
+  - name: test
+    in: |
+      231188 115594
+    out: |
+      1
+
 
 extend:
   - type: Text
