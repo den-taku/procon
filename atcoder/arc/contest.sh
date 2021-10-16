@@ -1,5 +1,7 @@
 #~/usr/bin.bash
 
+# say Fight
+
 CONTEST_NAME="$1"
 echo "Let's start $CONTEST_NAME!"
 
