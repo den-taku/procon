@@ -6,29 +6,36 @@ use std::collections::VecDeque;
 #[fastout]
 fn main() {
     input! {
-        _n: usize,
+        n: usize,
         q: usize,
         s: String,
         queries: [(usize, usize, usize); q]
     }
-    let mut s = s.chars().collect::<Vec<_>>();
-    'out: for (i, l, r) in queries {
-        if i == 1 {
-            s.swap(l - 1, r - 1);
+    let mut tree_min =
+        segment_tree_library::SegmentTree::new(n, |a, b| std::cmp::min(a, b), std::i64::MAX);
+    let mut tree_sum = segment_tree_library::SegmentTree::new(n, |a, b| a + b, 0);
+    let mut sum = 0i64;
+    for (i, c) in s.chars().enumerate() {
+        if c == '(' {
+            sum += 1;
+            tree_min.update(i, sum);
+            tree_sum.update(i, 1);
         } else {
-            let mut queue = Vec::new();
-            // for e in decide(&s, l - 1, r) {
-            for e in s.iter().copied().skip(l - 1).take(r - l + 1) {
-                if e == '(' {
-                    queue.push(1);
-                } else if queue.is_empty() {
-                    println!("No");
-                    continue 'out;
-                } else {
-                    queue.pop();
-                }
-            }
-            if queue.is_empty() {
+            sum -= 1;
+            tree_min.update(i, sum);
+            tree_sum.update(i, -1);
+        }
+    }
+    for (i, l, r) in queries {
+        if i == 1 {
+            let left = tree_sum.find(l - 1..l);
+            let right = tree_sum.find(r - 1..r);
+            tree_sum.update(l - 1, left);
+            tree_sum.update(r - 1, right);
+            tree_min.update(l - 1, left);
+            tree_min.update(r - 1, right);
+        } else {
+            if tree_sum.find(l - 1..r) == 0 && tree_min.find(l - 1..r) == 0 {
                 println!("Yes")
             } else {
                 println!("No")
