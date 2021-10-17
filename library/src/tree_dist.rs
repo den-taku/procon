@@ -24,6 +24,36 @@ pub mod tree_dist_library {
     }
 
     impl TreeDist {
+        pub fn count_path<T>(&self, start: usize, zero: T, one: T) -> (Vec<T>, Vec<Option<usize>>)
+        where
+            T: Copy + std::ops::AddAssign,
+        {
+            let mut distance = vec![None; self.nodes];
+            distance[start] = Some(0);
+            let mut count = vec![zero; self.nodes];
+            count[start] += one;
+            let mut queue = std::collections::VecDeque::new();
+            queue.push_back(start);
+            while let Some(u) = queue.pop_front() {
+                for &v in &self.adjacent[u] {
+                    if distance[v].is_none() {
+                        distance[v] = Some(distance[u].unwrap() + 1);
+                        count[v] = count[u];
+                        queue.push_back(v);
+                    } else if let Some(d) = distance[v] {
+                        let dis = distance[u].unwrap();
+                        if d == dis + 1 {
+                            let tmp = count[u];
+                            count[v] += tmp;
+                        }
+                    }
+                }
+            }
+            (count, distance)
+        }
+    }
+
+    impl TreeDist {
         pub fn new(nodes: usize) -> Self {
             Self {
                 nodes,
@@ -332,6 +362,38 @@ pub mod tree_dist_library {
             sum
         }
     }
+
+    pub trait Zero {
+        const ZERO: Self;
+    }
+
+    macro_rules! impl_zero {
+        ( $($e:ty),* ) => {
+            $(
+                impl Zero for $e {
+                    const ZERO: Self = 0;
+                }
+            )*
+        };
+    }
+
+    impl_zero!(isize, i8, i16, i32, i64, i128, usize, u8, u16, u32, u64, u128);
+
+    pub trait One {
+        const ONE: Self;
+    }
+
+    macro_rules! impl_one {
+            ( $($e:ty),* ) => {
+                $(
+                    impl One for $e {
+                        const ONE: Self = 1;
+                    }
+                )*
+            };
+        }
+
+    impl_one!(isize, i8, i16, i32, i64, i128, usize, u8, u16, u32, u64, u128);
 
     #[cfg(test)]
     mod tests_tree_dist {
