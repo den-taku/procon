@@ -4,8 +4,11 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        _n: usize,
-        _t: [[i128; 50];50]
+        n: usize,
     }
-    unimplemented!()
+    let mut ans = 0.0;
+    for i in 1..n {
+        ans += n as f64 / i as f64;
+    }
+    println!("{}", ans);
 }
