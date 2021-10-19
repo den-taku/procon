@@ -4,8 +4,17 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        _n: usize,
-        _t: [[i128; 50];50]
+        n: usize,
+        _z: i64,
+        w: i64,
+        a: [i64; n]
     }
-    unimplemented!()
+    if n == 1 {
+        println!("{}", (a[0] - w).abs())
+    } else {
+        println!(
+            "{}",
+            std::cmp::max((a[n - 1] - w).abs(), (a[n - 2] - a[n - 1]).abs())
+        )
+    }
 }
