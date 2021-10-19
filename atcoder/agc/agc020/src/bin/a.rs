@@ -5,7 +5,12 @@ use proconio::{fastout, input};
 fn main() {
     input! {
         _n: usize,
-        _t: [[i128; 50];50]
+        a: usize,
+        b: usize
     }
-    unimplemented!()
+    if (b - a - 1) % 2 == 0 {
+        println!("Borys")
+    } else {
+        println!("Alice")
+    }
 }
