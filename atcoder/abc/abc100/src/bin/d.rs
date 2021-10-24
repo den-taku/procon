@@ -4,8 +4,13 @@ use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
-        _n: usize,
-        _t: [[i128; 50];50]
+        n: usize,
+        m: usize,
+        xyz: [(i64, i64, i64); n]
     }
-    unimplemented!()
+    let mut dp_l = vec![(0i64, 0i64, 0i64); m + 1];
+    let mut dp_s = vec![(0i64, 0i64, 0i64); m + 1];
+    for (x, y, z) in xyz {
+        //
+    }
 }
