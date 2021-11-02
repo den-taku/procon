@@ -6,16 +6,28 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      2
-      1011 10100
+      1
+      4
     out: |
-      220
+      Alice
   - name: sample2
     in: |
-      7
-      123 456
+      2
+      11 19
     out: |
-      15642
+      Bob
+  - name: sample3
+    in: |
+      1
+      24
+    out: |
+      Alice
+  - name: sample4
+    in: |
+      4
+      600 1200 1800 2400
+    out: |
+      Bob
 
 extend:
   - type: Text

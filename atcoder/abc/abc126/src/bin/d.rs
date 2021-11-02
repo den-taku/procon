@@ -32,8 +32,8 @@ fn main() {
         "{}",
         color
             .iter()
-            .map(|v| format!("{}\n", v.unwrap()))
-            .collect::<String>()
-            .trim()
+            .map(|v| v.unwrap().to_string())
+            .collect::<Vec<_>>()
+            .join("\n")
     );
 }
