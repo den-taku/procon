@@ -6,18 +6,24 @@ match: Lines
 cases:
   - name: sample1
     in: |
-      3
-      3 5 2
-      26
+      7 3
     out: |
-      8
+      kado
   - name: sample2
     in: |
-      4
-      12 34 56 78
-      1000
+      7 2
     out: |
-      23
+      matsu
+  - name: sample3
+    in: |
+      13 13
+    out: |
+      matsu
+  - name: testcase
+    in: |
+      17 3
+    out: |
+      kado
 
 extend:
   - type: Text
