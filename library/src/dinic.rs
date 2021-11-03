@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 
 /// Dinic for maximum flow
+/// O(N^2 M)
 ///
 /// new
 /// add_edge
