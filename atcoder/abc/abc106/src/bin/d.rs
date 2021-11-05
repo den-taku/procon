@@ -10,9 +10,7 @@ fn main() {
         lr: [(usize, usize); m],
         pq: [(usize, usize); q]
     }
-    let f = |a, b| a + b;
-    let inverse = |a: i64| -a;
-    let mut tree = vec![bit_library::Bit::new(n, f, inverse, 0i64); n];
+    let mut tree = vec![bit_library::Bit::new(n, std::ops::Add::add, std::ops::Neg::neg, 0i64); n];
     for (l, r) in lr {
         tree[l - 1].add(r - 1, 1)
     }
