@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-/// MinCostFlow
+/// MinCostFlow O(FElogV) ~ O(V^3 logV)
 ///
 /// new
 /// add_edge
