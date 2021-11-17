@@ -19,7 +19,7 @@ fn rec(
     w: usize,
     (i, j, k, l): (usize, usize, usize, usize),
     poss: &[(usize, usize, usize, usize)],
-    dp: &mut HashMap<(usize, usize, usize, usize, i128), i64>
+    dp: &mut HashMap<(usize, usize, usize, usize, i128), i64>,
 ) -> i64 {
     if let Some(v) = dp.get(&(i, j, k, l, set)) {
         *v
