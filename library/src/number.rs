@@ -415,6 +415,12 @@ pub mod number_library {
         }
 
         pub fn powu(&self, n: usize) -> Self {
+            if self.value == 0 {
+                return Self {
+                    value: self.value,
+                    modular: self.modular,
+                };
+            }
             let mut n = n;
             let mut value = self.value;
             let mut ret = 1u64;
@@ -426,7 +432,7 @@ pub mod number_library {
                 n /= 2;
             }
             Self {
-                value,
+                value: ret,
                 modular: self.modular,
             }
         }
