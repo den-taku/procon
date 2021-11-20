@@ -12,30 +12,10 @@ fn main() {
         k: u64,
         m: u64
     }
-    // if m % MOD == 0 {
-    //     println!("0");
-    //     return;
-    // }
-    let k = ModInteger::new(k, MOD - 1).powu(n as usize);
-    // let k_n = pow(k, n, MOD - 1);
-    // let m = ModInteger::new(m, MOD);
-    // println!("{}", pow(m, k_n.value(), MOD))
-    println!("{}", ModInteger::new(m, MOD).powu(k.value() as usize))
-}
-
-fn pow(a: ModInteger, b: u64, modu: u64) -> ModInteger {
-    if b == 0 {
-        ModInteger::new(1, modu)
-    } else if b == 1 {
-        a
-    } else {
-        let tmp = pow(a, b / 2, modu);
-        if b % 2 == 0 {
-            tmp * tmp
-        } else {
-            tmp * tmp * a
-        }
-    }
+    println!(
+        "{}",
+        ModInteger::new(m, MOD).powu(ModInteger::new(k, MOD - 1).powu(n).value())
+    )
 }
 
 /// for numbers
@@ -452,7 +432,7 @@ pub mod number_library {
             self.value
         }
 
-        pub fn powu(&self, n: usize) -> Self {
+        pub fn powu(&self, n: u64) -> Self {
             if self.value == 0 {
                 return Self {
                     value: self.value,
@@ -470,14 +450,13 @@ pub mod number_library {
                 n /= 2;
             }
             Self {
-                // value,
                 value: ret,
                 modular: self.modular,
             }
         }
 
         pub fn pow(&self, n: Self) -> Self {
-            let n = n.value() as usize;
+            let n = n.value();
             self.powu(n)
         }
 
