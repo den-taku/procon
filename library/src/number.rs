@@ -414,7 +414,7 @@ pub mod number_library {
             self.value
         }
 
-        pub fn powu(&self, n: usize) -> Self {
+        pub fn powu(&self, n: u64) -> Self {
             if self.value == 0 {
                 return Self {
                     value: self.value,
@@ -438,7 +438,7 @@ pub mod number_library {
         }
 
         pub fn pow(&self, n: Self) -> Self {
-            let n = n.value() as usize;
+            let n = n.value();
             self.powu(n)
         }
 
