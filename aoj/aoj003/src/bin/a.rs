@@ -20,7 +20,9 @@ fn main() {
 #[inline(always)]
 fn input() -> (usize, usize, usize, Vec<(usize, usize, usize)>) {
     let (n, m, s) = {
-        let e = read_line::<usize>(); (e[0], e[1], e[2])};
+        let e = read_line::<usize>();
+        (e[0], e[1], e[2])
+    };
     let mut edges = Vec::new();
     for _ in 0..m {
         let e = read_line::<usize>();
