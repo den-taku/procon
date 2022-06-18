@@ -1,3 +1,4 @@
+// Shortest path (https://onlinejudge.u-aizu.ac.jp/problems/GRL_1_A) 00.12
 #![allow(unreachable_code)]
 use dijkstra_library::*;
 
@@ -8,13 +9,18 @@ fn main() {
         dijk.add_edge(u, v, d)
     }
     let path = dijk.shortest_path(s).0;
-    for e in path {
-        if e == usize::MAX {
-            println!("INF")
-        } else {
-            println!("{}", e)
-        }
-    }
+    let ans = path
+        .into_iter()
+        .map(|e| {
+            if e == usize::MAX {
+                "INF".to_string()
+            } else {
+                e.to_string()
+            }
+        })
+        .collect::<Vec<_>>()
+        .join("\n");
+    println!("{}", ans);
 }
 
 #[inline(always)]
