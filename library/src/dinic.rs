@@ -99,6 +99,7 @@ pub mod dinic_library {
                 unsafe {
                     let mut d = T::from(0);
                     for i in *iter.get_unchecked(vertex)..self.edges.get_unchecked(vertex).len() {
+                        *iter.get_unchecked_mut(vertex) = i;
                         let edge = *self.edges.get_unchecked(vertex).get_unchecked(i);
                         if edge.capacity > T::from(0)
                             && *level.get_unchecked(vertex) < *level.get_unchecked(edge.to)
