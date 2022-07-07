@@ -11,7 +11,7 @@ fn main() {
         edges: [(usize, usize, i64); m]
     }
     let mut dinic = Dinic::new(n, &edges);
-    println!("{}", dinic.max_flow(0, n-1))
+    println!("{}", dinic.max_flow(0, n - 1))
 }
 
 #[macro_export]
