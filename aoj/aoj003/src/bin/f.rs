@@ -1,4 +1,4 @@
-// Longest Common Subsequence (https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_10_C) 00.04
+// Longest Common Subsequence (https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_10_C) 00.03
 #![allow(dead_code)]
 #![allow(unreachable_code)]
 use std::cmp::max;
@@ -12,19 +12,21 @@ fn main() {
     }
     let mut ans = Vec::with_capacity(n);
     for (x, y) in xys {
-        let mut dp = vec![0; x.len() + 1];
+        let mut memo = vec![0; x.len() + 1];
+        let mut next = vec![0; x.len() + 1];
         for y in y.chars() {
-            let mut next = dp.clone();
             for (i, x) in x.chars().enumerate() {
                 if y == x {
-                    next[i + 1] = max(max(next[i], dp[i + 1]), dp[i] + 1)
+                    next[i + 1] = max(max(next[i], memo[i + 1]), memo[i] + 1)
                 } else {
-                    next[i + 1] = max(next[i], dp[i + 1])
+                    next[i + 1] = max(next[i], memo[i + 1])
                 }
             }
-            dp = next;
+            let tmp = memo;
+            memo = next;
+            next = tmp;
         }
-        ans.push(dp.pop().unwrap().to_string())
+        ans.push(memo.pop().unwrap().to_string())
     }
     println!("{}", ans.join("\n"))
 }
