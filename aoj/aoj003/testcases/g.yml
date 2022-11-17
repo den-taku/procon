@@ -1802,7 +1802,14 @@ cases:
       199 190
     out: |
       No
-
+  - name: sample3
+    in: |
+      4 3
+      0 1
+      1 2
+      2 3
+    out: |
+      Yes
 extend:
   - type: Text
     path: "./g"
